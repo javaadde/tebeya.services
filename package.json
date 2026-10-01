@@ -1,0 +1,16 @@
+{
+  "name": "tebeya-services-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Catering Staff Booking App Monorepo",
+  "scripts": {
+    "dev:api": "pnpm --filter @tebeya/api dev",
+    "dev:admin": "pnpm --filter @tebeya/web-admin dev",
+    "dev:mobile": "pnpm --filter @tebeya/mobile start",
+    "build": "pnpm --filter=!@tebeya/mobile -r build",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
