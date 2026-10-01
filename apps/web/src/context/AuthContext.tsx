@@ -8,6 +8,8 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (payload: LoginPayload) => Promise<void>;
+  requestOtp: (email: string) => Promise<string>;
+  verifyOtp: (email: string, otp: string) => Promise<void>;
   demoLogin: () => void;
   logout: () => void;
 }
@@ -69,6 +71,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('tb_user', JSON.stringify(res.user));
   };
 
+  const requestOtp = async (email: string): Promise<string> => {
+    const res = await authApi.sendAdminOtp(email);
+    return res.message;
+  };
+
+  const verifyOtp = async (email: string, otp: string): Promise<void> => {
+    const res = await authApi.verifyAdminOtp(email, otp);
+    if (res.user.role !== 'admin') {
+      throw new Error('Access denied. Administrator privileges required.');
+    }
+    setUser(res.user);
+    setToken(res.tokens.accessToken);
+    localStorage.setItem('tb_access_token', res.tokens.accessToken);
+    localStorage.setItem('tb_refresh_token', res.tokens.refreshToken);
+    localStorage.setItem('tb_user', JSON.stringify(res.user));
+  };
+
   const demoLogin = () => {
     const mockAdmin: User = {
       id: 'usr_admin_master',
@@ -103,6 +122,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated: !!user && user.role === 'admin',
         isLoading,
         login,
+        requestOtp,
+        verifyOtp,
         demoLogin,
         logout,
       }}

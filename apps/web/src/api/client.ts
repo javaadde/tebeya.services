@@ -136,6 +136,37 @@ function handleMockFallback<T>(endpoint: string, options: RequestOptions): T {
     } as unknown as T;
   }
 
+  if (endpoint.includes('/auth/admin/send-otp')) {
+    const body = options.body ? JSON.parse(options.body as string) : {};
+    console.log(`[MockEngine] 🔑 Sent OTP 123456 to ${body.email}`);
+    return {
+      message: 'A 6-digit one-time password has been sent to your authorized email address.',
+    } as unknown as T;
+  }
+
+  if (endpoint.includes('/auth/admin/verify-otp')) {
+    const body = options.body ? JSON.parse(options.body as string) : {};
+    const email = body.email || 'admin@tebeya.services';
+    const mockAdmin = {
+      id: 'usr_admin_master',
+      name: email.split('@')[0],
+      email: email,
+      phone: '+91 98470 00001',
+      phoneVerified: true,
+      role: 'admin',
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    return {
+      user: mockAdmin,
+      tokens: {
+        accessToken: 'mock_demo_token',
+        refreshToken: 'mock_demo_refresh',
+      },
+    } as unknown as T;
+  }
+
   if (endpoint.includes('/users/me')) {
     return {
       id: 'usr_admin_master',

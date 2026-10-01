@@ -481,13 +481,64 @@ $$\text{EstimatedPayout} = \text{payPerPerson} + \text{TravelAllowance}$$
   }
   ```
 
-#### 5. Forgot Password Request
+#### 5. Send Admin One-Time Password (`admin_web_controll_emails` Gated)
+- **Method**: `POST`
+- **Path**: `/api/auth/admin/send-otp`
+- **Auth**: Public
+- **Access Control**: Validates that email exists in server's `admin_web_controll_emails` comma-separated list.
+- **Request Body**:
+  ```json
+  {
+    "email": "admin@tebeya.services"
+  }
+  ```
+- **Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "message": "A 6-digit one-time password has been sent to your authorized email address."
+  }
+  ```
+
+#### 6. Verify Admin OTP & Session Login
+- **Method**: `POST`
+- **Path**: `/api/auth/admin/verify-otp`
+- **Auth**: Public
+- **Request Body**:
+  ```json
+  {
+    "email": "admin@tebeya.services",
+    "otp": "839201"
+  }
+  ```
+- **Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "user": {
+        "id": "67cb2a98f712a1...",
+        "name": "Operations Dispatcher",
+        "email": "admin@tebeya.services",
+        "role": "admin",
+        "status": "active"
+      },
+      "tokens": {
+        "accessToken": "eyJhbGciOi...",
+        "refreshToken": "eyJhbGciOi..."
+      }
+    },
+    "message": "Admin verification successful"
+  }
+  ```
+
+#### 7. Forgot Password Request
 - **Method**: `POST`
 - **Path**: `/api/auth/forgot-password`
 - **Request Body**: `{ "email": "arjun@example.com" }`
 - **Response (200 OK)**: `{ "success": true, "message": "Password reset instructions sent." }`
 
-#### 6. Reset Password
+#### 8. Reset Password
 - **Method**: `POST`
 - **Path**: `/api/auth/reset-password`
 - **Request Body**: `{ "token": "rst_xyz...", "newPassword": "NewSecurePassword123!" }`

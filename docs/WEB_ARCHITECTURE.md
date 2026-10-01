@@ -130,30 +130,39 @@ apps/web/
 
 ### 4.1 Authentication, Session Persistence & Route Guards
 
-Access to `@tebeya/web` is strictly limited to users with the `admin` role. 
+Access to `@tebeya/web` is strictly limited to authorized administrators listed in the backend environment variable `admin_web_controll_emails`. Authentication utilizes a secure **One-Time Password (OTP)** mechanism dispatched via **Nodemailer**.
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor Admin as Dispatch Manager / Owner
     participant Web as Web Admin UI
+    participant API as Tebeya API (/api/auth)
+    participant SMTP as Nodemailer Transporter
     participant AuthCtx as AuthContext & Storage
     participant Router as TanStack Router Guard
-    participant API as Tebeya API (/api/auth)
 
-    Admin->>Web: Enter Email & Password
-    Web->>API: POST /api/auth/login { email, password }
+    Admin->>Web: Enter Email (e.g. admin@tebeya.services)
+    Web->>API: POST /api/auth/admin/send-otp { email }
+    API->>API: Verify email in admin_web_controll_emails list
+    API->>SMTP: Dispatch 6-Digit OTP via Nodemailer
+    API-->>Web: 200 OK { message: 'OTP sent' }
+    Web-->>Admin: Prompt for 6-Digit Code
+    Admin->>Web: Enter OTP (e.g. 849201)
+    Web->>API: POST /api/auth/admin/verify-otp { email, otp }
+    API->>API: Verify OTP & enforce 10-minute expiry
     API-->>Web: 200 OK { user (role: 'admin'), tokens: { accessToken, refreshToken } }
-    Web->>AuthCtx: Store accessToken (memory/secure) & refreshToken
+    Web->>AuthCtx: Store accessToken & refreshToken
     Web->>Router: Redirect to Dashboard (/)
     Router->>Router: beforeLoad check: role === 'admin'
     Router-->>Admin: Render Operations Dashboard
 ```
 
 #### Key Architecture Rules
-1. **Stateless Token Management:** The short-lived `accessToken` (15m) is stored in memory/context. The `refreshToken` (30d) is held in secure persistent storage or HTTP-only cookie.
-2. **Silent Token Refresh:** The API client intercepts any `401 Unauthorized` responses, executes `POST /api/auth/refresh`, updates the active token, and seamlessly retries the failed request.
-3. **Route Protection:** TanStack Router uses `beforeLoad` route hooks on all authenticated routes. Unauthenticated or non-admin users are immediately redirected to `/login` with an intact `redirect` search parameter.
+1. **Access Allowlist Policy (`admin_web_controll_emails`):** Only email addresses present in the comma-separated environment variable list can request or receive OTP credentials. Unauthorized emails receive `403 Forbidden`.
+2. **One-Time Password Expiry & Limiting:** Codes are 6-digit numbers generated on demand, valid for 10 minutes with maximum 5 attempts before invalidation.
+3. **Stateless Token Management:** The short-lived `accessToken` (15m) is stored in memory/context. The `refreshToken` (30d) is held in persistent storage.
+4. **Route Protection:** TanStack Router uses `beforeLoad` route hooks on all authenticated routes. Unauthenticated or non-admin users are immediately redirected to `/login`.
 
 ---
 

@@ -48,4 +48,22 @@ export class AuthController {
       next(err);
     }
   }
+
+  static async sendAdminOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await AuthService.sendAdminOtp(req.body.email);
+      sendSuccess(res, result, 200, result.message);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async verifyAdminOtp(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await AuthService.verifyAdminOtp(req.body.email, req.body.otp);
+      sendSuccess(res, result, 200, 'Admin verification successful');
+    } catch (err) {
+      next(err);
+    }
+  }
 }
