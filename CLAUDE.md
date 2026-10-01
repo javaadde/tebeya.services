@@ -9,7 +9,7 @@
 - **Key Documentation:**
   - [API Architecture & Specification](./docs/API_ARCHITECTURE.md)
   - [Product Requirements Document (PRD)](./docs/PRD_%20Catering%20Staff%20Booking%20App.md)
-  - [Agent Operating Guide](./AGENT.md)
+  - [Agent Operating Guide](./AGENTS.md)
 
 ---
 

@@ -25,7 +25,7 @@ tebeya.services/
 
 - 📘 **[API Server Architecture & Endpoints Spec](./docs/API_ARCHITECTURE.md)**: Full breakdown of backend modules, data schemas, endpoints catalog, clash algorithms, and security.
 - 📋 **[Product Requirements Document (PRD)](./docs/PRD_%20Catering%20Staff%20Booking%20App.md)**: Product goals, user journeys, edge cases, and milestone roadmaps.
-- 🤖 **[Agent Operating Guide (AGENT.md)](./AGENT.md)**: Autonomous agent operating rules, system invariants, and workflow standards.
+- 🤖 **[Agent Operating Guide (AGENTS.md)](./AGENTS.md)**: Autonomous agent operating rules, system invariants, and workflow standards.
 - 🧠 **[Claude Code Reference (CLAUDE.md)](./CLAUDE.md)**: Architecture quick reference and development conventions.
 
 ---
