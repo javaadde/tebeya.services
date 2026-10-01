@@ -24,20 +24,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none select-none';
+      'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none select-none active:scale-[0.98]';
 
     const variants = {
-      primary: 'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500 shadow-sm',
-      secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-gray-400',
-      outline: 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-emerald-500 shadow-sm',
-      danger: 'bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm',
-      ghost: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-400',
+      primary:
+        'bg-[#e66434] text-white hover:bg-[#cf5224] focus:ring-[#e66434]/40 shadow-sm shadow-[#e66434]/25',
+      secondary:
+        'bg-[#f7f4ef] text-stone-800 hover:bg-[#dad0c3]/60 border border-[#dad0c3] focus:ring-stone-400',
+      outline:
+        'border border-[#dad0c3] text-stone-700 bg-white hover:bg-[#f7f4ef] hover:border-stone-400 focus:ring-[#e66434]/40 shadow-sm',
+      danger:
+        'bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm',
+      ghost:
+        'text-stone-600 hover:bg-[#dad0c3]/30 hover:text-stone-900 focus:ring-stone-300',
     };
 
     const sizes = {
-      sm: 'text-xs px-2.5 py-1.5 gap-1.5',
-      md: 'text-sm px-4 py-2 gap-2',
-      lg: 'text-base px-5 py-2.5 gap-2.5',
+      sm: 'text-xs px-3 py-1.5 gap-1.5 rounded-lg',
+      md: 'text-sm px-4 py-2 gap-2 rounded-xl',
+      lg: 'text-base px-5 py-2.5 gap-2.5 rounded-2xl',
     };
 
     return (

@@ -155,7 +155,7 @@ export function PayoutsView() {
         }
       />
 
-      <div className="p-8 space-y-6">
+      <div className="px-6 sm:px-8 py-3 space-y-6 pb-12">
         {feedback && <Alert variant={feedback.type}>{feedback.message}</Alert>}
 
         {/* Financial Stat Cards */}
@@ -172,20 +172,20 @@ export function PayoutsView() {
             value={`₹${totalPaidAmount.toLocaleString()}`}
             subtext="Disbursed to servers"
             icon={IndianRupee}
-            variant="emerald"
+            variant="terracotta"
           />
           <StatCard
             label="Active Travel Wage Rule"
             value={`₹${wageRule?.basePay ?? 800} Base`}
             subtext={`+₹${wageRule?.perKmRate ?? 10}/km above ${wageRule?.freeKm ?? 15}km`}
             icon={RefreshCw}
-            variant="blue"
+            variant="default"
           />
         </div>
 
         {/* Ledger Table */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+          <div className="p-4 flex items-center justify-between">
             <h3 className="text-sm font-bold text-gray-900">
               Shift Attendance & Compensation Records
             </h3>
@@ -205,7 +205,7 @@ export function PayoutsView() {
                       pendingItems.length > 0 &&
                       selectedBookingIds.length === pendingItems.length
                     }
-                    className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                    className="rounded-lg border-[#dad0c3] text-[#e66434] focus:ring-[#e66434]"
                   />
                 </TableHeader>
                 <TableHeader>Staff Member</TableHeader>
@@ -242,7 +242,7 @@ export function PayoutsView() {
                             type="checkbox"
                             checked={selectedBookingIds.includes(item.bookingId)}
                             onChange={() => handleToggleSelect(item.bookingId)}
-                            className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                            className="rounded-lg border-[#dad0c3] text-[#e66434] focus:ring-[#e66434]"
                           />
                         )}
                       </TableCell>
@@ -274,7 +274,7 @@ export function PayoutsView() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-xs text-emerald-700 hover:bg-emerald-50 border-emerald-200"
+                            className="text-xs text-[#e66434] hover:bg-[#faeae3] border-[#f5d5c7] rounded-xl font-bold"
                             onClick={() => handleMarkSinglePaid(item.bookingId)}
                             isLoading={isProcessing}
                           >

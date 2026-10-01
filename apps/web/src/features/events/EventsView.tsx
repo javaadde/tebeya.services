@@ -61,18 +61,18 @@ export function EventsView() {
         }
       />
 
-      <div className="p-8 space-y-6">
+      <div className="px-6 sm:px-8 py-3 space-y-6 pb-12">
         {/* Filters bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-4">
-          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
+          <div className="flex items-center gap-1.5 bg-[#f7f4ef] p-1.5 rounded-2xl">
             {filterTabs.map((tab) => (
               <button
                 key={tab.value}
                 onClick={() => setStatusFilter(tab.value)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
                   statusFilter === tab.value
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-900'
+                    ? 'bg-[#e66434] text-white shadow-md shadow-[#e66434]/20'
+                    : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
                 {tab.label}
@@ -80,19 +80,19 @@ export function EventsView() {
             ))}
           </div>
 
-          <div className="text-xs font-medium text-gray-500">
+          <div className="text-xs font-semibold text-stone-500">
             Showing {filteredEvents.length} shift(s)
           </div>
         </div>
 
         {/* Content list */}
         {isLoading ? (
-          <div className="py-16 text-center text-sm text-gray-400">Loading events...</div>
+          <div className="py-16 text-center text-sm text-stone-400">Loading events...</div>
         ) : filteredEvents.length === 0 ? (
-          <div className="py-16 text-center bg-white rounded-2xl border border-dashed border-gray-200">
-            <Calendar className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <h3 className="text-sm font-bold text-gray-900">No events found</h3>
-            <p className="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
+          <div className="py-16 text-center bg-white rounded-3xl shadow-sm">
+            <Calendar className="w-10 h-10 text-stone-300 mx-auto mb-3" />
+            <h3 className="text-sm font-bold text-stone-900">No events found</h3>
+            <p className="text-xs text-stone-500 mt-1 max-w-sm mx-auto">
               There are currently no events matching this filter. Create a new shift to publish it to staff.
             </p>
             <div className="mt-4">
@@ -101,6 +101,7 @@ export function EventsView() {
                 size="sm"
                 icon={Plus}
                 onClick={() => setIsCreateModalOpen(true)}
+                className="rounded-xl border-0 bg-[#f7f4ef] text-stone-800 shadow-xs hover:bg-[#eee9df]"
               >
                 Create Event
               </Button>
@@ -119,13 +120,13 @@ export function EventsView() {
                 <div
                   key={evt.id}
                   onClick={() => setSelectedEvent(evt)}
-                  className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all p-5 cursor-pointer flex flex-col justify-between group"
+                  className="bg-white rounded-3xl shadow-sm hover:shadow-md transition-all p-5 cursor-pointer flex flex-col justify-between group"
                 >
                   <div>
                     {/* Header: Title + Badges */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div>
-                        <h3 className="text-base font-bold text-gray-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
+                        <h3 className="text-base font-black text-stone-900 group-hover:text-[#e66434] transition-colors line-clamp-1">
                           {evt.title}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
@@ -133,48 +134,48 @@ export function EventsView() {
                           <StatusBadge status={evt.status} />
                         </div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-emerald-600 transition-colors flex-shrink-0" />
+                      <ChevronRight className="w-5 h-5 text-stone-300 group-hover:text-[#e66434] transition-colors flex-shrink-0" />
                     </div>
 
                     {/* Metadata */}
-                    <div className="space-y-1.5 text-xs text-gray-600 my-4">
+                    <div className="space-y-1.5 text-xs text-stone-600 my-4">
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                        <Calendar className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0" />
                         <span>{evt.date}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                        <Clock className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0" />
                         <span>
                           {evt.startTime} - {evt.endTime}
                         </span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                        <MapPin className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0 mt-0.5" />
                         <span className="line-clamp-1">{evt.venue.text}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Capacity Bar & Pay Footer */}
-                  <div className="pt-4 border-t border-gray-100">
+                  <div className="pt-4">
                     <div className="flex items-center justify-between text-xs mb-1.5">
-                      <span className="flex items-center gap-1.5 font-medium text-gray-500">
+                      <span className="flex items-center gap-1.5 font-semibold text-stone-500">
                         <Users className="w-3.5 h-3.5" />
                         Headcount
                       </span>
                       <span
-                        className={`font-bold ${
-                          isFull ? 'text-emerald-700' : 'text-gray-900'
+                        className={`font-black ${
+                          isFull ? 'text-emerald-700' : 'text-stone-900'
                         }`}
                       >
                         {evt.filledCount} / {evt.headcount} ({fillPct}%)
                       </span>
                     </div>
 
-                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden mb-3">
+                    <div className="w-full bg-[#f4f0ea] rounded-full h-2 overflow-hidden mb-3">
                       <div
                         className={`h-full rounded-full transition-all duration-300 ${
-                          isFull ? 'bg-emerald-600' : fillPct > 50 ? 'bg-emerald-500' : 'bg-amber-500'
+                          isFull ? 'bg-emerald-600' : 'bg-[#e66434]'
                         }`}
                         style={{ width: `${fillPct}%` }}
                       />

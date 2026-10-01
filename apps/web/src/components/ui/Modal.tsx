@@ -62,21 +62,21 @@ export function Modal({
       <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div
           className={cn(
-            'relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full border border-gray-100',
+            'relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full',
             maxWidths[maxWidth]
           )}
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+          <div className="flex items-center justify-between px-6 py-4.5 bg-[#fbf9f6]">
             <div>
-              <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+              <h3 className="text-lg font-black text-stone-900 tracking-tight">{title}</h3>
               {description && (
-                <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+                <p className="text-xs text-stone-500 mt-0.5">{description}</p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+              className="rounded-xl p-1.5 text-stone-400 hover:bg-[#dad0c3]/40 hover:text-stone-700 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

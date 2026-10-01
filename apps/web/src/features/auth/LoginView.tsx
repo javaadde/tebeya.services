@@ -77,21 +77,26 @@ export function LoginView() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-[#ede8e1] flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl mx-auto shadow-lg shadow-emerald-200">
-          TS
-        </div>
-        <h2 className="mt-4 text-2xl font-black text-gray-900 tracking-tight">
+        <img
+          src="/logo.jpg"
+          alt="Tebeya Services Logo"
+          className="w-16 h-16 rounded-3xl object-cover border border-[#dad0c3] shadow-md mx-auto"
+          onError={(e) => {
+            (e.target as HTMLElement).style.display = 'none';
+          }}
+        />
+        <h2 className="mt-4 text-2xl font-black text-stone-900 tracking-tight">
           Tebeya Services
         </h2>
-        <p className="mt-1 text-sm text-gray-500 font-medium">
-          Admin Portal · Secure OTP Access
+        <p className="mt-1 text-sm text-stone-500 font-medium">
+          Admin Operations Hub · Secure OTP Access
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-xl shadow-gray-200/50 sm:rounded-2xl sm:px-10 border border-gray-100">
+        <div className="bg-white py-8 px-6 shadow-xl shadow-stone-300/40 rounded-3xl sm:px-10 border border-[#dad0c3]/80">
           {error && <Alert variant="danger" className="mb-4">{error}</Alert>}
           {successMessage && <Alert variant="success" className="mb-4">{successMessage}</Alert>}
 
@@ -105,14 +110,14 @@ export function LoginView() {
                   placeholder="admin@tebeya.services"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  helperText="Only emails defined in the server's admin_web_controll_emails list can log in."
+                  helperText="Only emails defined in the server's admin_web_controll_emails policy can log in."
                 />
               </div>
 
               <Button
                 type="submit"
                 variant="primary"
-                className="w-full py-2.5"
+                className="w-full py-2.5 rounded-2xl"
                 isLoading={isLoading}
                 icon={Mail}
               >
@@ -121,10 +126,10 @@ export function LoginView() {
             </form>
           ) : (
             <form className="space-y-5" onSubmit={handleVerifyOtp}>
-              <div className="p-3 bg-gray-50 rounded-xl border border-gray-200 text-xs flex items-center justify-between">
+              <div className="p-3 bg-[#f7f4ef] rounded-2xl border border-[#dad0c3] text-xs flex items-center justify-between">
                 <div>
-                  <span className="text-gray-400 block">Recipient:</span>
-                  <span className="font-semibold text-gray-900 font-mono">{email}</span>
+                  <span className="text-stone-400 block">Recipient:</span>
+                  <span className="font-semibold text-stone-900 font-mono">{email}</span>
                 </div>
                 <button
                   type="button"
@@ -133,7 +138,7 @@ export function LoginView() {
                     setOtp('');
                     setError(null);
                   }}
-                  className="text-emerald-700 hover:underline font-semibold flex items-center gap-1"
+                  className="text-[#e66434] hover:underline font-bold flex items-center gap-1"
                 >
                   <ArrowLeft className="w-3 h-3" /> Change
                 </button>
@@ -156,7 +161,7 @@ export function LoginView() {
               <Button
                 type="submit"
                 variant="primary"
-                className="w-full py-2.5"
+                className="w-full py-2.5 rounded-2xl"
                 isLoading={isLoading}
                 icon={KeyRound}
               >
@@ -168,7 +173,7 @@ export function LoginView() {
                   type="button"
                   disabled={isLoading}
                   onClick={handleResendOtp}
-                  className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-emerald-700 font-medium"
+                  className="inline-flex items-center gap-1 text-xs text-stone-500 hover:text-[#e66434] font-medium"
                 >
                   <RefreshCw className="w-3 h-3" /> Didn't receive code? Resend
                 </button>
@@ -176,20 +181,20 @@ export function LoginView() {
             </form>
           )}
 
-          <div className="mt-6 pt-6 border-t border-gray-100 space-y-3">
+          <div className="mt-6 pt-6 border-t border-[#dad0c3]/60 space-y-3">
             <Button
               type="button"
               variant="outline"
-              className="w-full py-2 text-xs border-emerald-200 text-emerald-800 bg-emerald-50/50 hover:bg-emerald-50"
+              className="w-full py-2.5 text-xs font-bold border-[#dad0c3] text-stone-800 bg-[#f7f4ef] hover:bg-[#dad0c3]/40 rounded-2xl"
               onClick={() => demoLogin()}
             >
               ⚡ Explore Demo Admin Portal (Instant Access)
             </Button>
 
-            <div className="flex items-start gap-2.5 text-xs text-gray-500 bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 text-xs text-stone-500 bg-[#faf8f5] p-3 rounded-2xl border border-[#dad0c3]/60">
+              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-gray-700">Access Control:</span> Only emails in the server's <code className="bg-gray-200 px-1 py-0.5 rounded text-[11px]">admin_web_controll_emails</code> policy are dispatched OTP credentials.
+                <span className="font-semibold text-stone-700">Access Control:</span> Only authorized admin emails are issued OTP passes.
               </div>
             </div>
           </div>

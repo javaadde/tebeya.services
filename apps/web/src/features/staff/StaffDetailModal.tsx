@@ -135,33 +135,33 @@ export function StaffDetailModal({
           </div>
 
           <div className="pt-2">
-            <span className="text-gray-500 block">Registered Address (for travel radius):</span>
-            <div className="flex items-center gap-1.5 text-gray-800 mt-0.5">
-              <MapPin className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+            <span className="text-stone-500 block">Registered Address (for travel radius):</span>
+            <div className="flex items-center gap-1.5 text-stone-800 mt-0.5">
+              <MapPin className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0" />
               <span>{staff.address?.text || 'No address confirmed'}</span>
             </div>
           </div>
         </div>
 
         {/* Private KYC ID Proof Review */}
-        <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-3">
+        <div className="bg-white p-4 rounded-2xl border border-[#dad0c3] space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="font-bold text-gray-900 text-sm flex items-center gap-2">
-              <FileText className="w-4 h-4 text-emerald-600" />
+            <h4 className="font-bold text-stone-900 text-sm flex items-center gap-2">
+              <FileText className="w-4 h-4 text-[#e66434]" />
               Government ID Proof (Private KYC Asset)
             </h4>
-            <span className="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
+            <span className="text-[11px] bg-[#faeae3] text-[#cf5224] border border-[#f5d5c7] px-2.5 py-0.5 rounded-full font-bold">
               Rule 4 Compliant
             </span>
           </div>
 
           {staff.idProofUrl ? (
             <div className="space-y-2">
-              <div className="relative rounded-xl overflow-hidden border border-gray-200 bg-gray-100 p-2 text-center">
+              <div className="relative rounded-2xl overflow-hidden border border-[#dad0c3] bg-[#f7f4ef] p-2 text-center">
                 <img
                   src={staff.idProofUrl}
                   alt="Staff ID Proof"
-                  className="max-h-60 mx-auto rounded-lg object-contain"
+                  className="max-h-60 mx-auto rounded-xl object-contain"
                 />
               </div>
               <div className="flex justify-end">
@@ -169,7 +169,7 @@ export function StaffDetailModal({
                   href={staff.idProofUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-emerald-700 hover:underline font-semibold"
+                  className="inline-flex items-center gap-1 text-xs text-[#e66434] hover:underline font-bold"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   View Original Document

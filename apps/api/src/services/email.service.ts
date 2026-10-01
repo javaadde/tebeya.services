@@ -6,16 +6,42 @@ export class EmailService {
 
   private static getTransporter(): Transporter {
     if (!this.transporter) {
-      if (ENV.SMTP_HOST && ENV.SMTP_USER && ENV.SMTP_PASS) {
-        this.transporter = nodemailer.createTransport({
-          host: ENV.SMTP_HOST,
-          port: ENV.SMTP_PORT,
-          secure: ENV.SMTP_PORT === 465,
-          auth: {
-            user: ENV.SMTP_USER,
-            pass: ENV.SMTP_PASS,
-          },
-        });
+      if (ENV.SMTP_USER && ENV.SMTP_PASS) {
+        // Sanitize host: remove protocols like '://', 'https://', 'http://' and trailing slashes
+        let cleanHost = (ENV.SMTP_HOST || '')
+          .replace(/^(https?:\/\/|:\/\/|\/\/)/i, '')
+          .replace(/\/.*$/, '')
+          .trim();
+
+        const isGmail =
+          cleanHost.includes('gmail.com') ||
+          cleanHost.toLowerCase() === 'gmail' ||
+          ENV.SMTP_USER.endsWith('@gmail.com');
+
+        if (isGmail) {
+          this.transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: ENV.SMTP_USER,
+              pass: ENV.SMTP_PASS,
+            },
+          });
+        } else if (cleanHost) {
+          this.transporter = nodemailer.createTransport({
+            host: cleanHost,
+            port: ENV.SMTP_PORT || 587,
+            secure: ENV.SMTP_PORT === 465,
+            auth: {
+              user: ENV.SMTP_USER,
+              pass: ENV.SMTP_PASS,
+            },
+          });
+        } else {
+          this.transporter = nodemailer.createTransport({
+            streamTransport: true,
+            newline: 'windows',
+          });
+        }
       } else {
         // Fallback for development without external SMTP credentials
         this.transporter = nodemailer.createTransport({
@@ -68,13 +94,14 @@ export class EmailService {
     `;
 
     try {
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         from: ENV.SMTP_FROM,
         to,
         subject: `Your Tebeya Services Admin OTP: ${otp}`,
         text: `Your Tebeya Services Admin login OTP is: ${otp}. It expires in 10 minutes.`,
         html,
       });
+      console.log(`[EmailService] Email sent successfully to ${to}. MessageId: ${info.messageId}`);
       return true;
     } catch (error) {
       console.error('[EmailService] Failed to send email via SMTP transporter:', error);

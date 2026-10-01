@@ -8,7 +8,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Card({ className, children, ...props }: CardProps) {
   return (
     <div
-      className={cn('bg-white rounded-xl border border-gray-200 shadow-sm p-6', className)}
+      className={cn('bg-white rounded-3xl shadow-sm p-6', className)}
       {...props}
     >
       {children}
@@ -28,10 +28,10 @@ export function CardHeader({
   className?: string;
 }) {
   return (
-    <div className={cn('flex items-center justify-between pb-4 mb-4 border-b border-gray-100', className)}>
+    <div className={cn('flex items-center justify-between pb-3 mb-3', className)}>
       <div>
-        <h3 className="text-base font-bold text-gray-900">{title}</h3>
-        {subtitle && <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>}
+        <h3 className="text-base font-bold text-stone-900">{title}</h3>
+        {subtitle && <p className="text-xs text-stone-500 mt-0.5">{subtitle}</p>}
       </div>
       {action && <div>{action}</div>}
     </div>

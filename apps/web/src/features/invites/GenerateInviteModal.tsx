@@ -90,10 +90,10 @@ export function GenerateInviteModal({
           />
         </div>
 
-        <div className="bg-amber-50 p-3.5 rounded-xl border border-amber-200 text-xs text-amber-800 flex items-start gap-2.5">
-          <ShieldAlert className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-600" />
+        <div className="bg-[#faeae3] p-3.5 rounded-2xl border border-[#f5d5c7] text-xs text-[#732c16] flex items-start gap-2.5">
+          <ShieldAlert className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#e66434]" />
           <span>
-            <strong>Security Rule:</strong> Each invite code is strictly single-use and will be permanently retired once redeemed by a candidate.
+            <strong className="font-bold">Security Rule:</strong> Each invite code is strictly single-use and will be permanently retired once redeemed by a candidate.
           </span>
         </div>
 

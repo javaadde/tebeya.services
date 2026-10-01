@@ -16,12 +16,17 @@ function AdminPortal() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#ede8e1] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white font-black text-sm shadow-md animate-pulse">
-            TS
-          </div>
-          <p className="text-xs text-gray-500 font-medium">Loading Tebeya Admin Portal...</p>
+          <img
+            src="/logo.jpg"
+            alt="Logo"
+            className="w-12 h-12 rounded-2xl object-cover border border-[#dad0c3] shadow-md animate-pulse"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
+          />
+          <p className="text-xs text-stone-600 font-bold">Loading Tebeya Operations Hub...</p>
         </div>
       </div>
     );

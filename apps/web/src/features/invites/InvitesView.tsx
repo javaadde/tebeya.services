@@ -67,17 +67,17 @@ export function InvitesView() {
         }
       />
 
-      <div className="p-8 space-y-6">
+      <div className="px-6 sm:px-8 py-3 space-y-6 pb-12">
         {/* Info Banner */}
-        <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-start gap-4">
-          <div className="p-3 bg-emerald-50 rounded-xl text-emerald-600 flex-shrink-0">
+        <div className="bg-white p-5 rounded-3xl shadow-sm flex items-start gap-4">
+          <div className="p-3 bg-[#faeae3] rounded-2xl text-[#e66434] flex-shrink-0">
             <KeyRound className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-gray-900">
+            <h3 className="text-sm font-black text-stone-900">
               Invite-Only Registration Policy Active
             </h3>
-            <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+            <p className="text-xs text-stone-500 mt-1 leading-relaxed">
               New catering staff cannot register without an active, unexpired invite code issued by an administrator.
               Each code is single-use and expires after the configured duration.
             </p>
@@ -85,16 +85,16 @@ export function InvitesView() {
         </div>
 
         {/* Filter bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-4">
-          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
+          <div className="flex items-center gap-1.5 bg-[#f7f4ef] p-1.5 rounded-2xl">
             {filterTabs.map((tab) => (
               <button
                 key={tab.value}
                 onClick={() => setStatusFilter(tab.value)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
                   statusFilter === tab.value
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-900'
+                    ? 'bg-[#e66434] text-white shadow-md shadow-[#e66434]/20'
+                    : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
                 {tab.label}
@@ -102,13 +102,13 @@ export function InvitesView() {
             ))}
           </div>
 
-          <div className="text-xs font-medium text-gray-500">
+          <div className="text-xs font-semibold text-stone-500">
             Showing {codes.length} code(s)
           </div>
         </div>
 
         {/* Codes Table */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
           <Table>
             <TableHead>
               <TableRow>
@@ -123,7 +123,7 @@ export function InvitesView() {
             {isLoading ? (
               <tbody>
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-xs text-gray-400">
+                  <td colSpan={6} className="px-4 py-8 text-center text-xs text-stone-400">
                     Loading invite codes...
                   </td>
                 </tr>
@@ -136,16 +136,16 @@ export function InvitesView() {
                   <TableRow key={item.id}>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-sm text-gray-900 tracking-wider bg-gray-50 px-2 py-1 rounded border border-gray-200">
+                        <span className="font-mono font-bold text-sm text-stone-900 tracking-wider bg-[#f7f4ef] px-2.5 py-1 rounded-xl">
                           {item.code}
                         </span>
                         <button
                           onClick={() => handleCopy(item.code)}
-                          className="p-1 text-gray-400 hover:text-emerald-600 rounded transition-colors"
+                          className="p-1 text-stone-400 hover:text-[#e66434] rounded transition-colors"
                           title="Copy Code"
                         >
                           {copiedCode === item.code ? (
-                            <Check className="w-4 h-4 text-emerald-600" />
+                            <Check className="w-4 h-4 text-[#e66434]" />
                           ) : (
                             <Copy className="w-4 h-4" />
                           )}

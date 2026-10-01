@@ -62,7 +62,7 @@ export function SettingsView() {
         subtitle="Configure default server wage structures, travel allowances, and operational parameters."
       />
 
-      <div className="p-8 max-w-4xl space-y-6">
+      <div className="px-6 sm:px-8 py-3 max-w-4xl space-y-6 pb-12">
         {feedback && <Alert variant={feedback.type}>{feedback.message}</Alert>}
 
         {/* Wage Rules Configuration */}
@@ -104,15 +104,15 @@ export function SettingsView() {
             </div>
 
             {/* Travel Formula Box */}
-            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900">
-              <h5 className="font-bold mb-1 flex items-center gap-1.5">
-                <Sliders className="w-3.5 h-3.5 text-emerald-700" />
+            <div className="p-4 bg-[#f7f4ef] rounded-2xl shadow-xs text-xs text-stone-900">
+              <h5 className="font-bold mb-1 flex items-center gap-1.5 text-stone-900">
+                <Sliders className="w-3.5 h-3.5 text-[#e66434]" />
                 Live Travel Calculation Formula
               </h5>
-              <p className="font-mono text-emerald-800 bg-white/70 p-2 rounded-lg border border-emerald-100 my-1.5">
+              <p className="font-mono text-stone-800 bg-white/90 p-2.5 rounded-xl shadow-xs my-1.5 font-bold">
                 Total Payout = ₹{basePay} + Max(0, Distance - {freeKm} km) × ₹{perKmRate}/km
               </p>
-              <p className="text-[11px] text-emerald-700">
+              <p className="text-[11px] text-stone-600">
                 Example: A server traveling 25 km to a banquet receives ₹{basePay} + (10 km × ₹{perKmRate}) = ₹{basePay + 10 * perKmRate}.
               </p>
             </div>
@@ -123,6 +123,7 @@ export function SettingsView() {
                 type="submit"
                 isLoading={isSaving}
                 icon={CheckCircle2}
+                className="rounded-xl px-5 py-2 font-bold"
               >
                 Save Wage Rule
               </Button>
@@ -137,35 +138,35 @@ export function SettingsView() {
             subtitle="Core operational invariants enforced by the backend API and honored by the admin portal."
           />
 
-          <div className="space-y-3 text-xs text-gray-600">
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+          <div className="space-y-3 text-xs text-stone-600">
+            <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
+              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
               <div>
-                <strong className="text-gray-900 block">Rule 1: Shared Domain Contracts</strong>
+                <strong className="text-stone-900 block font-bold">Rule 1: Shared Domain Contracts</strong>
                 All entity schemas (CateringEvent, Booking, User, InviteCode) originate from @tebeya/shared.
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
+              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
               <div>
-                <strong className="text-gray-900 block">Rule 2: Server-Side Clash & Capacity Authority</strong>
+                <strong className="text-stone-900 block font-bold">Rule 2: Server-Side Clash & Capacity Authority</strong>
                 Hard overlap checks (startA &lt; endB and startB &lt; endA), daily 2-event maximums, and atomic seat increments are strictly enforced by the backend API.
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
+              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
               <div>
-                <strong className="text-gray-900 block">Rule 3: Restricted Invite-Only Onboarding</strong>
+                <strong className="text-stone-900 block font-bold">Rule 3: Restricted Invite-Only Onboarding</strong>
                 Open self-registration is disabled. Mobile staff signups require valid, single-use, admin-issued invite codes.
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
+              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
               <div>
-                <strong className="text-gray-900 block">Rule 4: Private KYC Document Storage</strong>
+                <strong className="text-stone-900 block font-bold">Rule 4: Private KYC Document Storage</strong>
                 Staff Government ID proof documents are stored in Cloudinary authenticated mode and viewed using short-lived signed URLs.
               </div>
             </div>

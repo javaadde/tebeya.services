@@ -183,20 +183,20 @@ export function EventDetailModal({
 
         {/* Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="space-y-2 bg-white p-4 rounded-xl border border-gray-200">
-            <h4 className="font-bold text-gray-800 text-sm mb-2">Schedule & Venue</h4>
-            <p className="flex items-center gap-2 text-gray-600">
-              <Calendar className="w-4 h-4 text-emerald-600" />
+          <div className="space-y-2 bg-white p-4 rounded-2xl border border-[#dad0c3]">
+            <h4 className="font-bold text-stone-900 text-sm mb-2">Schedule & Venue</h4>
+            <p className="flex items-center gap-2 text-stone-600">
+              <Calendar className="w-4 h-4 text-[#e66434]" />
               <span>{event.date}</span>
             </p>
-            <p className="flex items-center gap-2 text-gray-600">
-              <Clock className="w-4 h-4 text-emerald-600" />
+            <p className="flex items-center gap-2 text-stone-600">
+              <Clock className="w-4 h-4 text-[#e66434]" />
               <span>
                 {event.startTime} - {event.endTime} (24h)
               </span>
             </p>
-            <p className="flex items-start gap-2 text-gray-600">
-              <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <p className="flex items-start gap-2 text-stone-600">
+              <MapPin className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
               <span>{event.venue.text}</span>
             </p>
           </div>
@@ -325,7 +325,7 @@ export function EventDetailModal({
                             [item.bookingId]: e.target.value as AttendanceStatus,
                           }))
                         }
-                        className="text-xs border border-gray-300 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                        className="text-xs border border-[#dad0c3] rounded-lg px-2.5 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-[#e66434]"
                       >
                         <option value="pending">Pending</option>
                         <option value="present">Present (Eligible)</option>

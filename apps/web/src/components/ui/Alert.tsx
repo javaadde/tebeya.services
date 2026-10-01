@@ -16,10 +16,10 @@ export function Alert({
   className,
 }: AlertProps) {
   const variants = {
-    info: 'bg-blue-50 text-blue-800 border-blue-200',
-    success: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-    warning: 'bg-amber-50 text-amber-800 border-amber-200',
-    danger: 'bg-rose-50 text-rose-800 border-rose-200',
+    info: 'bg-[#faeae3] text-[#732c16] border-[#f5d5c7]',
+    success: 'bg-emerald-50 text-emerald-900 border-emerald-200/80',
+    warning: 'bg-amber-50 text-amber-900 border-amber-200/80',
+    danger: 'bg-rose-50 text-rose-900 border-rose-200/80',
   };
 
   const icons = {
@@ -34,7 +34,7 @@ export function Alert({
   return (
     <div
       className={cn(
-        'flex items-start gap-3 p-4 rounded-xl border text-sm',
+        'flex items-start gap-3 p-4 rounded-2xl border text-sm',
         variants[variant],
         className
       )}

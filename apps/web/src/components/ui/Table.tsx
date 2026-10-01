@@ -7,8 +7,8 @@ export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> 
 
 export function Table({ className, children, ...props }: TableProps) {
   return (
-    <div className="w-full overflow-x-auto rounded-lg border border-gray-200">
-      <table className={cn('w-full text-left text-sm text-gray-700', className)} {...props}>
+    <div className="w-full overflow-x-auto rounded-2xl bg-white shadow-sm">
+      <table className={cn('w-full text-left text-sm text-stone-700', className)} {...props}>
         {children}
       </table>
     </div>
@@ -16,7 +16,7 @@ export function Table({ className, children, ...props }: TableProps) {
 }
 
 export function TableHead({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <thead className={cn('bg-gray-50 text-xs font-semibold uppercase text-gray-500 border-b border-gray-200', className)}>{children}</thead>;
+  return <thead className={cn('bg-[#f7f4ef] text-xs font-semibold uppercase text-stone-500 border-b border-stone-100', className)}>{children}</thead>;
 }
 
 export function TableRow({ children, className, onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
@@ -24,8 +24,8 @@ export function TableRow({ children, className, onClick }: { children: React.Rea
     <tr
       onClick={onClick}
       className={cn(
-        'border-b border-gray-100 last:border-none transition-colors',
-        onClick && 'cursor-pointer hover:bg-gray-50/80',
+        'border-b border-stone-100/80 last:border-none transition-colors',
+        onClick && 'cursor-pointer hover:bg-[#faf8f5]',
         className
       )}
     >

@@ -44,18 +44,18 @@ export function StaffView() {
         subtitle="Verify catering server profiles, review government ID proofs, and manage deployment status."
       />
 
-      <div className="p-8 space-y-6">
+      <div className="px-6 sm:px-8 py-3 space-y-6 pb-12">
         {/* Top Controls Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-4">
-          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
+          <div className="flex items-center gap-1.5 bg-[#f7f4ef] p-1.5 rounded-2xl">
             {filterTabs.map((tab) => (
               <button
                 key={tab.value}
                 onClick={() => setStatusFilter(tab.value)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
                   statusFilter === tab.value
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-900'
+                    ? 'bg-[#e66434] text-white shadow-md shadow-[#e66434]/20'
+                    : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
                 {tab.label}
@@ -64,19 +64,19 @@ export function StaffView() {
           </div>
 
           <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />
             <input
               type="text"
               placeholder="Search by name, phone, or email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full pl-9 pr-3.5 py-2 text-xs bg-white rounded-xl shadow-xs focus:outline-none focus:ring-2 focus:ring-[#e66434]/20"
             />
           </div>
         </div>
 
         {/* Staff Table */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
           <Table>
             <TableHead>
               <TableRow>
@@ -108,41 +108,41 @@ export function StaffView() {
                   >
                     <TableCell>
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">
+                        <div className="w-8 h-8 rounded-xl bg-[#faeae3] text-[#e66434] flex items-center justify-center font-bold text-xs">
                           {staff.name ? staff.name[0].toUpperCase() : 'U'}
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-900 text-sm">
+                          <div className="font-bold text-stone-900 text-sm">
                             {staff.name}
                           </div>
-                          <div className="text-xs text-gray-400">{staff.email}</div>
+                          <div className="text-xs text-stone-400">{staff.email}</div>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="font-mono text-xs text-gray-600">{staff.phone}</span>
+                      <span className="font-mono text-xs text-stone-600">{staff.phone}</span>
                     </TableCell>
                     <TableCell>
                       <StatusBadge status={staff.status} />
                     </TableCell>
                     <TableCell>
                       {staff.phoneVerified ? (
-                        <span className="inline-flex items-center gap-1 text-xs text-emerald-700 font-medium">
+                        <span className="inline-flex items-center gap-1 text-xs text-emerald-700 font-semibold">
                           <UserCheck className="w-3.5 h-3.5" /> Verified
                         </span>
                       ) : (
-                        <span className="text-xs text-gray-400">Pending</span>
+                        <span className="text-xs text-stone-400">Pending</span>
                       )}
                     </TableCell>
                     <TableCell>
-                      <span className="text-xs font-semibold text-gray-800">
+                      <span className="text-xs font-semibold text-stone-800">
                         {staff.completedCount ?? 0}
                       </span>
                     </TableCell>
                     <TableCell>
                       <span
                         className={`text-xs font-bold ${
-                          (staff.noShowCount ?? 0) > 0 ? 'text-rose-600' : 'text-gray-400'
+                          (staff.noShowCount ?? 0) > 0 ? 'text-rose-600' : 'text-stone-400'
                         }`}
                       >
                         {staff.noShowCount ?? 0}
@@ -154,7 +154,7 @@ export function StaffView() {
                           e.stopPropagation();
                           setSelectedStaff(staff);
                         }}
-                        className="inline-flex items-center gap-1 text-xs text-emerald-700 font-semibold hover:underline"
+                        className="inline-flex items-center gap-1 text-xs text-[#e66434] font-bold hover:underline"
                       >
                         Review Profile
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -168,10 +168,10 @@ export function StaffView() {
         </div>
 
         {/* Security / KYC Advisory */}
-        <div className="p-4 bg-gray-100/70 rounded-xl border border-gray-200 text-xs text-gray-600 flex items-start gap-3">
-          <ShieldAlert className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+        <div className="p-4 bg-[#f7f4ef] rounded-2xl shadow-xs text-xs text-stone-600 flex items-start gap-3">
+          <ShieldAlert className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
           <div>
-            <strong>Private Storage Compliance (Rule 4):</strong> Staff government ID proof images are stored in Cloudinary authenticated mode. Signed temporary links expire automatically to protect candidate privacy.
+            <strong className="text-stone-900">Private Storage Compliance (Rule 4):</strong> Staff government ID proof images are stored in Cloudinary authenticated mode. Signed temporary links expire automatically to protect candidate privacy.
           </div>
         </div>
       </div>
