@@ -11,7 +11,7 @@ tebeya.services/
 ├── apps/
 │   ├── api/            # Node.js + Express + MongoDB (Mongoose) API service
 │   ├── mobile/         # React Native + Expo app for catering service staff
-│   └── web-admin/      # React + TanStack (Router/Query) + Vite admin panel
+│   └── web/            # React + TanStack (Router/Query) + Vite admin panel
 ├── packages/
 │   └── shared/         # Shared domain models, TypeScript interfaces, & constants
 ├── docs/               # PRD and technical specifications
@@ -24,6 +24,7 @@ tebeya.services/
 ## Documentation
 
 - 📘 **[API Server Architecture & Endpoints Spec](./docs/API_ARCHITECTURE.md)**: Full breakdown of backend modules, data schemas, endpoints catalog, clash algorithms, and security.
+- 🖥️ **[Web Admin Portal Architecture Spec](./docs/WEB_ARCHITECTURE.md)**: Frontend architecture, TanStack router/query structure, state management, roster operations, and KYC security.
 - 📋 **[Product Requirements Document (PRD)](./docs/PRD_%20Catering%20Staff%20Booking%20App.md)**: Product goals, user journeys, edge cases, and milestone roadmaps.
 - 🤖 **[Agent Operating Guide (AGENTS.md)](./AGENTS.md)**: Autonomous agent operating rules, system invariants, and workflow standards.
 - 🧠 **[Claude Code Reference (CLAUDE.md)](./CLAUDE.md)**: Architecture quick reference and development conventions.
@@ -35,7 +36,7 @@ tebeya.services/
 | Component | Technology | Role & Responsibilities |
 |---|---|---|
 | **Mobile App (`apps/mobile`)** | React Native (Expo) | Staff onboarding with single-use invite codes, browsing shifts, join/leave with hard clash checks, history & earnings. |
-| **Admin Portal (`apps/web-admin`)** | React (Vite) + TanStack (Query & Router) + Tailwind CSS | Admin dashboard, event scheduling, rosters, attendance & payout marking, invite code generation. |
+| **Admin Portal (`apps/web`)** | React (Vite) + TanStack (Query & Router) + Tailwind CSS | Admin dashboard, event scheduling, rosters, attendance & payout marking, invite code generation. |
 | **Backend API (`apps/api`)** | Node.js + Express + MongoDB (Mongoose) | Central business logic: atomic bookings, hard overlap checks, travel gap validation, JWT auth, notifications. |
 | **Shared Core (`packages/shared`)** | TypeScript | Shared data models (`User`, `CateringEvent`, `Booking`, `InviteCode`, `WageRule`) and shared constants. |
 
@@ -59,10 +60,12 @@ pnpm dev:api
 - Listens on `http://localhost:5000`
 - Health check: `http://localhost:5000/api/health`
 
-#### Web Admin Portal (`apps/web-admin`)
+#### Web Admin Portal (`apps/web`)
 ```bash
 # Start Vite development server
 pnpm dev:admin
+# or
+pnpm dev:web
 ```
 - Available at `http://localhost:5173`
 

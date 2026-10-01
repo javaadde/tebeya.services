@@ -18,7 +18,7 @@
 | Package / App | Path | Primary Technologies | Description |
 |---|---|---|---|
 | **API Server** | `apps/api` | Express 4.x, TypeScript, MongoDB, Mongoose, Zod | Core REST API, clash engine, atomic booking, auth |
-| **Web Admin** | `apps/web-admin` | React 19, Vite, TanStack Router/Query, Tailwind CSS | Event roster, invite code generation, staff verifications |
+| **Web Admin** | `apps/web` | React 19, Vite, TanStack Router/Query, Tailwind CSS | Event roster, invite code generation, staff verifications |
 | **Mobile App** | `apps/mobile` | React Native 0.76, Expo 52, TypeScript | Staff shift discovery, booking, clash alert UI, earnings |
 | **Shared Core** | `packages/shared` | TypeScript (ESM) | Canonical domain types (`User`, `CateringEvent`, `Booking`, etc.) |
 
@@ -48,7 +48,7 @@ pnpm lint
 
 # Workspace-specific typechecks
 pnpm --filter @tebeya/api typecheck
-pnpm --filter @tebeya/web-admin typecheck
+pnpm --filter @tebeya/web typecheck
 pnpm --filter @tebeya/mobile typecheck
 pnpm --filter @tebeya/shared typecheck
 ```
@@ -71,7 +71,7 @@ pnpm --filter @tebeya/shared typecheck
   - Failure: `{ success: false, error: { code: string, message: string, details?: any } }`
 - **Transactions & Concurrency:** Use conditional atomic queries (`findOneAndUpdate` with `$expr` capacity guards) or MongoDB transactions to prevent race conditions during booking.
 
-### Frontend & Admin (`apps/web-admin`)
+### Frontend & Admin (`apps/web`)
 - **Routing:** TanStack Router.
 - **Data Fetching:** TanStack Query (`useQuery`, `useMutation`).
 - **Styling:** Tailwind CSS utility classes; use `clsx` and `tailwind-merge` for conditional class combinations.

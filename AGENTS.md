@@ -17,7 +17,7 @@ tebeya.services/
 ├── apps/
 │   ├── api/            # Express 4.x + MongoDB (Mongoose) + TypeScript backend
 │   ├── mobile/         # React Native 0.76 + Expo 52 staff mobile app
-│   └── web-admin/      # React 19 + TanStack Router/Query + Tailwind + Vite admin panel
+│   └── web/            # React 19 + TanStack Router/Query + Tailwind + Vite admin panel
 ├── packages/
 │   └── shared/         # Shared domain models, TypeScript interfaces, & constants
 ├── docs/               # PRD and API architecture documentation
@@ -40,7 +40,7 @@ Always execute commands from the monorepo root unless a specific package context
 - **Build all buildable packages:** `pnpm build`
 - **Lint all packages:** `pnpm lint`
 - **Typecheck API:** `pnpm --filter @tebeya/api typecheck`
-- **Typecheck Admin:** `pnpm --filter @tebeya/web-admin typecheck`
+- **Typecheck Admin:** `pnpm --filter @tebeya/web typecheck`
 - **Typecheck Mobile:** `pnpm --filter @tebeya/mobile typecheck`
 - **Typecheck Shared:** `pnpm --filter @tebeya/shared typecheck`
 
@@ -52,7 +52,7 @@ When modifying or implementing features, you **must adhere to these rules**:
 
 ### Rule 1: Shared Models as Single Source of Truth
 - All entity contracts, payload interfaces, enums, and shared types must reside in `packages/shared/src/types/index.ts`.
-- When updating an entity field (e.g. adding a property to `CateringEvent` or `Booking`), **update `packages/shared` first**, run `pnpm --filter @tebeya/shared build` (or verify export), and then use it in `api`, `web-admin`, and `mobile`.
+- When updating an entity field (e.g. adding a property to `CateringEvent` or `Booking`), **update `packages/shared` first**, run `pnpm --filter @tebeya/shared build` (or verify export), and then use it in `api`, `web`, and `mobile`.
 
 ### Rule 2: Server-Side Enforcement of Booking Rules
 - Never rely solely on client-side validation for schedule clashes or capacity.
@@ -86,7 +86,7 @@ When modifying or implementing features, you **must adhere to these rules**:
   - Success: `{ success: true, data: T, message?: string }`
   - Error: `{ success: false, error: { code: string, message: string, details?: any } }`
 
-### 4.2 Web Admin (`apps/web-admin`)
+### 4.2 Web Admin (`apps/web`)
 - **Stack:** React 19, `@tanstack/react-query` v5, `@tanstack/react-router`, Tailwind CSS.
 - **Design:** Clean dashboard with responsive tables, status badges, and actionable modal flows.
 - **State Management:** Server state via TanStack Query; UI state via local React state.
