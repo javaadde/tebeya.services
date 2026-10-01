@@ -1,4 +1,4 @@
-export * from './types';
+export * from './types/index.js';
 
 export const APP_CONFIG = {
   MAX_DAILY_EVENTS: 2,

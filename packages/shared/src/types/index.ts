@@ -72,6 +72,13 @@ export interface CateringEvent {
   updatedAt: string;
 }
 
+export interface EventWithStaffMeta extends CateringEvent {
+  distanceKm?: number;
+  estimatedPayout?: number;
+  isJoined?: boolean;
+  myBookingStatus?: BookingStatus;
+}
+
 export type BookingStatus = 'confirmed' | 'waitlisted' | 'cancelled';
 
 export type AttendanceStatus = 'pending' | 'present' | 'absent' | 'late';
@@ -116,5 +123,57 @@ export interface AppNotification {
   body: string;
   data?: Record<string, unknown>;
   readAt?: string;
+  createdAt: string;
+}
+
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  tokens: AuthTokens;
+}
+
+export interface ApiResponse<T> {
+  success: true;
+  data: T;
+  message?: string;
+}
+
+export interface ApiErrorDetail {
+  field?: string;
+  message: string;
+}
+
+export interface ApiErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: unknown;
+  };
+}
+
+export interface EarningsSummary {
+  totalEventsWorked: number;
+  totalEarnings: number;
+  currentMonthEarnings: number;
+  pendingPayouts: number;
+}
+
+export interface RosterItem {
+  bookingId: string;
+  user: {
+    id: string;
+    name: string;
+    phone: string;
+    profileImageUrl?: string;
+  };
+  status: BookingStatus;
+  attendance: AttendanceStatus;
+  payoutAmount: number;
+  payoutStatus: PayoutStatus;
   createdAt: string;
 }
