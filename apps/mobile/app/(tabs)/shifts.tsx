@@ -1,41 +1,24 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
-  FlatList,
-  TouchableOpacity,
-  Linking,
-  Alert,
+  ScrollView,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  Calendar,
-  Clock,
-  MapPin,
-  Phone,
-  Navigation,
-  XCircle,
-  Shirt,
-  AlertTriangle,
-} from 'lucide-react-native';
-import { CateringEvent, Booking } from '@tebeya/shared';
+import { useQuery } from '@tanstack/react-query';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
-import { Header } from '../../src/components/layout/Header';
-import { EmptyState } from '../../src/components/layout/EmptyState';
-import { SlotBadge } from '../../src/components/ui/Badge';
-import { Button } from '../../src/components/ui/Button';
+import { AppTopHeader } from '../../src/components/layout/AppTopHeader';
+import { ShiftCard } from '../../src/components/shifts/ShiftCard';
 import { eventsApi } from '../../src/api/events.api';
-import { CONFIG } from '../../src/constants/config';
+import { EventWithStaffMeta } from '@tebeya/shared';
 
-export default function MyShiftsScreen() {
+export default function UpcomingEventsScreen() {
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<'confirmed' | 'waitlisted'>('confirmed');
 
   const {
-    data,
+    data: myBookingsData,
     isLoading,
     refetch,
     isRefetching,
@@ -44,232 +27,84 @@ export default function MyShiftsScreen() {
     queryFn: () => eventsApi.getMyBookings(),
   });
 
-  const leaveMutation = useMutation({
-    mutationFn: (eventId: string) => eventsApi.leaveEvent(eventId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['my-bookings'] });
-      queryClient.invalidateQueries({ queryKey: ['events'] });
-      Alert.alert('Shift Cancelled', 'You have been removed from this shift roster.');
-    },
-    onError: (err: Error) => {
-      Alert.alert('Unable to Cancel Shift', err.message);
-    },
+  const { data: allEvents = [] } = useQuery<EventWithStaffMeta[]>({
+    queryKey: ['events'],
+    queryFn: () => eventsApi.getEvents(),
   });
 
-  const handleOpenMaps = (address: string, lat?: number, lng?: number) => {
-    let url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-    if (lat && lng) {
-      url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-    }
-    Linking.openURL(url).catch(() => {
-      Alert.alert('Error', 'Unable to open map application.');
-    });
-  };
+  // Include EVERY upcoming event that is not filled yet
+  const displayShifts = useMemo(() => {
+    const myBookedIds = new Set((myBookingsData?.events || []).map((e) => e.id));
 
-  const handleCallCoordinator = (phone: string) => {
-    Linking.openURL(`tel:${phone}`).catch(() => {
-      Alert.alert('Error', 'Unable to place phone call.');
-    });
-  };
-
-  const handleLeaveShift = (event: CateringEvent) => {
-    // Check cancellation cutoff (e.g. 24 hours before start)
-    const eventDateTime = new Date(`${event.date}T${event.startTime}:00`);
-    const now = new Date();
-    const hoursRemaining = (eventDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
-
-    if (hoursRemaining < CONFIG.CANCELLATION_CUTOFF_HOURS) {
-      Alert.alert(
-        'Late Cancellation Cutoff Passed',
-        `Cancellations within ${CONFIG.CANCELLATION_CUTOFF_HOURS} hours of shift start cannot be made in the app. Please contact your coordinator directly.`,
-        [
-          { text: 'OK' },
-          event.contactPerson?.phone
-            ? {
-                text: 'Call Coordinator',
-                onPress: () => handleCallCoordinator(event.contactPerson!.phone),
-              }
-            : { text: 'Dismiss' },
-        ]
-      );
-      return;
-    }
-
-    Alert.alert(
-      'Leave Shift Confirmation',
-      `Are you sure you want to cancel your shift at "${event.title}"? Your spot will be offered to the waitlist.`,
-      [
-        { text: 'Keep Shift', style: 'cancel' },
-        {
-          text: 'Confirm Cancellation',
-          style: 'destructive',
-          onPress: () => leaveMutation.mutate(event.id),
-        },
-      ]
-    );
-  };
-
-  const confirmedEvents = (data?.events || []).filter((e) => {
-    const booking = data?.bookings?.find((b) => b.eventId === e.id);
-    return booking?.status === 'confirmed';
-  });
-
-  const waitlistedEvents = (data?.events || []).filter((e) => {
-    const booking = data?.bookings?.find((b) => b.eventId === e.id);
-    return booking?.status === 'waitlisted';
-  });
-
-  const displayList = activeTab === 'confirmed' ? confirmedEvents : waitlistedEvents;
+    return allEvents
+      .filter((event) => {
+        const isNotFull = (event.filledCount || 0) < (event.headcount || 1);
+        const isJoined = myBookedIds.has(event.id) || event.isJoined;
+        return isNotFull || isJoined;
+      })
+      .sort((a, b) => {
+        const dateCompare = a.date.localeCompare(b.date);
+        if (dateCompare !== 0) return dateCompare;
+        return (a.startTime || '').localeCompare(b.startTime || '');
+      });
+  }, [allEvents, myBookingsData]);
 
   return (
-    <ScreenWrapper>
-      <Header title="My Shifts" />
+    <ScreenWrapper className="px-4">
+      {/* Header matching Image 2: "check your" / "Upcoming events" / Orange Button */}
+      <AppTopHeader
+        subtitle="check your"
+        title="Upcoming events"
+      />
 
-      {/* Segmented Filter */}
-      <View className="px-4 py-3 bg-white border-b border-slate-100 flex-row">
-        <TouchableOpacity
-          onPress={() => setActiveTab('confirmed')}
-          className={`flex-1 py-2 rounded-xl items-center mr-2 border ${
-            activeTab === 'confirmed'
-              ? 'bg-indigo-600 border-indigo-600'
-              : 'bg-slate-50 border-slate-200'
-          }`}
-        >
-          <Text
-            className={`text-xs font-bold ${
-              activeTab === 'confirmed' ? 'text-white' : 'text-slate-600'
-            }`}
-          >
-            Confirmed ({confirmedEvents.length})
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => setActiveTab('waitlisted')}
-          className={`flex-1 py-2 rounded-xl items-center border ${
-            activeTab === 'waitlisted'
-              ? 'bg-indigo-600 border-indigo-600'
-              : 'bg-slate-50 border-slate-200'
-          }`}
-        >
-          <Text
-            className={`text-xs font-bold ${
-              activeTab === 'waitlisted' ? 'text-white' : 'text-slate-600'
-            }`}
-          >
-            Waitlisted ({waitlistedEvents.length})
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <FlatList
-        data={displayList}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 130 }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            colors={['#4f46e5']}
+            colors={['#df3b20']}
+            tintColor="#df3b20"
           />
         }
-        renderItem={({ item }) => (
-          <View className="bg-white rounded-2xl p-4 mb-4 border border-slate-200 shadow-sm">
-            <View className="flex-row justify-between items-center mb-2">
-              <SlotBadge slot={item.slot} />
-              <View className="bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                <Text className="text-xs font-bold text-emerald-700">
-                  {activeTab === 'confirmed' ? 'Confirmed Shift' : 'Waitlisted'}
-                </Text>
-              </View>
-            </View>
+      >
+        {/* 2-Column Grid */}
+        <View className="flex-row flex-wrap justify-between pt-1">
+          {displayShifts.map((event) => (
+            <ShiftCard
+              key={event.id}
+              event={event}
+              variant="grid"
+              onPress={() => router.push(`/events/${event.id}`)}
+            />
+          ))}
+        </View>
 
-            <Text className="text-lg font-bold text-slate-900 mb-2">
-              {item.title}
+        {/* Empty state if no unfilled events exist */}
+        {displayShifts.length === 0 && !isLoading && (
+          <View className="bg-white rounded-[26px] p-8 items-center justify-center my-6 shadow-sm border border-white/50">
+            <Text className="text-base font-bold text-neutral-800">
+              No Open Shifts
             </Text>
-
-            {/* Timing & Reporting notice */}
-            <View className="bg-amber-50/70 p-3 rounded-xl mb-3 border border-amber-200/70">
-              <View className="flex-row items-center mb-1">
-                <Clock size={15} color="#d97706" />
-                <Text className="text-xs font-bold text-amber-900 ml-1.5">
-                  Reporting Time: 30 mins before shift start
-                </Text>
-              </View>
-              <Text className="text-xs text-amber-800">
-                Shift: {item.date} • {item.startTime} to {item.endTime}
-              </Text>
-            </View>
-
-            {/* Venue & Dress Code */}
-            <View className="space-y-1.5 mb-4">
-              <View className="flex-row items-center">
-                <MapPin size={15} color="#64748b" />
-                <Text className="text-xs text-slate-700 ml-1.5 flex-1" numberOfLines={2}>
-                  {item.venue.text}
-                </Text>
-              </View>
-
-              {item.dressCode && (
-                <View className="flex-row items-center mt-1">
-                  <Shirt size={15} color="#64748b" />
-                  <Text className="text-xs text-slate-700 ml-1.5 flex-1" numberOfLines={1}>
-                    Dress Code: {item.dressCode}
-                  </Text>
-                </View>
-              )}
-            </View>
-
-            {/* Action Row */}
-            <View className="flex-row space-x-2 pt-2 border-t border-slate-100">
-              <TouchableOpacity
-                onPress={() => handleOpenMaps(item.venue.text, item.venue.lat, item.venue.lng)}
-                className="flex-1 flex-row items-center justify-center bg-slate-100 py-2.5 px-3 rounded-xl mr-2"
-              >
-                <Navigation size={14} color="#334155" />
-                <Text className="text-xs font-bold text-slate-700 ml-1.5">
-                  Directions
-                </Text>
-              </TouchableOpacity>
-
-              {item.contactPerson?.phone && (
-                <TouchableOpacity
-                  onPress={() => handleCallCoordinator(item.contactPerson!.phone)}
-                  className="flex-1 flex-row items-center justify-center bg-slate-100 py-2.5 px-3 rounded-xl mr-2"
-                >
-                  <Phone size={14} color="#334155" />
-                  <Text className="text-xs font-bold text-slate-700 ml-1.5">
-                    Coordinator
-                  </Text>
-                </TouchableOpacity>
-              )}
-
-              {activeTab === 'confirmed' && (
-                <TouchableOpacity
-                  onPress={() => handleLeaveShift(item)}
-                  className="px-3 py-2.5 rounded-xl bg-rose-50 border border-rose-200 items-center justify-center"
-                >
-                  <XCircle size={16} color="#e11d48" />
-                </TouchableOpacity>
-              )}
-            </View>
+            <Text className="text-xs text-neutral-500 text-center mt-1">
+              All upcoming shifts are currently filled. Check back soon!
+            </Text>
           </View>
         )}
-        ListEmptyComponent={
-          !isLoading ? (
-            <EmptyState
-              title={activeTab === 'confirmed' ? 'No Confirmed Shifts' : 'No Waitlisted Shifts'}
-              description={
-                activeTab === 'confirmed'
-                  ? "You haven't joined any upcoming catering shifts yet. Visit the Discover tab to find available slots."
-                  : 'You are not currently on any waitlists.'
-              }
-              actionTitle="Discover Shifts"
-              onAction={() => router.push('/(tabs)')}
-            />
-          ) : null
-        }
-      />
+
+        {/* Bottom Quote: Appears when scrolling is over (end of the list) */}
+        {displayShifts.length > 0 && (
+          <View className="items-center justify-center pt-8 pb-4">
+            <Text className="text-2xl font-black text-neutral-400/80 tracking-wider text-center">
+              Hakuna Matata !
+            </Text>
+            <Text className="text-[11px] font-semibold text-neutral-400 mt-1">
+              You're all caught up with available shifts
+            </Text>
+          </View>
+        )}
+      </ScrollView>
     </ScreenWrapper>
   );
 }

@@ -25,8 +25,7 @@ export class AuthService {
     }
 
     if (new Date() > invite.expiresAt) {
-      invite.status = 'expired';
-      await invite.save();
+      await InviteCode.deleteOne({ _id: invite._id });
       throw new AppError('INVITE_EXPIRED', 'This invite code has expired', 400);
     }
 
@@ -253,6 +252,46 @@ export class AuthService {
         user.status = 'active';
         await user.save();
       }
+    }
+
+    if (user.status === 'suspended') {
+      throw new AppError('ACCOUNT_SUSPENDED', 'Your admin account has been suspended', 403);
+    }
+
+    const payload = {
+      userId: user._id.toString(),
+      role: user.role,
+      email: user.email,
+    };
+
+    const tokens = {
+      accessToken: signAccessToken(payload),
+      refreshToken: signRefreshToken(payload),
+    };
+
+    return {
+      user: user.toSafeJSON() as any,
+      tokens,
+    };
+  }
+
+  static async demoLogin(): Promise<AuthResponse> {
+    let user = await User.findOne({ role: 'admin' });
+    if (!user) {
+      user = await User.findOne();
+    }
+    if (!user) {
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash('admin123', salt);
+      user = await User.create({
+        name: 'Operations Dispatcher',
+        email: 'admin@tebeya.services',
+        phone: '+91 98470 00001',
+        passwordHash,
+        role: 'admin',
+        status: 'active',
+        phoneVerified: true,
+      });
     }
 
     if (user.status === 'suspended') {

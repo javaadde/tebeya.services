@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Mail, Lock, LogIn } from 'lucide-react-native';
+import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react-native';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
 import { Input } from '../../src/components/ui/Input';
 import { Button } from '../../src/components/ui/Button';
@@ -38,83 +38,85 @@ export default function LoginScreen() {
   };
 
   return (
-    <ScreenWrapper scrollable className="px-6 py-10 justify-between">
+    <ScreenWrapper scrollable className="px-5 py-6 justify-between">
       <View>
         {/* Brand Header */}
-        <View className="items-center mb-8 pt-4">
-          <View className="w-16 h-16 rounded-2xl bg-indigo-600 items-center justify-center mb-4 shadow-md">
-            <LogIn size={32} color="#ffffff" />
+        <View className="items-center my-6">
+          <View className="w-16 h-16 rounded-[22px] bg-[#df3b20] items-center justify-center mb-4 shadow-sm">
+            <LogIn size={28} color="#ffffff" />
           </View>
-          <Text className="text-2xl font-black text-slate-900 tracking-tight">
+          <Text className="text-2xl font-black text-neutral-900 tracking-tight">
             Staff Portal
           </Text>
-          <Text className="text-sm text-slate-500 mt-1">
-            Sign in to view and book catering shifts
+          <Text className="text-xs font-medium text-neutral-500 mt-1">
+            Sign in to discover and book catering shifts
           </Text>
         </View>
 
-        {/* Global Error Banner */}
-        {error && (
-          <View className="bg-rose-50 border border-rose-200 p-3.5 rounded-xl mb-5">
-            <Text className="text-xs text-rose-700 font-semibold">{error}</Text>
-          </View>
-        )}
+        {/* Form Card */}
+        <View className="bg-white rounded-[28px] p-6 shadow-sm border border-white/50">
+          {error && (
+            <View className="bg-rose-50 border border-rose-200 p-3.5 rounded-xl mb-4">
+              <Text className="text-xs text-rose-700 font-semibold">{error}</Text>
+            </View>
+          )}
 
-        {/* Form Fields */}
-        <Input
-          label="Email Address"
-          placeholder="staff@tebeya.com"
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            setError(null);
-          }}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          leftIcon={<Mail size={18} color="#94a3b8" />}
-        />
+          <Input
+            label="Email Address"
+            placeholder="staff@tebeya.com"
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+              setError(null);
+            }}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            leftIcon={<Mail size={18} color="#94a3b8" />}
+          />
 
-        <Input
-          label="Password"
-          placeholder="Enter your password"
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-            setError(null);
-          }}
-          secureTextEntry
-          leftIcon={<Lock size={18} color="#94a3b8" />}
-        />
+          <Input
+            label="Password"
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+              setError(null);
+            }}
+            secureTextEntry
+            leftIcon={<Lock size={18} color="#94a3b8" />}
+          />
 
-        <TouchableOpacity
-          onPress={() => router.push('/(auth)/forgot-password')}
-          className="self-end -mt-1 mb-6"
-        >
-          <Text className="text-xs font-semibold text-indigo-600">
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.push('/(auth)/forgot-password')}
+            className="self-end -mt-1 mb-6"
+          >
+            <Text className="text-xs font-bold text-[#df3b20]">
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
 
-        <Button
-          title="Sign In"
-          onPress={handleLogin}
-          loading={loading}
-          size="lg"
-        />
+          <Button
+            title="Sign In"
+            onPress={handleLogin}
+            loading={loading}
+            variant="primary"
+            size="lg"
+          />
+        </View>
       </View>
 
-      {/* Footer Navigation */}
-      <View className="items-center pt-8 border-t border-slate-200/60 mt-10">
-        <Text className="text-xs text-slate-500 text-center mb-2">
+      {/* Footer Card */}
+      <View className="bg-white/80 rounded-[24px] p-4 items-center mt-6">
+        <Text className="text-xs text-neutral-600 text-center mb-1.5">
           New to Tebeya Services? Sign up requires an invite code.
         </Text>
         <TouchableOpacity
           onPress={() => router.push('/(auth)/signup')}
-          className="py-2 px-4"
+          className="py-1"
         >
-          <Text className="text-sm font-bold text-indigo-600">
-            Enter Invite Code & Sign Up
+          <Text className="text-xs font-black text-[#df3b20]">
+            Enter Invite Code & Sign Up →
           </Text>
         </TouchableOpacity>
       </View>

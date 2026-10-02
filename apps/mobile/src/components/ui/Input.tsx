@@ -25,8 +25,8 @@ export const Input: React.FC<InputProps> = ({
         <Text className="text-sm font-medium text-slate-700 mb-1.5">{label}</Text>
       )}
       <View
-        className={`flex-row items-center border rounded-xl bg-white px-3.5 py-3 ${
-          error ? 'border-rose-500 bg-rose-50/20' : 'border-slate-300 focus:border-indigo-600'
+        className={`flex-row items-center border rounded-2xl bg-white px-4 py-3.5 ${
+          error ? 'border-rose-500 bg-rose-50/20' : 'border-neutral-200 focus:border-[#df3b20]'
         }`}
       >
         {leftIcon && <View className="mr-2.5">{leftIcon}</View>}

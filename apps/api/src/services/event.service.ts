@@ -7,6 +7,38 @@ import { calculateDistanceKm } from '../utils/geo.js';
 import { EventSlot, EventStatus, EventWithStaffMeta } from '@tebeya/shared';
 
 export class EventService {
+  static async listEventsForAdmin(filters?: {
+    date?: string;
+    slot?: EventSlot;
+    status?: EventStatus;
+    onlyOpen?: boolean;
+  }): Promise<EventWithStaffMeta[]> {
+    const query: any = {};
+    if (filters?.status) {
+      query.status = filters.status;
+    }
+    if (filters?.date) {
+      query.date = filters.date;
+    }
+    if (filters?.slot) {
+      query.slot = filters.slot;
+    }
+
+    let events = await CateringEvent.find(query).sort({ date: -1, startTime: 1 });
+
+    if (filters?.onlyOpen) {
+      events = events.filter((e) => e.filledCount < e.headcount);
+    }
+
+    return events.map((event) => {
+      const eventJson = event.toSafeJSON() as any;
+      return {
+        ...eventJson,
+        estimatedPayout: event.payPerPerson,
+      };
+    });
+  }
+
   static async listEventsForStaff(
     userId?: string,
     filters?: { date?: string; slot?: EventSlot; onlyOpen?: boolean }
@@ -117,14 +149,16 @@ export class EventService {
     venue: { text: string; lat?: number; lng?: number };
     headcount: number;
     payPerPerson: number;
+    status?: EventStatus;
     notes?: string;
     dressCode?: string;
     contactPerson?: { name: string; phone: string };
   }): Promise<ICateringEventDocument> {
+    const status = data.status || 'draft';
     return CateringEvent.create({
       ...data,
       filledCount: 0,
-      status: 'draft',
+      status,
     });
   }
 

@@ -9,7 +9,21 @@ import { sendError } from './utils/response.js';
 export function createApp(): Express {
   const app = express();
 
-  app.use(cors({ origin: ENV.CORS_ORIGIN, credentials: true }));
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        // Allow requests with no origin (native mobile apps, curl) or in development
+        if (!origin || ENV.NODE_ENV === 'development') {
+          return callback(null, true);
+        }
+        if (origin === ENV.CORS_ORIGIN) {
+          return callback(null, true);
+        }
+        return callback(null, false);
+      },
+      credentials: true,
+    })
+  );
   app.use(express.json());
   app.use(morgan(ENV.NODE_ENV === 'development' ? 'dev' : 'combined'));
 

@@ -30,6 +30,7 @@ export async function apiClient<T>(
 
   const requestHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
+    'Bypass-Tunnel-Reminder': 'true',
     ...(headers as Record<string, string>),
   };
 
@@ -58,7 +59,7 @@ export async function apiClient<T>(
       try {
         const refreshRes = await fetch(`${CONFIG.API_BASE_URL}/auth/refresh`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
           body: JSON.stringify({ refreshToken }),
         });
 

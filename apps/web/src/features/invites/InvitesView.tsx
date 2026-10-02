@@ -23,6 +23,7 @@ export function InvitesView() {
     queryKey: queryKeys.invites.list(statusFilter === 'all' ? undefined : statusFilter),
     queryFn: () =>
       invitesApi.list(statusFilter === 'all' ? undefined : (statusFilter as InviteCodeStatus)),
+    refetchInterval: 5000,
   });
 
   const handleCopy = (code: string) => {
@@ -114,8 +115,7 @@ export function InvitesView() {
               <TableRow>
                 <TableHeader>Invite Code</TableHeader>
                 <TableHeader>Status</TableHeader>
-                <TableHeader>Locked Target</TableHeader>
-                <TableHeader>Expires At</TableHeader>
+                <TableHeader>Expires At (TTL)</TableHeader>
                 <TableHeader>Created</TableHeader>
                 <TableHeader className="text-right">Actions</TableHeader>
               </TableRow>
@@ -123,7 +123,7 @@ export function InvitesView() {
             {isLoading ? (
               <tbody>
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-xs text-stone-400">
+                  <td colSpan={5} className="px-4 py-8 text-center text-xs text-stone-400">
                     Loading invite codes...
                   </td>
                 </tr>
@@ -156,18 +156,13 @@ export function InvitesView() {
                       <StatusBadge status={item.status} />
                     </TableCell>
                     <TableCell>
-                      <span className="text-xs text-gray-600 font-mono">
-                        {item.lockedPhoneOrEmail || 'Unrestricted'}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-xs text-gray-600">
-                        {new Date(item.expiresAt).toLocaleDateString()} {new Date(item.expiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      <span className="text-xs text-stone-700 font-medium">
+                        {new Date(item.expiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                       </span>
                     </TableCell>
                     <TableCell>
                       <span className="text-xs text-gray-400">
-                        {new Date(item.createdAt).toLocaleDateString()}
+                        {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </TableCell>
                     <TableCell className="text-right">

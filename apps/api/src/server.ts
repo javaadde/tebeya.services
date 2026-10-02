@@ -10,9 +10,10 @@ async function bootstrap() {
   }
 
   const port = Number(ENV.PORT);
-  app.listen(port, () => {
-    console.log(`🚀 [API] Server running at http://localhost:${port}`);
-    console.log(`🩺 [API] Health check: http://localhost:${port}/api/health`);
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`🚀 [API] Server running locally at:   http://localhost:${port}`);
+    console.log(`🌐 [API] Server running on network at: http://0.0.0.0:${port}`);
+    console.log(`🩺 [API] Health check:                http://localhost:${port}/api/health`);
   });
 }
 

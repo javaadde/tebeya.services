@@ -11,13 +11,13 @@ export class AdminInviteController {
   ): Promise<void> {
     try {
       const adminId = req.user!.userId;
-      const { count, expiresInHours, lockedPhoneOrEmail } = req.body;
+      const { count, expiresInMinutes, expiresInHours } = req.body;
+      const minutes = expiresInMinutes ?? (expiresInHours ? expiresInHours * 60 : 2);
 
       const codes = await InviteService.generateInviteCodes(
         adminId,
         count,
-        expiresInHours,
-        lockedPhoneOrEmail
+        minutes
       );
 
       sendSuccess(

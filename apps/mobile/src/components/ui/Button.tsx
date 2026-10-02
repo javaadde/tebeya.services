@@ -28,17 +28,17 @@ export const Button: React.FC<ButtonProps> = ({
   const getVariantStyles = () => {
     switch (variant) {
       case 'primary':
-        return 'bg-indigo-600 active:bg-indigo-700 text-white border-transparent';
+        return 'bg-[#df3b20] active:bg-[#c73017] text-white border-transparent';
       case 'secondary':
-        return 'bg-slate-800 active:bg-slate-900 text-white border-transparent';
+        return 'bg-[#201d1e] active:bg-black text-white border-transparent';
       case 'outline':
-        return 'bg-transparent border border-slate-300 active:bg-slate-50 text-slate-700';
+        return 'bg-transparent border border-neutral-300 active:bg-white text-neutral-800';
       case 'danger':
         return 'bg-rose-600 active:bg-rose-700 text-white border-transparent';
       case 'ghost':
-        return 'bg-transparent text-slate-700 active:bg-slate-100';
+        return 'bg-transparent text-neutral-700 active:bg-white/50';
       default:
-        return 'bg-indigo-600 text-white';
+        return 'bg-[#df3b20] text-white';
     }
   };
 
@@ -82,7 +82,7 @@ export const Button: React.FC<ButtonProps> = ({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === 'outline' || variant === 'ghost' ? '#4f46e5' : '#ffffff'}
+          color={variant === 'outline' || variant === 'ghost' ? '#df3b20' : '#ffffff'}
         />
       ) : (
         <View className="flex-row items-center justify-center">

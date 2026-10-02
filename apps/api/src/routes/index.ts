@@ -12,6 +12,10 @@ import { adminEventRouter } from './admin/event.route.js';
 import { adminRosterRouter } from './admin/roster.route.js';
 import { adminPaymentRouter } from './admin/payment.route.js';
 
+import { AuthController } from '../controllers/auth.controller.js';
+import { validateBody } from '../middleware/validate.middleware.js';
+import { validateInviteSchema } from '../schemas/auth.schema.js';
+
 export const apiRouter = Router();
 
 // Public / Health
@@ -19,6 +23,7 @@ apiRouter.use('/health', healthRouter);
 
 // Staff / Common Auth
 apiRouter.use('/auth', authRouter);
+apiRouter.post('/invites/verify', validateBody(validateInviteSchema), AuthController.validateInvite);
 apiRouter.use('/events', eventRouter);
 apiRouter.use('/bookings', bookingRouter);
 apiRouter.use('/users', userRouter);

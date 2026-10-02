@@ -31,5 +31,11 @@ export const authApi = {
       body: JSON.stringify({ email, otp }),
     });
   },
+
+  demoLogin: async (): Promise<AuthResponse> => {
+    return apiClient<AuthResponse>('/auth/demo-login', {
+      method: 'POST',
+    });
+  },
 };
 

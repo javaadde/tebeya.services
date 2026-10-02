@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import type { CateringEvent, EventSlot, EventVenue } from '@tebeya/shared';
+import type { CateringEvent, EventSlot, EventStatus, EventVenue } from '@tebeya/shared';
 
 export interface CreateEventPayload {
   title: string;
@@ -11,11 +11,12 @@ export interface CreateEventPayload {
   venue: EventVenue;
   headcount: number;
   payPerPerson: number;
+  status?: EventStatus;
   notes?: string;
   dressCode?: string;
   contactPerson?: {
-    name: string;
-    phone: string;
+    name?: string;
+    phone?: string;
   };
 }
 
@@ -24,6 +25,7 @@ export type UpdateEventPayload = Partial<CreateEventPayload>;
 export interface ListEventsParams {
   date?: string;
   slot?: EventSlot;
+  status?: EventStatus;
   onlyOpen?: 'true' | 'false';
 }
 

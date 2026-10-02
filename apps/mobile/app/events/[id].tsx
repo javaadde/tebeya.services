@@ -6,11 +6,11 @@ import {
   Linking,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Calendar,
   Clock,
   MapPin,
   Phone,
@@ -19,12 +19,12 @@ import {
   IndianRupee,
   Navigation,
   CheckCircle2,
-  XCircle,
   Users,
+  ChevronLeft,
+  ArrowUpRight,
 } from 'lucide-react-native';
 import { EventWithStaffMeta } from '@tebeya/shared';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
-import { Header } from '../../src/components/layout/Header';
 import { SlotBadge } from '../../src/components/ui/Badge';
 import { ProgressBar } from '../../src/components/ui/ProgressBar';
 import { Button } from '../../src/components/ui/Button';
@@ -39,25 +39,21 @@ export default function EventDetailScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // Modals state
   const [doubleBookingModalVisible, setDoubleBookingModalVisible] = useState(false);
   const [clashModalVisible, setClashModalVisible] = useState(false);
   const [clashMessage, setClashMessage] = useState('');
 
-  // Fetch event details
   const { data: event, isLoading } = useQuery<EventWithStaffMeta>({
     queryKey: ['event', id],
     queryFn: () => eventsApi.getEventById(id as string),
     enabled: !!id,
   });
 
-  // Fetch existing user bookings to perform client clash pre-check (Rule 2)
   const { data: myBookingsData } = useQuery({
     queryKey: ['my-bookings'],
     queryFn: () => eventsApi.getMyBookings(),
   });
 
-  // Join Event Mutation
   const joinMutation = useMutation({
     mutationFn: (acknowledgedDoubleBooking: boolean = false) =>
       eventsApi.joinEvent(id as string, { acknowledgedDoubleBooking }),
@@ -74,7 +70,6 @@ export default function EventDetailScreen() {
     },
   });
 
-  // Leave Event Mutation
   const leaveMutation = useMutation({
     mutationFn: () => eventsApi.leaveEvent(id as string),
     onSuccess: () => {
@@ -91,7 +86,7 @@ export default function EventDetailScreen() {
   if (isLoading || !event) {
     return (
       <ScreenWrapper className="items-center justify-center">
-        <ActivityIndicator size="large" color="#4f46e5" />
+        <ActivityIndicator size="large" color="#df3b20" />
       </ScreenWrapper>
     );
   }
@@ -106,7 +101,6 @@ export default function EventDetailScreen() {
   const spotsLeft = Math.max(0, event.headcount - event.filledCount);
   const totalPay = (event.payPerPerson || 0) + (event.estimatedPayout || 0);
 
-  // Initiates Join Shift with Guardrails (Rule 2)
   const handleInitiateJoin = () => {
     const confirmedEvents = (myBookingsData?.events || []).filter((e) => {
       const b = myBookingsData?.bookings?.find((bk) => bk.eventId === e.id);
@@ -122,7 +116,6 @@ export default function EventDetailScreen() {
     }
 
     if (clashResult.isSecondShiftOfDay) {
-      // Prompt Mandatory Double-Booking Confirmation Modal (FR-12)
       setDoubleBookingModalVisible(true);
     } else {
       joinMutation.mutate(false);
@@ -170,174 +163,171 @@ export default function EventDetailScreen() {
   };
 
   return (
-    <ScreenWrapper scrollable>
-      <Header title="Shift Details" showBack />
+    <ScreenWrapper className="px-4">
+      {/* Top Header matching design reference */}
+      <View className="flex-row items-center justify-between pt-2 pb-4">
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="w-12 h-12 rounded-2xl bg-white items-center justify-center shadow-sm"
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <ChevronLeft size={22} color="#201d1e" />
+        </TouchableOpacity>
 
-      <View className="p-4">
-        {/* Slot & Date Badge Bar */}
-        <View className="flex-row justify-between items-center mb-3">
-          <SlotBadge slot={event.slot} />
-          <View className="bg-slate-100 px-3 py-1 rounded-full">
-            <Text className="text-xs font-bold text-slate-700">
-              {event.date}
-            </Text>
-          </View>
-        </View>
-
-        {/* Shift Title */}
-        <Text className="text-2xl font-black text-slate-900 mb-3 leading-7">
-          {event.title}
+        <Text className="text-base font-black text-neutral-900 tracking-tight">
+          Shift Details
         </Text>
 
-        {/* Shift Joined Banner */}
-        {isJoined && (
-          <View className="flex-row items-center bg-emerald-50 border border-emerald-200 p-3.5 rounded-2xl mb-4">
-            <CheckCircle2 size={20} color="#059669" />
-            <View className="ml-3 flex-1">
-              <Text className="text-xs font-bold text-emerald-800">
+        <View className="w-12 h-12 rounded-full bg-[#df3b20] items-center justify-center shadow-sm">
+          <ArrowUpRight size={22} color="#ffffff" />
+        </View>
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 40 }}
+      >
+        {/* Main Details Card */}
+        <View className="bg-white rounded-[28px] p-5 mb-3.5 shadow-sm border border-white/50">
+          <View className="flex-row justify-between items-center mb-3">
+            <SlotBadge slot={event.slot} />
+            <View className="bg-[#f1f2f2] px-3 py-1 rounded-full">
+              <Text className="text-xs font-bold text-neutral-700">
+                {event.date}
+              </Text>
+            </View>
+          </View>
+
+          <Text className="text-2xl font-black text-neutral-900 mb-2 leading-7">
+            {event.title}
+          </Text>
+
+          {isJoined && (
+            <View className="flex-row items-center bg-[#fdece8] border border-[#fad4cc] p-3 rounded-2xl my-2">
+              <CheckCircle2 size={18} color="#df3b20" />
+              <Text className="text-xs font-bold text-[#df3b20] ml-2 flex-1">
                 You are confirmed on this roster
               </Text>
-              <Text className="text-[11px] text-emerald-600">
-                Please arrive 30 mins before shift start in required dress code.
+            </View>
+          )}
+
+          {/* Wage Card */}
+          <View className="bg-[#f1f2f2] rounded-2xl p-4 my-3">
+            <View className="flex-row justify-between items-center">
+              <Text className="text-xs font-bold text-neutral-600 uppercase tracking-wide">
+                Total Estimated Pay
               </Text>
+              <View className="flex-row items-center">
+                <IndianRupee size={18} color="#df3b20" />
+                <Text className="text-xl font-black text-neutral-900">
+                  ₹{totalPay || event.payPerPerson}
+                </Text>
+              </View>
+            </View>
+            <View className="flex-row justify-between pt-2 mt-2 border-t border-neutral-200/80">
+              <Text className="text-[11px] text-neutral-500">
+                Base Shift: ₹{event.payPerPerson}
+              </Text>
+              {event.estimatedPayout ? (
+                <Text className="text-[11px] font-bold text-[#df3b20]">
+                  + ₹{event.estimatedPayout} Travel Bonus
+                </Text>
+              ) : null}
             </View>
           </View>
-        )}
 
-        {/* Wage Card */}
-        <View className="bg-indigo-50/70 border border-indigo-100 rounded-2xl p-4 mb-4">
-          <View className="flex-row justify-between items-center mb-1.5">
-            <Text className="text-xs font-bold text-indigo-900 uppercase tracking-wide">
-              Estimated Total Earnings
-            </Text>
+          {/* Timing & Venue */}
+          <View className="space-y-3 pt-2">
             <View className="flex-row items-center">
-              <IndianRupee size={20} color="#4f46e5" />
-              <Text className="text-2xl font-black text-indigo-700 ml-0.5">
-                ₹{totalPay || event.payPerPerson}
-              </Text>
-            </View>
-          </View>
-          <View className="flex-row justify-between text-xs pt-2 border-t border-indigo-200/50">
-            <Text className="text-xs text-slate-600">
-              Base Shift Wage: ₹{event.payPerPerson}
-            </Text>
-            {event.estimatedPayout ? (
-              <Text className="text-xs font-semibold text-emerald-700">
-                + ₹{event.estimatedPayout} Travel Allowance
-              </Text>
-            ) : null}
-          </View>
-        </View>
-
-        {/* Timing & Venue Cards */}
-        <View className="bg-white rounded-2xl p-4 mb-4 border border-slate-200 shadow-sm space-y-3">
-          <View className="flex-row items-center">
-            <Clock size={18} color="#4f46e5" />
-            <View className="ml-3 flex-1">
-              <Text className="text-xs font-medium text-slate-500">Shift Timings</Text>
-              <Text className="text-sm font-bold text-slate-900">
+              <Clock size={16} color="#64748b" />
+              <Text className="text-xs font-bold text-neutral-800 ml-2">
                 {event.startTime} - {event.endTime}
               </Text>
             </View>
-          </View>
 
-          <View className="h-px bg-slate-100 my-1" />
-
-          <View className="flex-row items-start">
-            <MapPin size={18} color="#4f46e5" className="mt-0.5" />
-            <View className="ml-3 flex-1">
-              <Text className="text-xs font-medium text-slate-500">Venue Location</Text>
-              <Text className="text-sm font-bold text-slate-900">
-                {event.venue.text}
-              </Text>
-              {event.distanceKm !== undefined && (
-                <Text className="text-xs font-semibold text-indigo-600 mt-0.5">
-                  {event.distanceKm} km from your home
+            <View className="flex-row items-start mt-2">
+              <MapPin size={16} color="#64748b" className="mt-0.5" />
+              <View className="ml-2 flex-1">
+                <Text className="text-xs text-neutral-700 leading-4">
+                  {event.venue.text}
                 </Text>
-              )}
-              <TouchableOpacity
-                onPress={() =>
-                  Linking.openURL(
-                    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue.text)}`
-                  )
-                }
-                className="flex-row items-center mt-2"
-              >
-                <Navigation size={13} color="#4f46e5" />
-                <Text className="text-xs font-bold text-indigo-600 ml-1">
-                  Open in Maps
-                </Text>
-              </TouchableOpacity>
+                {event.distanceKm !== undefined && (
+                  <Text className="text-[11px] font-bold text-[#df3b20] mt-0.5">
+                    {event.distanceKm} km from your home location
+                  </Text>
+                )}
+                <TouchableOpacity
+                  onPress={() =>
+                    Linking.openURL(
+                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue.text)}`
+                    )
+                  }
+                  className="flex-row items-center mt-1.5"
+                >
+                  <Navigation size={12} color="#df3b20" />
+                  <Text className="text-xs font-bold text-[#df3b20] ml-1">
+                    Open in Maps
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
 
-        {/* Headcount Capacity */}
-        <View className="bg-white rounded-2xl p-4 mb-4 border border-slate-200 shadow-sm">
+        {/* Capacity Card */}
+        <View className="bg-white rounded-[28px] p-5 mb-3.5 shadow-sm border border-white/50">
           <View className="flex-row items-center justify-between mb-2">
             <View className="flex-row items-center">
               <Users size={16} color="#64748b" />
-              <Text className="text-xs font-bold text-slate-700 ml-1.5">
-                Staff Headcount Capacity
+              <Text className="text-xs font-bold text-neutral-800 ml-1.5">
+                Headcount Capacity
               </Text>
             </View>
-            <Text className="text-xs font-bold text-slate-600">
+            <Text className="text-xs font-bold text-neutral-700">
               {spotsLeft} Spots Left
             </Text>
           </View>
           <ProgressBar current={event.filledCount} total={event.headcount} />
         </View>
 
-        {/* Dress Code & Guidelines */}
-        <View className="bg-white rounded-2xl p-4 mb-6 border border-slate-200 shadow-sm space-y-3">
+        {/* Dress Code & Supervisor Notes */}
+        <View className="bg-white rounded-[28px] p-5 mb-5 shadow-sm border border-white/50 space-y-3">
           {event.dressCode && (
             <View className="flex-row items-start">
-              <Shirt size={18} color="#64748b" className="mt-0.5" />
-              <View className="ml-3 flex-1">
-                <Text className="text-xs font-medium text-slate-500">Uniform & Dress Code</Text>
-                <Text className="text-xs font-semibold text-slate-800 leading-5">
+              <Shirt size={16} color="#64748b" className="mt-0.5" />
+              <View className="ml-2 flex-1">
+                <Text className="text-xs font-bold text-neutral-800">Dress Code</Text>
+                <Text className="text-xs text-neutral-600 mt-0.5 leading-4">
                   {event.dressCode}
                 </Text>
               </View>
             </View>
           )}
 
-          {event.notes && (
-            <View className="flex-row items-start pt-2 border-t border-slate-100">
-              <Info size={18} color="#64748b" className="mt-0.5" />
-              <View className="ml-3 flex-1">
-                <Text className="text-xs font-medium text-slate-500">Shift Notes</Text>
-                <Text className="text-xs text-slate-700 leading-5">
-                  {event.notes}
-                </Text>
-              </View>
-            </View>
-          )}
-
           {event.contactPerson?.phone && (
-            <View className="flex-row items-center justify-between pt-2 border-t border-slate-100">
+            <View className="flex-row items-center justify-between pt-3 mt-3 border-t border-neutral-100">
               <View>
-                <Text className="text-xs font-medium text-slate-500">Event Coordinator</Text>
-                <Text className="text-xs font-bold text-slate-800">
+                <Text className="text-xs font-bold text-neutral-800">Coordinator</Text>
+                <Text className="text-xs text-neutral-500">
                   {event.contactPerson.name} ({event.contactPerson.phone})
                 </Text>
               </View>
               <TouchableOpacity
                 onPress={() => Linking.openURL(`tel:${event.contactPerson!.phone}`)}
-                className="w-9 h-9 rounded-full bg-slate-100 items-center justify-center"
+                className="w-10 h-10 rounded-full bg-[#f1f2f2] items-center justify-center"
               >
-                <Phone size={16} color="#334155" />
+                <Phone size={16} color="#201d1e" />
               </TouchableOpacity>
             </View>
           )}
         </View>
 
-        {/* Action Button */}
+        {/* Main Action Button */}
         {isJoined ? (
           <Button
             title="Cancel Booking / Leave Shift"
             onPress={handleLeave}
-            variant="danger"
+            variant="secondary"
             size="lg"
             loading={leaveMutation.isPending}
           />
@@ -345,13 +335,14 @@ export default function EventDetailScreen() {
           <Button
             title={isFull ? 'Shift Full (Join Waitlist)' : `Confirm & Join Shift (₹${totalPay || event.payPerPerson})`}
             onPress={handleInitiateJoin}
+            variant="primary"
             size="lg"
             loading={joinMutation.isPending}
           />
         )}
-      </View>
+      </ScrollView>
 
-      {/* Double Booking Confirmation Modal (FR-12) */}
+      {/* Double Booking Modal */}
       <DoubleBookingModal
         visible={doubleBookingModalVisible}
         eventTitle={event.title}
@@ -360,7 +351,7 @@ export default function EventDetailScreen() {
         loading={joinMutation.isPending}
       />
 
-      {/* Clash Alert Modal (Rule 2) */}
+      {/* Clash Alert Modal */}
       <ClashAlertModal
         visible={clashModalVisible}
         message={clashMessage}

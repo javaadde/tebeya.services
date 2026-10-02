@@ -34,6 +34,9 @@ const inviteCodeSchema = new Schema<IInviteCodeDocument>(
   }
 );
 
+// MongoDB TTL index: automatically delete documents once expiresAt has passed
+inviteCodeSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
 inviteCodeSchema.methods.toSafeJSON = function (): Record<string, unknown> {
   const obj = this.toObject();
   obj.id = obj._id.toString();

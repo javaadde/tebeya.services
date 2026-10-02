@@ -10,7 +10,7 @@ interface AuthContextType {
   login: (payload: LoginPayload) => Promise<void>;
   requestOtp: (email: string) => Promise<string>;
   verifyOtp: (email: string, otp: string) => Promise<void>;
-  demoLogin: () => void;
+  demoLogin: () => Promise<void>;
   logout: () => void;
 }
 
@@ -88,22 +88,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('tb_user', JSON.stringify(res.user));
   };
 
-  const demoLogin = () => {
-    const mockAdmin: User = {
-      id: 'usr_admin_master',
-      name: 'Operations Dispatcher',
-      email: 'admin@tebeya.services',
-      phone: '+91 98470 00001',
-      phoneVerified: true,
-      role: 'admin',
-      status: 'active',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setUser(mockAdmin);
-    setToken('mock_demo_token');
-    localStorage.setItem('tb_access_token', 'mock_demo_token');
-    localStorage.setItem('tb_user', JSON.stringify(mockAdmin));
+  const demoLogin = async () => {
+    try {
+      const res = await authApi.demoLogin();
+      setUser(res.user);
+      setToken(res.tokens.accessToken);
+      localStorage.setItem('tb_access_token', res.tokens.accessToken);
+      localStorage.setItem('tb_refresh_token', res.tokens.refreshToken);
+      localStorage.setItem('tb_user', JSON.stringify(res.user));
+    } catch (err) {
+      console.warn('Backend demo-login failed, falling back to local demo admin:', err);
+      const mockAdmin: User = {
+        id: 'usr_admin_master',
+        name: 'Operations Dispatcher',
+        email: 'admin@tebeya.services',
+        phone: '+91 98470 00001',
+        phoneVerified: true,
+        role: 'admin',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      setUser(mockAdmin);
+      setToken('mock_demo_token');
+      localStorage.setItem('tb_access_token', 'mock_demo_token');
+      localStorage.setItem('tb_user', JSON.stringify(mockAdmin));
+    }
   };
 
   const logout = () => {

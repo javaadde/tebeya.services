@@ -10,14 +10,26 @@ export class EventController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const userId = req.user?.userId;
-      const { date, slot, onlyOpen } = req.query as {
+      const user = req.user;
+      const { date, slot, status, onlyOpen } = req.query as {
         date?: string;
         slot?: any;
+        status?: any;
         onlyOpen?: string;
       };
 
-      const events = await EventService.listEventsForStaff(userId, {
+      if (user?.role === 'admin') {
+        const events = await EventService.listEventsForAdmin({
+          date,
+          slot,
+          status,
+          onlyOpen: onlyOpen === 'true',
+        });
+        sendSuccess(res, events, 200);
+        return;
+      }
+
+      const events = await EventService.listEventsForStaff(user?.userId, {
         date,
         slot,
         onlyOpen: onlyOpen === 'true',

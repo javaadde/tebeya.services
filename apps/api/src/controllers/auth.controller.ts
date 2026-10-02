@@ -66,4 +66,13 @@ export class AuthController {
       next(err);
     }
   }
+
+  static async demoLogin(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await AuthService.demoLogin();
+      sendSuccess(res, result, 200, 'Demo login successful');
+    } catch (err) {
+      next(err);
+    }
+  }
 }

@@ -40,7 +40,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
   const [isGenerateInviteOpen, setIsGenerateInviteOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CateringEvent | null>(null);
   const [tableFilter, setTableFilter] = useState<EventStatus | 'all'>('all');
-  const [activeMonthIndex, setActiveMonthIndex] = useState(7); // Default to August (index 7) like inspiration
+  const [activeMonthIndex, setActiveMonthIndex] = useState(new Date().getMonth());
 
   const { data: events = [], refetch: refetchEvents } = useQuery({
     queryKey: queryKeys.events.all,
@@ -73,21 +73,25 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
     return e.status === tableFilter;
   });
 
-  // Mocked monthly capacity & filled data for the Statistics Chart (styled exactly like Jobgio)
-  const monthlyStats = [
-    { month: 'Jan', capacity: 42, filled: 36 },
-    { month: 'Feb', capacity: 60, filled: 52 },
-    { month: 'Mar', capacity: 55, filled: 48 },
-    { month: 'Apr', capacity: 68, filled: 62 },
-    { month: 'May', capacity: 62, filled: 58 },
-    { month: 'Jun', capacity: 85, filled: 79 },
-    { month: 'Jul', capacity: 58, filled: 50 },
-    { month: 'Aug', capacity: 96, filled: 92, highlightText: '6.4K' },
-    { month: 'Sep', capacity: 52, filled: 46 },
-    { month: 'Oct', capacity: 78, filled: 74 },
-    { month: 'Nov', capacity: 65, filled: 60 },
-    { month: 'Dec', capacity: 88, filled: 84 },
-  ];
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const monthlyStats = monthNames.map((month, idx) => {
+    const monthEvents = events.filter((e) => {
+      if (!e.date) return false;
+      const d = new Date(e.date);
+      return !isNaN(d.getTime()) && d.getMonth() === idx;
+    });
+    const capacity = monthEvents.reduce((acc, curr) => acc + (curr.headcount || 0), 0);
+    const filled = monthEvents.reduce((acc, curr) => acc + (curr.filledCount || 0), 0);
+    return {
+      month,
+      capacity,
+      filled,
+      highlightText: filled > 0 ? `${filled} filled` : undefined,
+    };
+  });
+
+  const maxCapacity = Math.max(1, ...monthlyStats.map((m) => m.capacity));
 
   return (
     <div className="pb-10">
@@ -265,10 +269,10 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                         className="flex-1 flex flex-col items-center justify-end h-full relative cursor-pointer group"
                       >
                         {/* Floating Tooltip Pill for Highlighted/Active Month */}
-                        {isSelected && (
+                        {isSelected && item.capacity > 0 && (
                           <div className="absolute -top-7 flex flex-col items-center z-10 animate-in fade-in zoom-in duration-200">
                             <div className="bg-stone-900 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-lg">
-                              {item.highlightText || `${item.filled * 65}`}
+                              {item.highlightText || `${item.filled}/${item.capacity}`}
                             </div>
                             <div className="w-1.5 h-1.5 bg-stone-900 rotate-45 -mt-0.5" />
                           </div>
@@ -278,17 +282,21 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                         <div className="flex items-end gap-1 w-full justify-center">
                           {/* Main Dark Bar */}
                           <div
-                            style={{ height: `${item.capacity}%` }}
+                            style={{ height: `${item.capacity > 0 ? Math.max(8, (item.capacity / maxCapacity) * 100) : 4}%` }}
                             className={`w-2.5 sm:w-3.5 rounded-full transition-all duration-300 ${
-                              isSelected
+                              item.capacity === 0
+                                ? 'bg-stone-200'
+                                : isSelected
                                 ? 'bg-[#e66434] shadow-md shadow-[#e66434]/30'
                                 : 'bg-stone-900 group-hover:bg-stone-700'
                             }`}
                           />
                           {/* Secondary Sand Bar */}
                           <div
-                            style={{ height: `${item.filled * 0.75}%` }}
-                            className="w-1.5 sm:w-2 rounded-full bg-[#dad0c3] group-hover:bg-[#c7baa8] transition-all duration-300"
+                            style={{ height: `${item.filled > 0 ? Math.max(6, (item.filled / maxCapacity) * 100) : 4}%` }}
+                            className={`w-1.5 sm:w-2 rounded-full transition-all duration-300 ${
+                              item.filled === 0 ? 'bg-stone-200' : 'bg-[#dad0c3] group-hover:bg-[#c7baa8]'
+                            }`}
                           />
                         </div>
 
@@ -308,7 +316,11 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
             </div>
 
             <div className="pt-4 flex items-center justify-between text-xs text-stone-500 font-medium">
-              <span>Peak banquet demand logged during festival & wedding dates.</span>
+              <span>
+                {events.length > 0
+                  ? 'Roster demand dynamically calculated from scheduled shifts.'
+                  : 'No shifts scheduled yet. Click "+ New Shift" to publish event rosters.'}
+              </span>
               <button
                 onClick={() => onNavigate('events')}
                 className="text-[#e66434] hover:text-[#cf5224] font-bold inline-flex items-center gap-1"

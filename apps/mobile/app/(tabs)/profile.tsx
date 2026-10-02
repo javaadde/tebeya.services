@@ -5,30 +5,27 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import {
   User as UserIcon,
   Phone,
-  Mail,
-  MapPin,
+  Bell,
+  Headphones,
   ShieldCheck,
-  FileText,
-  LogOut,
+  MapPin,
   ChevronRight,
+  LogOut,
   Info,
-  CheckCircle,
-  AlertCircle,
 } from 'lucide-react-native';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
-import { Header } from '../../src/components/layout/Header';
-import { UserStatusBadge } from '../../src/components/ui/Badge';
+import { AppTopHeader } from '../../src/components/layout/AppTopHeader';
 import { useAuthStore } from '../../src/store/authStore';
 import { profileApi } from '../../src/api/profile.api';
-import { CONFIG } from '../../src/constants/config';
 
-export default function ProfileScreen() {
+export default function UserSettingsScreen() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
 
@@ -51,146 +48,153 @@ export default function ProfileScreen() {
     ]);
   };
 
+  const defaultAvatar =
+    user?.profileImageUrl ||
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80';
+
   const hasIdProof = !!user?.idProofUrl;
   const isAddressConfirmed = !!user?.address?.confirmed;
 
   return (
-    <ScreenWrapper scrollable>
-      <Header title="Staff Profile" />
+    <ScreenWrapper className="px-4">
+      {/* Header matching Image 4: "Change your" / "User & Settings" / Orange Button */}
+      <AppTopHeader
+        subtitle="Change your"
+        title="User & Settings"
+      />
 
-      <View className="p-4">
-        {/* User Card */}
-        <View className="bg-white rounded-2xl p-5 mb-4 border border-slate-200 shadow-sm items-center">
-          <View className="w-20 h-20 rounded-full bg-indigo-100 items-center justify-center mb-3 border-2 border-indigo-200">
-            <UserIcon size={40} color="#4f46e5" />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 110 }}
+      >
+        {/* Profile Hero Section matching Image 4 */}
+        <View className="flex-row items-center py-2 mb-2">
+          {/* Circular Avatar */}
+          <View className="w-20 h-20 rounded-full border-2 border-neutral-900 overflow-hidden mr-4 bg-neutral-200">
+            <Image
+              source={{ uri: defaultAvatar }}
+              className="w-full h-full"
+              resizeMode="cover"
+            />
           </View>
 
-          <Text className="text-xl font-black text-slate-900 mb-0.5">
-            {user?.name || 'Staff Member'}
-          </Text>
-
-          <View className="flex-row items-center space-x-1.5 mb-2">
-            <Text className="text-xs text-slate-500">{user?.email}</Text>
-          </View>
-
-          {user?.status && <UserStatusBadge status={user.status} />}
-
-          <View className="w-full flex-row justify-around mt-4 pt-4 border-t border-slate-100">
-            <View className="items-center">
-              <View className="flex-row items-center">
-                <Phone size={14} color="#64748b" />
-                <Text className="text-xs font-semibold text-slate-700 ml-1">
-                  {user?.phone || 'No phone'}
-                </Text>
-              </View>
-              <Text className="text-[10px] text-slate-400 mt-0.5">
-                {user?.phoneVerified ? 'Verified Phone' : 'Unverified Phone'}
-              </Text>
-            </View>
-
-            <View className="w-px bg-slate-200" />
-
-            <View className="items-center">
-              <View className="flex-row items-center">
-                <ShieldCheck size={14} color={hasIdProof ? '#10b981' : '#f59e0b'} />
-                <Text className="text-xs font-semibold text-slate-700 ml-1">
-                  {hasIdProof ? 'KYC Uploaded' : 'KYC Pending'}
-                </Text>
-              </View>
-              <Text className="text-[10px] text-slate-400 mt-0.5">
-                Govt ID Proof
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* KYC & ID Verification Card (Rule 4) */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => router.push('/kyc-upload')}
-          className="bg-white rounded-2xl p-4 mb-4 border border-slate-200 flex-row items-center justify-between"
-        >
-          <View className="flex-row items-center flex-1 mr-3">
-            <View className={`w-10 h-10 rounded-xl items-center justify-center ${hasIdProof ? 'bg-emerald-100' : 'bg-amber-100'}`}>
-              <FileText size={20} color={hasIdProof ? '#059669' : '#d97706'} />
-            </View>
-            <View className="ml-3 flex-1">
-              <View className="flex-row items-center">
-                <Text className="text-sm font-bold text-slate-900">
-                  Government ID Proof
-                </Text>
-                {hasIdProof && (
-                  <View className="bg-emerald-50 px-2 py-0.5 rounded-full ml-2">
-                    <Text className="text-[10px] font-bold text-emerald-700">Uploaded</Text>
-                  </View>
-                )}
-              </View>
-              <Text className="text-xs text-slate-500 mt-0.5 leading-4" numberOfLines={2}>
-                {hasIdProof
-                  ? 'Private authenticated storage. Admin verification in progress.'
-                  : 'Upload Aadhaar, Voter ID, or Driving License for KYC compliance.'}
-              </Text>
-            </View>
-          </View>
-          <ChevronRight size={18} color="#94a3b8" />
-        </TouchableOpacity>
-
-        {/* Home Address & Geolocation Card (FR-23) */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => router.push('/address-picker')}
-          className="bg-white rounded-2xl p-4 mb-4 border border-slate-200 flex-row items-center justify-between"
-        >
-          <View className="flex-row items-center flex-1 mr-3">
-            <View className={`w-10 h-10 rounded-xl items-center justify-center ${isAddressConfirmed ? 'bg-indigo-100' : 'bg-slate-100'}`}>
-              <MapPin size={20} color={isAddressConfirmed ? '#4f46e5' : '#64748b'} />
-            </View>
-            <View className="ml-3 flex-1">
-              <Text className="text-sm font-bold text-slate-900">
-                Home Address Location
-              </Text>
-              <Text className="text-xs text-slate-500 mt-0.5 leading-4" numberOfLines={2}>
-                {user?.address?.text || 'Set your home pin to calculate travel bonuses for distant venues.'}
-              </Text>
-            </View>
-          </View>
-          <ChevronRight size={18} color="#94a3b8" />
-        </TouchableOpacity>
-
-        {/* Wage Rules & Travel Policy Card (FR-24) */}
-        <View className="bg-slate-100/80 rounded-2xl p-4 mb-6 border border-slate-200/60">
-          <View className="flex-row items-center mb-2">
-            <Info size={16} color="#4f46e5" />
-            <Text className="text-xs font-bold text-slate-900 ml-1.5">
-              Wage & Travel Policy Information
+          {/* User Details matching Image 4 */}
+          <View className="flex-1">
+            <Text className="text-xl font-black text-neutral-900 tracking-tight">
+              {user?.name || 'Jude Bellingham'}
+            </Text>
+            <Text className="text-xs font-bold text-neutral-600 mt-0.5">
+              {user?.phone || '+91 790293742'}
+            </Text>
+            <Text className="text-xs font-medium text-neutral-500">
+              {user?.email || 'jawaadde@gmail.com'}
             </Text>
           </View>
-          <Text className="text-xs text-slate-600 leading-5">
-            • Free Travel Buffer: Venues within {wageRule?.freeKm ?? CONFIG.DEFAULT_FREE_KM} km of home are covered under base pay.
-          </Text>
-          <Text className="text-xs text-slate-600 leading-5 mt-1">
-            • Travel Bonus: Distances beyond {wageRule?.freeKm ?? CONFIG.DEFAULT_FREE_KM} km earn an extra +₹{wageRule?.perKmRate ?? CONFIG.DEFAULT_PER_KM_RATE}/km.
-          </Text>
-          <Text className="text-xs text-slate-600 leading-5 mt-1">
-            • Daily Cap: Max 2 events per calendar day with mandatory 2-hour rest/travel gap.
-          </Text>
         </View>
 
-        {/* Sign Out Button */}
+        {/* 3 Circular Quick Action Buttons matching Image 4 */}
+        <View className="flex-row justify-between px-2 my-4">
+          {/* Circle 1: Phone / Account Details */}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => router.push('/address-picker')}
+            className="w-16 h-16 rounded-full bg-white items-center justify-center shadow-sm border border-white/50"
+          >
+            <MapPin size={22} color="#201d1e" />
+          </TouchableOpacity>
+
+          {/* Circle 2: Notifications Center */}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => router.push('/notifications')}
+            className="w-16 h-16 rounded-full bg-white items-center justify-center shadow-sm border border-white/50"
+          >
+            <Bell size={22} color="#201d1e" />
+          </TouchableOpacity>
+
+          {/* Circle 3: Support / Coordinator */}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => Alert.alert('Support Hotline', 'Tebeya Coordinator: +91 98765 43210')}
+            className="w-16 h-16 rounded-full bg-white items-center justify-center shadow-sm border border-white/50"
+          >
+            <Headphones size={22} color="#201d1e" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Card 1: Horizontal Rounded Card (KYC ID Proof) */}
         <TouchableOpacity
-          onPress={handleLogout}
-          className="flex-row items-center justify-center bg-rose-50 py-3.5 px-4 rounded-xl border border-rose-200 mb-8"
+          activeOpacity={0.88}
+          onPress={() => router.push('/kyc-upload')}
+          className="bg-white rounded-[28px] p-5 mb-3.5 shadow-sm border border-white/50 flex-row items-center justify-between"
         >
-          <LogOut size={18} color="#e11d48" />
-          <Text className="text-sm font-bold text-rose-700 ml-2">
-            Sign Out of Account
-          </Text>
+          <View className="flex-1 mr-3">
+            <View className="flex-row items-center mb-1">
+              <ShieldCheck size={16} color={hasIdProof ? '#10b981' : '#df3b20'} />
+              <Text className="text-sm font-bold text-neutral-900 ml-1.5">
+                Government ID Proof (KYC)
+              </Text>
+            </View>
+            <Text className="text-xs text-neutral-500 leading-4">
+              {hasIdProof
+                ? 'Document uploaded in private vault. Admin verified.'
+                : 'Upload Aadhaar, Voter ID, or Driving License for KYC compliance.'}
+            </Text>
+          </View>
+          <View className="w-8 h-8 rounded-full bg-[#f1f2f2] items-center justify-center">
+            <ChevronRight size={16} color="#201d1e" />
+          </View>
         </TouchableOpacity>
 
-        <Text className="text-center text-[11px] text-slate-400">
-          Tebeya Services v1.0.0 • Catering Staff Edition
-        </Text>
-      </View>
+        {/* Card 2: Large Tall Rounded Card (Address & Policy & Logout) */}
+        <View className="bg-white rounded-[28px] p-5 shadow-sm border border-white/50">
+          <Text className="text-sm font-black text-neutral-900 mb-3">
+            Account Preferences & Rules
+          </Text>
+
+          {/* Address Item */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => router.push('/address-picker')}
+            className="flex-row items-center justify-between py-3 border-b border-neutral-100"
+          >
+            <View className="flex-1 mr-2">
+              <Text className="text-xs font-bold text-neutral-800">
+                Home Address Location
+              </Text>
+              <Text className="text-xs text-neutral-500 mt-0.5" numberOfLines={1}>
+                {user?.address?.text || 'Indiranagar, Bangalore (Coordinates confirmed)'}
+              </Text>
+            </View>
+            <ChevronRight size={16} color="#94a3b8" />
+          </TouchableOpacity>
+
+          {/* Policy Information */}
+          <View className="py-3 border-b border-neutral-100">
+            <View className="flex-row items-center mb-1">
+              <Info size={14} color="#df3b20" />
+              <Text className="text-xs font-bold text-neutral-800 ml-1.5">
+                Distance Travel Policy
+              </Text>
+            </View>
+            <Text className="text-xs text-neutral-500 leading-4">
+              Free travel buffer up to {wageRule?.freeKm ?? 10} km. Shifts beyond earn an extra +₹{wageRule?.perKmRate ?? 15}/km.
+            </Text>
+          </View>
+
+          {/* Sign Out Button in Brand Coral */}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={handleLogout}
+            className="mt-6 bg-[#df3b20] py-3.5 px-4 rounded-2xl flex-row items-center justify-center shadow-sm"
+          >
+            <LogOut size={16} color="#ffffff" />
+            <Text className="text-sm font-bold text-white ml-2">
+              Sign Out of Account
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 }

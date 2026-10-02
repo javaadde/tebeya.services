@@ -28,6 +28,7 @@ export function CreateEventModal({ isOpen, onClose, onSuccess }: CreateEventModa
   const [notes, setNotes] = useState('');
   const [contactName, setContactName] = useState('');
   const [contactPhone, setContactPhone] = useState('');
+  const [publishImmediately, setPublishImmediately] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,24 +43,28 @@ export function CreateEventModal({ isOpen, onClose, onSuccess }: CreateEventModa
     setIsLoading(true);
     setError(null);
 
+    const latNum = venueLat.trim() ? parseFloat(venueLat) : undefined;
+    const lngNum = venueLng.trim() ? parseFloat(venueLng) : undefined;
+
     const payload: CreateEventPayload = {
-      title,
+      title: title.trim(),
       date,
       slot,
-      startTime,
-      endTime,
+      startTime: startTime.slice(0, 5),
+      endTime: endTime.slice(0, 5),
       venue: {
-        text: venueText,
-        lat: venueLat ? parseFloat(venueLat) : undefined,
-        lng: venueLng ? parseFloat(venueLng) : undefined,
+        text: venueText.trim(),
+        lat: latNum !== undefined && !isNaN(latNum) ? latNum : undefined,
+        lng: lngNum !== undefined && !isNaN(lngNum) ? lngNum : undefined,
       },
-      headcount: Number(headcount),
-      payPerPerson: Number(payPerPerson),
-      dressCode: dressCode || undefined,
-      notes: notes || undefined,
+      headcount: Math.max(1, Number(headcount) || 1),
+      payPerPerson: Math.max(0, Number(payPerPerson) || 0),
+      status: publishImmediately ? 'published' : 'draft',
+      dressCode: dressCode.trim() || undefined,
+      notes: notes.trim() || undefined,
       contactPerson:
-        contactName && contactPhone
-          ? { name: contactName, phone: contactPhone }
+        contactName.trim() || contactPhone.trim()
+          ? { name: contactName.trim() || undefined, phone: contactPhone.trim() || undefined }
           : undefined,
     };
 
@@ -215,12 +220,25 @@ export function CreateEventModal({ isOpen, onClose, onSuccess }: CreateEventModa
           />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+        <div className="flex items-center gap-3 bg-[#faf8f5] p-3 rounded-2xl">
+          <input
+            id="publishImmediately"
+            type="checkbox"
+            checked={publishImmediately}
+            onChange={(e) => setPublishImmediately(e.target.checked)}
+            className="w-4 h-4 rounded text-[#e66434] focus:ring-[#e66434] accent-[#e66434] cursor-pointer"
+          />
+          <label htmlFor="publishImmediately" className="text-xs font-semibold text-stone-700 cursor-pointer select-none">
+            Publish shift immediately (Visible in staff mobile app)
+          </label>
+        </div>
+
+        <div className="flex justify-end gap-3 pt-4 border-t border-[#dad0c3]/40">
           <Button variant="outline" type="button" onClick={onClose}>
             Cancel
           </Button>
           <Button variant="primary" type="submit" isLoading={isLoading}>
-            Create Shift as Draft
+            {publishImmediately ? 'Create & Publish Shift' : 'Save Shift as Draft'}
           </Button>
         </div>
       </form>

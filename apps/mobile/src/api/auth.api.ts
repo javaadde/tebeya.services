@@ -17,7 +17,7 @@ export interface RegisterPayload {
 
 export const authApi = {
   verifyInviteCode(code: string): Promise<VerifyInviteResult> {
-    return apiClient<VerifyInviteResult>('/invites/verify', {
+    return apiClient<VerifyInviteResult>('/auth/validate-invite', {
       method: 'POST',
       body: JSON.stringify({ code }),
       requiresAuth: false,
@@ -41,7 +41,7 @@ export const authApi = {
   },
 
   getProfile(): Promise<User> {
-    return apiClient<User>('/auth/me', {
+    return apiClient<User>('/users/me', {
       method: 'GET',
       requiresAuth: true,
     });

@@ -484,32 +484,29 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        brand: {
+          coral: '#df3b20',
+          dark: '#c73017',
+          light: '#fdece8',
+        },
         primary: {
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          500: '#6366f1',
-          600: '#4f46e5', // Tebeya Primary Brand Blue
-          700: '#4338ca',
-          900: '#312e81',
+          50: '#fdece8',
+          100: '#fad4cc',
+          500: '#df3b20', // Terracotta/Coral Brand Red-Orange
+          600: '#c92f16',
+          700: '#a72310',
         },
-        accent: {
-          500: '#f59e0b', // Banquet Gold / Alert Amber
-          600: '#d97706',
-        },
-        success: {
-          500: '#10b981', // Attendance Present / Paid
-          600: '#059669',
-        },
-        danger: {
-          500: '#ef4444', // Absence / Clash Alert
-          600: '#dc2626',
-        },
+        appBg: '#d4d5d6', // Warm Soft Gray Screen Background
+        navDark: '#201d1e', // Dark Charcoal Floating Bottom Pill Bar
         surface: {
-          light: '#f8fafc',
-          dark: '#0f172a',
+          light: '#d4d5d6',
+          dark: '#201d1e',
           card: '#ffffff',
-          cardDark: '#1e293b',
         }
+      },
+      borderRadius: {
+        '3xl': '28px',
+        '4xl': '36px',
       },
       fontFamily: {
         sans: ['System'], // Native system fonts for optimal text rendering

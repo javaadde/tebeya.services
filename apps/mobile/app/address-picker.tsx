@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MapPin, Navigation, CheckCircle2 } from 'lucide-react-native';
+import { MapPin, Navigation, ChevronLeft } from 'lucide-react-native';
 import { ScreenWrapper } from '../src/components/layout/ScreenWrapper';
-import { Header } from '../src/components/layout/Header';
 import { Input } from '../src/components/ui/Input';
 import { Button } from '../src/components/ui/Button';
 import { profileApi } from '../src/api/profile.api';
@@ -29,7 +28,7 @@ export default function AddressPickerScreen() {
       const parsedLat = parseFloat(lat) || 12.9716;
       const parsedLng = parseFloat(lng) || 77.5946;
 
-      const updatedUser = await profileApi.updateAddress({
+      await profileApi.updateAddress({
         text: addressText.trim(),
         lat: parsedLat,
         lng: parsedLng,
@@ -47,7 +46,7 @@ export default function AddressPickerScreen() {
 
       Alert.alert(
         'Address Saved',
-        'Your home location has been updated. Distance-based travel allowances will now be calculated automatically for all shift venues.',
+        'Your home location has been updated. Distance travel allowances will calculate automatically for shift venues.',
         [{ text: 'Done', onPress: () => router.back() }]
       );
     } catch (err: unknown) {
@@ -59,22 +58,34 @@ export default function AddressPickerScreen() {
   };
 
   return (
-    <ScreenWrapper className="px-5 py-2">
-      <Header title="Set Home Address" showBack />
+    <ScreenWrapper className="px-4">
+      {/* Top Header */}
+      <View className="flex-row items-center justify-between pt-2 pb-4">
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="w-12 h-12 rounded-2xl bg-white items-center justify-center shadow-sm"
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <ChevronLeft size={22} color="#201d1e" />
+        </TouchableOpacity>
 
-      <View className="py-4">
-        <View className="bg-indigo-50/70 p-4 rounded-2xl mb-5 border border-indigo-100">
-          <View className="flex-row items-center mb-1">
-            <Navigation size={16} color="#4f46e5" />
-            <Text className="text-xs font-bold text-indigo-900 ml-1.5">
-              Distance Travel Allowance
-            </Text>
-          </View>
-          <Text className="text-xs text-indigo-800 leading-5">
-            Your home location is used to calculate distance to venue locations.
-            Shifts further than the free travel buffer automatically receive distance allowances!
+        <Text className="text-base font-black text-neutral-900 tracking-tight">
+          Home Address Pin
+        </Text>
+
+        <View className="w-12" />
+      </View>
+
+      <View className="bg-white rounded-[28px] p-5 shadow-sm border border-white/50 mb-4">
+        <View className="flex-row items-center mb-2">
+          <Navigation size={16} color="#df3b20" />
+          <Text className="text-xs font-bold text-neutral-800 ml-1.5">
+            Distance Travel Allowance
           </Text>
         </View>
+        <Text className="text-xs text-neutral-500 leading-5 mb-4">
+          Your home address determines distance travel bonuses. Shifts situated beyond the 10 km buffer receive extra travel pay!
+        </Text>
 
         <Input
           label="Home Street Address & Area"
@@ -84,7 +95,7 @@ export default function AddressPickerScreen() {
           leftIcon={<MapPin size={18} color="#94a3b8" />}
         />
 
-        <View className="flex-row space-x-3 mb-6">
+        <View className="flex-row space-x-3 mb-4">
           <View className="flex-1 mr-2">
             <Input
               label="Latitude"
@@ -109,6 +120,7 @@ export default function AddressPickerScreen() {
           title="Save Home Address"
           onPress={handleSaveAddress}
           loading={loading}
+          variant="primary"
           size="lg"
         />
       </View>

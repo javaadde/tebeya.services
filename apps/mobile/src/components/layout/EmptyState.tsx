@@ -19,9 +19,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   icon,
 }) => {
   return (
-    <View className="flex-1 items-center justify-center p-6 my-10">
-      <View className="w-16 h-16 rounded-full bg-slate-100 items-center justify-center mb-4">
-        {icon || <CalendarX size={32} color="#64748b" />}
+    <View className="flex-1 items-center justify-center p-6 my-6 bg-white rounded-[28px] shadow-sm border border-white/50">
+      <View className="w-14 h-14 rounded-2xl bg-[#fdece8] items-center justify-center mb-3">
+        {icon || <CalendarX size={28} color="#df3b20" />}
       </View>
       <Text className="text-lg font-bold text-slate-800 text-center mb-1.5">
         {title}

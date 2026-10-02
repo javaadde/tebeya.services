@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { Alert } from '../../components/ui/Alert';
 import { invitesApi } from '../../api/invites.api';
 import { KeyRound, ShieldAlert } from 'lucide-react';
+import { cn } from '../../utils/cn';
 
 interface GenerateInviteModalProps {
   isOpen: boolean;
@@ -18,8 +19,7 @@ export function GenerateInviteModal({
   onSuccess,
 }: GenerateInviteModalProps) {
   const [count, setCount] = useState(1);
-  const [expiresInHours, setExpiresInHours] = useState(48);
-  const [lockedTarget, setLockedTarget] = useState('');
+  const [expiresInMinutes, setExpiresInMinutes] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,8 +31,7 @@ export function GenerateInviteModal({
     try {
       await invitesApi.generate({
         count: Number(count),
-        expiresInHours: Number(expiresInHours),
-        lockedPhoneOrEmail: lockedTarget || undefined,
+        expiresInMinutes: Number(expiresInMinutes),
       });
       onSuccess();
       onClose();
@@ -48,7 +47,7 @@ export function GenerateInviteModal({
       isOpen={isOpen}
       onClose={onClose}
       title="Generate Single-Use Invite Codes"
-      description="Issue restricted access codes required for staff onboarding."
+      description="Issue fast-expiring access codes required for staff onboarding."
       maxWidth="md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,40 +67,52 @@ export function GenerateInviteModal({
         </div>
 
         <div>
-          <Input
-            label="Code Validity (Hours)"
-            type="number"
-            min={1}
-            max={720}
-            required
-            value={expiresInHours}
-            onChange={(e) => setExpiresInHours(Number(e.target.value))}
-            helperText="Default: 48 hours. Code becomes invalid after expiration."
-          />
+          <label className="block text-xs font-bold text-stone-700 mb-2">
+            Code Validity (TTL)
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setExpiresInMinutes(1)}
+              className={cn(
+                'py-2.5 px-4 rounded-xl text-xs font-bold transition-all text-center',
+                expiresInMinutes === 1
+                  ? 'bg-[#e66434] text-white shadow-sm'
+                  : 'bg-[#f7f4ef] text-stone-700 hover:bg-[#ede8e1]'
+              )}
+            >
+              1 Minute
+            </button>
+            <button
+              type="button"
+              onClick={() => setExpiresInMinutes(2)}
+              className={cn(
+                'py-2.5 px-4 rounded-xl text-xs font-bold transition-all text-center',
+                expiresInMinutes === 2
+                  ? 'bg-[#e66434] text-white shadow-sm'
+                  : 'bg-[#f7f4ef] text-stone-700 hover:bg-[#ede8e1]'
+              )}
+            >
+              2 Minutes (Default)
+            </button>
+          </div>
+          <p className="text-[11px] text-stone-500 mt-1.5">
+            The code will be automatically deleted from the database after expiration.
+          </p>
         </div>
 
-        <div>
-          <Input
-            label="Lock to Phone or Email (Optional)"
-            placeholder="e.g. +91 98765 43210 or user@example.com"
-            value={lockedTarget}
-            onChange={(e) => setLockedTarget(e.target.value)}
-            helperText="Prevents sharing: only this phone or email will be accepted during registration."
-          />
-        </div>
-
-        <div className="bg-[#faeae3] p-3.5 rounded-2xl border border-[#f5d5c7] text-xs text-[#732c16] flex items-start gap-2.5">
+        <div className="bg-[#faeae3] p-3.5 rounded-2xl text-xs text-[#732c16] flex items-start gap-2.5 shadow-2xs">
           <ShieldAlert className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#e66434]" />
           <span>
-            <strong className="font-bold">Security Rule:</strong> Each invite code is strictly single-use and will be permanently retired once redeemed by a candidate.
+            <strong className="font-bold">Security Rule:</strong> Each invite code is strictly single-use and will automatically be deleted from the database once the {expiresInMinutes}-minute TTL elapses.
           </span>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-          <Button variant="outline" type="button" onClick={onClose}>
+        <div className="flex justify-end gap-3 pt-4 border-t border-stone-100">
+          <Button variant="outline" type="button" onClick={onClose} className="rounded-xl border-0 bg-[#f7f4ef] text-stone-700 hover:bg-[#eee9df]">
             Cancel
           </Button>
-          <Button variant="primary" type="submit" isLoading={isLoading} icon={KeyRound}>
+          <Button variant="primary" type="submit" isLoading={isLoading} icon={KeyRound} className="rounded-xl">
             Generate {count > 1 ? `${count} Codes` : 'Code'}
           </Button>
         </div>

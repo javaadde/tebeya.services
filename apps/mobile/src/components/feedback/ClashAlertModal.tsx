@@ -22,16 +22,16 @@ export const ClashAlertModal: React.FC<ClashAlertModalProps> = ({
       onRequestClose={onClose}
     >
       <View className="flex-1 bg-black/60 items-center justify-center p-5">
-        <View className="w-full max-w-sm bg-white rounded-2xl p-6 shadow-xl">
-          <View className="w-12 h-12 rounded-full bg-rose-100 items-center justify-center mb-4 self-center">
-            <ShieldAlert size={26} color="#e11d48" />
+        <View className="w-full max-w-sm bg-white rounded-[28px] p-6 shadow-xl">
+          <View className="w-14 h-14 rounded-2xl bg-[#fdece8] items-center justify-center mb-4 self-center">
+            <ShieldAlert size={28} color="#df3b20" />
           </View>
 
-          <Text className="text-xl font-bold text-slate-900 text-center mb-2">
+          <Text className="text-xl font-black text-neutral-900 text-center mb-2">
             Schedule Clash Detected
           </Text>
 
-          <Text className="text-sm text-slate-600 text-center mb-6 leading-5">
+          <Text className="text-xs text-neutral-600 text-center mb-6 leading-5">
             {message}
           </Text>
 

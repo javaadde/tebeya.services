@@ -39,16 +39,16 @@ export const DoubleBookingModal: React.FC<DoubleBookingModalProps> = ({
       onRequestClose={handleCancel}
     >
       <View className="flex-1 bg-black/60 items-center justify-center p-5">
-        <View className="w-full max-w-sm bg-white rounded-2xl p-6 shadow-xl">
-          <View className="w-12 h-12 rounded-full bg-amber-100 items-center justify-center mb-4 self-center">
-            <AlertTriangle size={26} color="#d97706" />
+        <View className="w-full max-w-sm bg-white rounded-[28px] p-6 shadow-xl">
+          <View className="w-14 h-14 rounded-2xl bg-[#fdece8] items-center justify-center mb-4 self-center">
+            <AlertTriangle size={28} color="#df3b20" />
           </View>
 
-          <Text className="text-xl font-bold text-slate-900 text-center mb-2">
+          <Text className="text-xl font-black text-neutral-900 text-center mb-2">
             Second Shift Confirmation
           </Text>
 
-          <Text className="text-sm text-slate-600 text-center mb-4 leading-5">
+          <Text className="text-xs text-neutral-600 text-center mb-4 leading-5">
             You are committing to take a second event today ({eventTitle}). You must be present at both shifts. Absence or lateness may have consequences.
           </Text>
 
@@ -56,14 +56,14 @@ export const DoubleBookingModal: React.FC<DoubleBookingModalProps> = ({
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => setAcknowledged(!acknowledged)}
-            className="flex-row items-center bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 mb-6"
+            className="flex-row items-center bg-[#fdece8] p-3.5 rounded-2xl border border-[#fad4cc] mb-5"
           >
             {acknowledged ? (
-              <CheckSquare size={22} color="#d97706" />
+              <CheckSquare size={20} color="#df3b20" />
             ) : (
-              <Square size={22} color="#94a3b8" />
+              <Square size={20} color="#94a3b8" />
             )}
-            <Text className="ml-3 text-sm font-medium text-slate-800 flex-1">
+            <Text className="ml-2.5 text-xs font-bold text-neutral-900 flex-1">
               I understand and commit to attend both shifts.
             </Text>
           </TouchableOpacity>

@@ -115,7 +115,7 @@ function handleMockFallback<T>(endpoint: string, options: RequestOptions): T {
   const method = (options.method || 'GET').toUpperCase();
 
   // 1. Auth endpoints
-  if (endpoint.includes('/auth/login')) {
+  if (endpoint.includes('/auth/login') || endpoint.includes('/auth/demo-login')) {
     const mockAdmin = {
       id: 'usr_admin_master',
       name: 'Operations Dispatcher',
@@ -272,6 +272,14 @@ function handleMockFallback<T>(endpoint: string, options: RequestOptions): T {
 
   // 5. Invite codes
   if (endpoint === '/admin/invite-codes' && method === 'GET') {
+    // Purge expired codes so they are deleted from client memory after 2 minutes
+    const now = Date.now();
+    for (let i = runtimeInvites.length - 1; i >= 0; i--) {
+      if (new Date(runtimeInvites[i].expiresAt).getTime() <= now) {
+        runtimeInvites.splice(i, 1);
+      }
+    }
+
     const statusParam = options.params?.status;
     if (statusParam && statusParam !== 'all') {
       return runtimeInvites.filter((i) => i.status === statusParam) as unknown as T;
@@ -282,15 +290,20 @@ function handleMockFallback<T>(endpoint: string, options: RequestOptions): T {
   if (endpoint === '/admin/invite-codes' && method === 'POST') {
     const body = options.body ? JSON.parse(options.body as string) : {};
     const count = body.count || 1;
+    const expiresInMinutes = body.expiresInMinutes ?? (body.expiresInHours ? body.expiresInHours * 60 : 2);
+    const codeChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     const newCodes = [];
     for (let i = 0; i < count; i++) {
+      let codeStr = '';
+      for (let j = 0; j < 6; j++) {
+        codeStr += codeChars.charAt(Math.floor(Math.random() * codeChars.length));
+      }
       const code = {
         id: `inv_${Date.now()}_${i}`,
-        code: `TEB-${Math.floor(1000 + Math.random() * 9000)}-${String.fromCharCode(65 + i)}`,
+        code: codeStr,
         createdBy: 'usr_admin',
-        lockedPhoneOrEmail: body.lockedPhoneOrEmail,
         status: 'active' as const,
-        expiresAt: new Date(Date.now() + (body.expiresInHours || 48) * 3600 * 1000).toISOString(),
+        expiresAt: new Date(Date.now() + expiresInMinutes * 60 * 1000).toISOString(),
         createdAt: new Date().toISOString(),
       };
       runtimeInvites.unshift(code);

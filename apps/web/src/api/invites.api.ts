@@ -3,6 +3,7 @@ import type { InviteCode, InviteCodeStatus } from '@tebeya/shared';
 
 export interface GenerateInvitesPayload {
   count?: number;
+  expiresInMinutes?: number;
   expiresInHours?: number;
   lockedPhoneOrEmail?: string;
 }

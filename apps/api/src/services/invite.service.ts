@@ -4,25 +4,37 @@ import { InviteCode, IInviteCodeDocument } from '../models/invite-code.model.js'
 import { AppError } from '../utils/errors.js';
 import { InviteCodeStatus } from '@tebeya/shared';
 
+// Clean uppercase alphanumeric characters without confusing glyphs, hyphens, or underscores
+const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+function generateCleanCode(length = 6): string {
+  let result = '';
+  const bytes = crypto.randomBytes(length);
+  for (let i = 0; i < length; i++) {
+    result += CODE_CHARS[bytes[i] % CODE_CHARS.length];
+  }
+  return result;
+}
+
 export class InviteService {
   static async generateInviteCodes(
     createdBy: string,
     count = 1,
-    expiresInHours = 48,
-    lockedPhoneOrEmail?: string
+    expiresInMinutes = 2
   ): Promise<IInviteCodeDocument[]> {
-    const expiresAt = new Date(Date.now() + expiresInHours * 60 * 60 * 1000);
+    const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
     const createdCodes: IInviteCodeDocument[] = [];
 
     for (let i = 0; i < count; i++) {
-      const randomStr = crypto.randomBytes(3).toString('hex').toUpperCase();
-      const code = `TB-${randomStr}`;
+      let code = generateCleanCode(6);
+      while (await InviteCode.exists({ code })) {
+        code = generateCleanCode(6);
+      }
 
       const invite = await InviteCode.create({
         code,
         createdBy: new mongoose.Types.ObjectId(createdBy),
         expiresAt,
-        lockedPhoneOrEmail,
         status: 'active',
       });
       createdCodes.push(invite);
@@ -34,6 +46,9 @@ export class InviteService {
   static async listInviteCodes(filters?: {
     status?: InviteCodeStatus;
   }): Promise<Record<string, unknown>[]> {
+    // Purge expired codes from database immediately
+    await InviteCode.deleteMany({ expiresAt: { $lt: new Date() } });
+
     const query: any = {};
     if (filters?.status) {
       query.status = filters.status;
