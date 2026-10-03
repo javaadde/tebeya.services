@@ -115,11 +115,8 @@ export default function EventDetailScreen() {
       return;
     }
 
-    if (clashResult.isSecondShiftOfDay) {
-      setDoubleBookingModalVisible(true);
-    } else {
-      joinMutation.mutate(false);
-    }
+    // With 1-per-day rule, no double-booking scenario is possible
+    joinMutation.mutate(false);
   };
 
   const handleConfirmDoubleBooking = () => {

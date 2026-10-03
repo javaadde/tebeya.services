@@ -57,7 +57,7 @@ export class BookingService {
     if (confirmedEventsSameDay.length >= APP_CONFIG.MAX_DAILY_EVENTS) {
       throw new AppError(
         'DAILY_EVENT_LIMIT_EXCEEDED',
-        `You cannot join more than ${APP_CONFIG.MAX_DAILY_EVENTS} events on the same calendar day`,
+        'You can only take one work per day. You already have a confirmed shift on this date.',
         409
       );
     }

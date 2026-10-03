@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Tabs } from 'expo-router';
-import { Home, Search, Heart, User } from 'lucide-react-native';
+import { Home, CalendarDays, History, Hexagon } from 'lucide-react-native';
 
 interface TabBarProps {
   state: {
@@ -18,9 +18,9 @@ interface TabBarProps {
 function FloatingTabBar({ state, descriptors, navigation }: TabBarProps) {
   const icons: Record<string, React.ComponentType<any>> = {
     index: Home,
-    shifts: Search,
-    earnings: Heart,
-    profile: User,
+    shifts: CalendarDays,
+    earnings: History,
+    profile: Hexagon,
   };
 
   return (

@@ -39,7 +39,7 @@ export function evaluateScheduleClash(
       canJoin: false,
       reason: 'DAILY_LIMIT_EXCEEDED',
       isSecondShiftOfDay: false,
-      message: `You have reached the maximum limit of ${CONFIG.MAX_EVENTS_PER_DAY} shifts for this date.`,
+      message: 'You can only take one work per day. You already have a confirmed shift on this date.',
     };
   }
 

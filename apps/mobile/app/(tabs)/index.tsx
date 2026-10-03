@@ -3,22 +3,20 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
   RefreshControl,
-  Image,
+  ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
-import { Sparkles, ArrowUpRight, MapPin, Clock, IndianRupee } from 'lucide-react-native';
+import { CalendarDays, Sparkles, CheckCircle2, ChevronRight } from 'lucide-react-native';
 import { EventWithStaffMeta } from '@tebeya/shared';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
 import { AppTopHeader } from '../../src/components/layout/AppTopHeader';
-import { ShiftCard } from '../../src/components/shifts/ShiftCard';
-import { SlotBadge } from '../../src/components/ui/Badge';
+import { EventCard } from '../../src/components/events/EventCard';
+import { EventSliderCard } from '../../src/components/events/EventSliderCard';
 import { useAuthStore } from '../../src/store/authStore';
 import { eventsApi } from '../../src/api/events.api';
-
-const banquetBanner = require('../../assets/banquet-banner.jpg');
 
 export default function HomeFeedScreen() {
   const router = useRouter();
@@ -41,36 +39,66 @@ export default function HomeFeedScreen() {
 
   const todayIso = new Date().toISOString().split('T')[0];
 
-  // Highlighted today shift or top upcoming shift for the large top card
-  const featuredEvent = useMemo(() => {
-    if (myBookingsData?.events?.length) {
-      const todayShift = myBookingsData.events.find((e) => e.date === todayIso);
-      if (todayShift) return todayShift;
+  // Compute set of event IDs user has already joined today
+  const todayBookedEventIds = useMemo(() => {
+    const ids = new Set<string>();
+    if (myBookingsData?.bookings && myBookingsData?.events) {
+      for (const booking of myBookingsData.bookings) {
+        if (booking.status === 'confirmed') {
+          const ev = myBookingsData.events.find((e) => e.id === booking.eventId);
+          if (ev && ev.date === todayIso) {
+            ids.add(ev.id);
+          }
+        }
+      }
     }
-    return events[0] || null;
-  }, [events, myBookingsData, todayIso]);
+    return ids;
+  }, [myBookingsData, todayIso]);
 
-  // Remaining shifts for the 2x2 grid
-  const gridEvents = useMemo(() => {
-    if (!events.length) return [];
-    if (featuredEvent) {
-      return events.filter((e) => e.id !== featuredEvent.id).slice(0, 4);
-    }
-    return events.slice(0, 4);
-  }, [events, featuredEvent]);
+  const hasBookingToday = todayBookedEventIds.size > 0;
+
+  // Only upcoming events (date >= today), sorted nearest first
+  const upcomingEvents = useMemo(() => {
+    return events
+      .filter((e) => e.date >= todayIso)
+      .sort((a, b) => {
+        const dateCompare = a.date.localeCompare(b.date);
+        if (dateCompare !== 0) return dateCompare;
+        return (a.startTime || '').localeCompare(b.startTime || '');
+      });
+  }, [events, todayIso]);
+
+  // Split into today's events and future events
+  const todayEvents = useMemo(
+    () => upcomingEvents.filter((e) => e.date === todayIso),
+    [upcomingEvents, todayIso]
+  );
+
+  const futureEvents = useMemo(
+    () => upcomingEvents.filter((e) => e.date > todayIso),
+    [upcomingEvents, todayIso]
+  );
+
+  // Determine greeting based on time of day
+  const greeting = useMemo(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning !';
+    if (hour < 17) return 'Good Afternoon !';
+    return 'Good Evening !';
+  }, []);
 
   return (
     <ScreenWrapper className="px-4">
-      {/* Exact Header matching Image 1: Avatar, Good Morning !, Jude Bellingham, Orange Button */}
+      {/* Header: Avatar, Greeting, Name, Notification */}
       <AppTopHeader
         mode="user"
-        subtitle="Good Morning !"
-        title={user?.name || 'Jude Bellingham'}
+        subtitle={greeting}
+        title={user?.name || 'Staff'}
       />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 110 }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
@@ -80,123 +108,112 @@ export default function HomeFeedScreen() {
           />
         }
       >
-        {/* Large Featured Banquet Card with User's Uploaded Image */}
-        <TouchableOpacity
-          activeOpacity={0.92}
-          onPress={() =>
-            featuredEvent
-              ? router.push(`/events/${featuredEvent.id}`)
-              : router.push('/(tabs)/shifts')
-          }
-          className="rounded-[30px] overflow-hidden mb-4 shadow-md bg-neutral-900 border border-white/50 relative h-64 justify-between p-5"
-        >
-          {/* Background Banquet Image */}
-          <Image
-            source={banquetBanner}
-            className="absolute inset-0 w-full h-full"
-            resizeMode="cover"
-          />
-
-          {/* Dark scrim gradient overlay for contrast */}
-          <View
-            className="absolute inset-0"
-            style={{
-              backgroundColor: 'rgba(20, 18, 19, 0.42)',
-            }}
-          />
-
-          {/* Top row: Badges and circular arrow */}
-          <View className="flex-row items-center justify-between z-10">
-            <View className="flex-row items-center">
-              {featuredEvent ? (
-                <SlotBadge slot={featuredEvent.slot} />
-              ) : (
-                <View className="bg-[#df3b20] px-3 py-1 rounded-full shadow-sm">
-                  <Text className="text-xs font-black text-white uppercase tracking-wider">
-                    Featured
-                  </Text>
-                </View>
-              )}
-              <View className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full ml-2 border border-white/30">
-                <Text className="text-[11px] font-bold text-white">
-                  {featuredEvent
-                    ? featuredEvent.date === todayIso
-                      ? "Today's Shift"
-                      : featuredEvent.date
-                    : 'Grand Banquet'}
-                </Text>
-              </View>
-            </View>
-
-            {/* Circular top-right arrow button matching nav bar shape */}
-            <View className="w-10 h-10 rounded-full bg-white/95 items-center justify-center shadow-md">
-              <ArrowUpRight size={20} color="#201d1e" />
+        {/* One-per-day Info Banner */}
+        {hasBookingToday && (
+          <View className="bg-[#fdece8] rounded-2xl p-4 mb-4 flex-row items-center border border-[#fad4cc]">
+            <CheckCircle2 size={20} color="#df3b20" />
+            <View className="ml-3 flex-1">
+              <Text className="text-xs font-bold text-[#df3b20]">
+                You have a shift today
+              </Text>
+              <Text className="text-[10px] text-neutral-600 mt-0.5">
+                Only one work per day is allowed
+              </Text>
             </View>
           </View>
+        )}
 
-          {/* Bottom details with glass card effect */}
-          <View className="z-10 bg-black/50 p-4 rounded-2xl border border-white/20 backdrop-blur-md">
-            <Text className="text-xl font-black text-white leading-6 mb-1.5" numberOfLines={1}>
-              {featuredEvent ? featuredEvent.title : 'Luxury Banquet & Wedding Reception'}
-            </Text>
-
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center flex-1 mr-2">
-                <MapPin size={13} color="#fca5a5" />
-                <Text className="text-xs text-neutral-200 ml-1.5 font-medium" numberOfLines={1}>
-                  {featuredEvent ? featuredEvent.venue.text : 'The Grand Pavilion • Banquet Hall'}
-                </Text>
-              </View>
-
-              <View className="flex-row items-center bg-[#df3b20] px-3 py-1.5 rounded-xl shadow-sm">
-                <IndianRupee size={13} color="#ffffff" />
-                <Text className="text-xs font-black text-white ml-0.5">
-                  {featuredEvent ? featuredEvent.payPerPerson : '1,200'}
-                </Text>
-                <Text className="text-[10px] text-white/80 ml-1 font-semibold">
-                  {featuredEvent && (featuredEvent as EventWithStaffMeta).isJoined ? 'Booked' : 'shift'}
-                </Text>
-              </View>
-            </View>
+        {/* Loading State */}
+        {isLoading && (
+          <View className="items-center justify-center py-16">
+            <ActivityIndicator size="large" color="#df3b20" />
           </View>
-        </TouchableOpacity>
+        )}
 
-        {/* 2x2 Grid Section matching Image 1 */}
-        <View className="flex-row flex-wrap justify-between">
-          {gridEvents.map((item) => (
-            <ShiftCard
-              key={item.id}
-              event={item}
-              variant="grid"
-              onPress={() => router.push(`/events/${item.id}`)}
-            />
-          ))}
+        {/* Horizontal Slider: Featured / Today's Shifts Carousel */}
+        {!isLoading && upcomingEvents.length > 0 && (
+          <View className="mb-4">
+            <View className="flex-row items-center justify-between mb-3 mt-1">
+              <View className="flex-row items-center">
+                <Sparkles size={16} color="#df3b20" />
+                <Text className="text-sm font-black text-neutral-900 ml-2 tracking-tight">
+                  Featured Shifts
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => router.push('/shifts')}
+                className="flex-row items-center"
+              >
+                <Text className="text-xs font-bold text-[#df3b20] mr-0.5">
+                  View All
+                </Text>
+                <ChevronRight size={14} color="#df3b20" />
+              </TouchableOpacity>
+            </View>
 
-          {/* Fallback placeholding cards if few events exist */}
-          {gridEvents.length === 0 && (
-            <>
-              {[1, 2, 3, 4].map((i) => (
-                <View
-                  key={i}
-                  className="bg-white rounded-[26px] p-4 mb-3.5 justify-between relative shadow-sm border border-white/40"
-                  style={{ width: '48.2%', minHeight: 145 }}
-                >
-                  <View className="w-8 h-8 rounded-full bg-[#f1f2f2] border border-[#e4e5e6] items-center justify-center self-end">
-                    <ArrowUpRight size={16} color="#201d1e" />
-                  </View>
-                  <View>
-                    <Text className="text-xs font-bold text-neutral-700">
-                      Shift Slot #{i}
-                    </Text>
-                    <Text className="text-[10px] text-neutral-400 mt-1">
-                      Check back for new publishings
-                    </Text>
-                  </View>
-                </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingRight: 4, paddingVertical: 2 }}
+            >
+              {upcomingEvents.slice(0, 6).map((event) => (
+                <EventSliderCard
+                  key={event.id}
+                  event={event}
+                  isToday={event.date === todayIso}
+                  onPress={() => router.push(`/events/${event.id}`)}
+                />
               ))}
-            </>
-          )}
-        </View>
+            </ScrollView>
+          </View>
+        )}
+
+        {/* Upcoming Shifts Vertical Section */}
+        {upcomingEvents.length > 0 && (
+          <>
+            <View className="flex-row items-center mb-3 mt-2">
+              <CalendarDays size={16} color="#64748b" />
+              <Text className="text-sm font-black text-neutral-900 ml-2 tracking-tight">
+                All Available Shifts
+              </Text>
+            </View>
+            <View className="pt-0.5">
+              {upcomingEvents.map((event) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  onPress={() => router.push(`/events/${event.id}`)}
+                />
+              ))}
+            </View>
+          </>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && upcomingEvents.length === 0 && (
+          <View className="bg-white rounded-[28px] p-10 items-center justify-center my-8 shadow-sm border border-white/50">
+            <CalendarDays size={48} color="#d4d4d8" />
+            <Text className="text-base font-bold text-neutral-800 mt-4">
+              No Upcoming Shifts
+            </Text>
+            <Text className="text-xs text-neutral-500 text-center mt-1.5 leading-4">
+              New shifts will appear here when published.{'\n'}
+              Pull down to refresh.
+            </Text>
+          </View>
+        )}
+
+        {/* End-of-list quote */}
+        {upcomingEvents.length > 0 && (
+          <View className="items-center justify-center pt-8 pb-4">
+            <Text className="text-2xl font-black text-neutral-400/80 tracking-wider text-center">
+              Hakuna Matata !
+            </Text>
+            <Text className="text-[11px] font-semibold text-neutral-400 mt-1">
+              You're all caught up
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </ScreenWrapper>
   );

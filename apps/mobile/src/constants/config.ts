@@ -23,7 +23,7 @@ export const CONFIG = {
   DEFAULT_PER_KM_RATE: 15,
   CANCELLATION_CUTOFF_HOURS: 24,
   MIN_TRAVEL_GAP_MINUTES: 120, // 2 hours
-  MAX_EVENTS_PER_DAY: 2,
+  MAX_EVENTS_PER_DAY: 1,
 };
 
 export const SLOT_INFO: Record<EventSlot, { label: string; badgeClass: string; textClass: string }> = {
