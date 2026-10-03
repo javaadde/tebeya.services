@@ -1,31 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { UtensilsCrossed, IndianRupee, ShieldCheck } from 'lucide-react-native';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
+import { CateringStaffIllustration } from '../../src/components/auth/CateringStaffIllustration';
+import { SocialAuthBlock } from '../../src/components/auth/SocialAuthBlock';
 import { Button } from '../../src/components/ui/Button';
 
 const SLIDES = [
   {
-    title: 'Premium Catering Shifts',
-    description:
-      'Discover high-profile banquet, wedding, and corporate shifts across premier venues in your city.',
-    icon: <UtensilsCrossed size={42} color="#df3b20" />,
-    badge: 'Step 1 of 3',
+    title: 'Elite Catering Staff',
+    subtitle: 'Join premier banquet and event teams at five-star venues across the city.',
   },
   {
-    title: 'Transparent Earnings & Travel Bonus',
-    description:
-      'Clear per-event wages with automatic distance-based travel allowances calculated from your home.',
-    icon: <IndianRupee size={42} color="#df3b20" />,
-    badge: 'Step 2 of 3',
+    title: 'Transparent Earnings',
+    subtitle: 'Guaranteed hourly wages with automatic distance travel allowances.',
   },
   {
-    title: 'Reliable Scheduling & Verification',
-    description:
-      'Direct shift confirmation with attendance logging, punctuality tracking, and prompt weekly payouts.',
-    icon: <ShieldCheck size={42} color="#df3b20" />,
-    badge: 'Step 3 of 3',
+    title: 'Fast Weekly Payouts',
+    subtitle: 'Direct shift confirmation with attendance logging and prompt payouts.',
   },
 ];
 
@@ -33,79 +25,84 @@ export default function OnboardingScreen() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
 
-  const handleNext = () => {
-    if (currentSlide < SLIDES.length - 1) {
-      setCurrentSlide(currentSlide + 1);
-    } else {
-      router.replace('/(auth)/signup');
-    }
-  };
-
   const slide = SLIDES[currentSlide];
 
   return (
-    <ScreenWrapper className="px-5 py-6 justify-between">
-      {/* Top Header */}
-      <View className="flex-row justify-between items-center pt-2">
-        <Text className="text-lg font-black text-neutral-900 tracking-wider">
-          TEBEYA SERVICES
-        </Text>
-        <TouchableOpacity
-          onPress={() => router.replace('/(auth)/login')}
-          className="px-3 py-1.5 rounded-full bg-white/70"
-        >
-          <Text className="text-xs font-bold text-neutral-600">Skip</Text>
-        </TouchableOpacity>
-      </View>
+    <ScreenWrapper
+      scrollable
+      backgroundColor="bg-white"
+      className="px-6 py-4 justify-between"
+    >
+      <View className="flex-1 justify-between">
+        <View className="items-center pt-2">
+          {/* Top Skip Button */}
+          <View className="w-full flex-row justify-end mb-2">
+            <TouchableOpacity
+              onPress={() => router.replace('/(auth)/login')}
+              className="py-1 px-3"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Text className="text-xs font-semibold text-neutral-400">Skip</Text>
+            </TouchableOpacity>
+          </View>
 
-      {/* Main Slide Card */}
-      <View className="bg-white rounded-[32px] p-8 items-center shadow-sm border border-white/50 my-6">
-        <View className="w-24 h-24 rounded-[26px] bg-[#fdece8] items-center justify-center mb-6">
-          {slide.icon}
-        </View>
+          {/* Meaningful Catering Staff Illustration */}
+          <View className="items-center my-4">
+            <CateringStaffIllustration width={220} height={175} />
+          </View>
 
-        <View className="bg-[#f1f2f2] px-3 py-1 rounded-full mb-3">
-          <Text className="text-[11px] font-bold text-neutral-700 uppercase tracking-wide">
-            {slide.badge}
+          {/* Title & Subtitle */}
+          <Text className="text-2xl font-black text-neutral-900 text-center tracking-tight mb-2">
+            {slide.title}
           </Text>
+          <Text className="text-xs font-normal text-neutral-500 text-center px-4 leading-5 mb-6">
+            {slide.subtitle}
+          </Text>
+
+          {/* 3 Horizontal Pill Dash Indicators (Brand Orange Active) */}
+          <View className="flex-row items-center justify-center space-x-2 w-full px-2 mb-8">
+            {SLIDES.map((_, idx) => {
+              const isLit = idx <= currentSlide || (currentSlide === 0 && idx < 2);
+              return (
+                <TouchableOpacity
+                  key={idx}
+                  onPress={() => setCurrentSlide(idx)}
+                  activeOpacity={0.7}
+                  className="flex-1 py-1"
+                >
+                  <View
+                    className={`h-[4px] rounded-full mx-1 ${
+                      isLit ? 'bg-[#df3b20]' : 'bg-neutral-200'
+                    }`}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          {/* Primary Action Button (Brand Orange) */}
+          <Button
+            title="Enter Invite Code & Sign Up"
+            variant="primary"
+            pill
+            size="lg"
+            onPress={() => router.push('/(auth)/signup')}
+            className="w-full h-[52px] mb-3"
+          />
+
+          {/* Google Sign-In Option */}
+          <SocialAuthBlock />
         </View>
 
-        <Text className="text-2xl font-black text-neutral-900 text-center mb-2 leading-7">
-          {slide.title}
-        </Text>
-
-        <Text className="text-xs text-neutral-500 text-center leading-5 px-2">
-          {slide.description}
-        </Text>
-      </View>
-
-      {/* Footer Controls */}
-      <View className="space-y-4">
-        {/* Pagination Dots */}
-        <View className="flex-row justify-center items-center mb-4">
-          {SLIDES.map((_, index) => (
-            <View
-              key={index}
-              className={`h-2 rounded-full mx-1 ${
-                index === currentSlide
-                  ? 'w-8 bg-[#df3b20]'
-                  : 'w-2 bg-neutral-300'
-              }`}
-            />
-          ))}
-        </View>
-
-        <Button
-          title={currentSlide === SLIDES.length - 1 ? 'Get Started' : 'Next'}
-          onPress={handleNext}
-          variant="primary"
-          size="lg"
-        />
-
-        <View className="flex-row justify-center items-center mt-3">
-          <Text className="text-xs text-neutral-600">Already registered? </Text>
-          <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
-            <Text className="text-xs font-black text-[#df3b20]">Sign In</Text>
+        {/* Footer Navigation */}
+        <View className="items-center py-6 mt-4">
+          <TouchableOpacity
+            onPress={() => router.push('/(auth)/login')}
+            className="flex-row items-center py-2"
+            hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
+          >
+            <Text className="text-[13px] text-neutral-600">Already have an account? </Text>
+            <Text className="text-[13px] font-black text-[#df3b20]">Log in</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react-native';
+import { Mail, Lock } from 'lucide-react-native';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
 import { Input } from '../../src/components/ui/Input';
 import { Button } from '../../src/components/ui/Button';
+import { SocialAuthBlock } from '../../src/components/auth/SocialAuthBlock';
 import { authApi } from '../../src/api/auth.api';
 import { useAuthStore } from '../../src/store/authStore';
 
@@ -38,32 +39,29 @@ export default function LoginScreen() {
   };
 
   return (
-    <ScreenWrapper scrollable className="px-5 py-6 justify-between">
-      <View>
-        {/* Brand Header */}
-        <View className="items-center my-6">
-          <View className="w-16 h-16 rounded-[22px] bg-[#df3b20] items-center justify-center mb-4 shadow-sm">
-            <LogIn size={28} color="#ffffff" />
+    <ScreenWrapper
+      scrollable
+      backgroundColor="bg-white"
+      className="px-6 py-4 justify-between"
+    >
+      <View className="flex-1 justify-center pt-8">
+        {/* Title */}
+        <Text className="text-2xl font-black text-neutral-900 text-center mb-8 tracking-tight">
+          Login
+        </Text>
+
+        {/* Error Notification */}
+        {error && (
+          <View className="bg-rose-50 border border-rose-200 p-3.5 rounded-2xl mb-4">
+            <Text className="text-xs text-rose-700 font-semibold text-center">{error}</Text>
           </View>
-          <Text className="text-2xl font-black text-neutral-900 tracking-tight">
-            Staff Portal
-          </Text>
-          <Text className="text-xs font-medium text-neutral-500 mt-1">
-            Sign in to discover and book catering shifts
-          </Text>
-        </View>
+        )}
 
-        {/* Form Card */}
-        <View className="bg-white rounded-[28px] p-6 shadow-sm border border-white/50">
-          {error && (
-            <View className="bg-rose-50 border border-rose-200 p-3.5 rounded-xl mb-4">
-              <Text className="text-xs text-rose-700 font-semibold">{error}</Text>
-            </View>
-          )}
-
+        {/* Form Inputs */}
+        <View className="w-full">
           <Input
-            label="Email Address"
-            placeholder="staff@tebeya.com"
+            pill
+            placeholder="Email"
             value={email}
             onChangeText={(text) => {
               setEmail(text);
@@ -72,52 +70,64 @@ export default function LoginScreen() {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
-            leftIcon={<Mail size={18} color="#94a3b8" />}
+            leftIcon={<Mail size={18} color="#9ca3af" />}
           />
 
           <Input
-            label="Password"
-            placeholder="Enter your password"
+            pill
+            placeholder="Password"
             value={password}
             onChangeText={(text) => {
               setPassword(text);
               setError(null);
             }}
             secureTextEntry
-            leftIcon={<Lock size={18} color="#94a3b8" />}
+            leftIcon={<Lock size={18} color="#9ca3af" />}
           />
 
+          {/* Forgot Password Link */}
           <TouchableOpacity
             onPress={() => router.push('/(auth)/forgot-password')}
-            className="self-end -mt-1 mb-6"
+            className="self-center my-3"
+            hitSlop={{ top: 8, bottom: 8, left: 12, right: 12 }}
           >
-            <Text className="text-xs font-bold text-[#df3b20]">
+            <Text className="text-xs font-semibold text-neutral-500">
               Forgot Password?
             </Text>
           </TouchableOpacity>
 
+          {/* Brand Orange Primary Login Button */}
           <Button
-            title="Sign In"
+            title="Login"
+            variant="primary"
+            pill
+            size="lg"
             onPress={handleLogin}
             loading={loading}
-            variant="primary"
-            size="lg"
+            className="h-[52px] mt-1 shadow-sm"
           />
         </View>
+
+        {/* Divider */}
+        <View className="flex-row items-center my-6">
+          <View className="flex-1 h-[1px] bg-neutral-200" />
+          <Text className="mx-4 text-xs font-medium text-neutral-400">or</Text>
+          <View className="flex-1 h-[1px] bg-neutral-200" />
+        </View>
+
+        {/* Google-Only Social Login */}
+        <SocialAuthBlock />
       </View>
 
-      {/* Footer Card */}
-      <View className="bg-white/80 rounded-[24px] p-4 items-center mt-6">
-        <Text className="text-xs text-neutral-600 text-center mb-1.5">
-          New to Tebeya Services? Sign up requires an invite code.
-        </Text>
+      {/* Footer Navigation */}
+      <View className="items-center py-6">
         <TouchableOpacity
           onPress={() => router.push('/(auth)/signup')}
-          className="py-1"
+          className="flex-row items-center py-2"
+          hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
         >
-          <Text className="text-xs font-black text-[#df3b20]">
-            Enter Invite Code & Sign Up →
-          </Text>
+          <Text className="text-[13px] text-neutral-600">Need an account? </Text>
+          <Text className="text-[13px] font-black text-[#df3b20]">Sign up</Text>
         </TouchableOpacity>
       </View>
     </ScreenWrapper>

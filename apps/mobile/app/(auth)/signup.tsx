@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { KeyRound, User, Mail, Phone, Lock, CheckCircle2, ArrowRight, ChevronLeft } from 'lucide-react-native';
+import {
+  KeyRound,
+  User,
+  Mail,
+  Phone,
+  Lock,
+  CheckCircle2,
+  ChevronLeft,
+} from 'lucide-react-native';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
 import { Input } from '../../src/components/ui/Input';
 import { Button } from '../../src/components/ui/Button';
+import { CateringStaffIllustration } from '../../src/components/auth/CateringStaffIllustration';
 import { authApi } from '../../src/api/auth.api';
 import { useAuthStore } from '../../src/store/authStore';
 
@@ -25,10 +34,11 @@ export default function SignupScreen() {
   const router = useRouter();
   const setSession = useAuthStore((state) => state.setSession);
 
+  // Step 1: Verify OTP / Invite Code (Rule 3)
   const handleVerifyCode = async () => {
     const cleanCode = inviteCode.trim().toUpperCase();
     if (!cleanCode) {
-      setError('Please enter your invite code.');
+      setError('Please enter your invite code / OTP.');
       return;
     }
 
@@ -46,13 +56,14 @@ export default function SignupScreen() {
       }
       setStep(2);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Invalid or expired invite code.';
+      const msg = err instanceof Error ? err.message : 'Invalid or expired invite code / OTP.';
       setError(msg);
     } finally {
       setLoading(false);
     }
   };
 
+  // Step 2: Complete Registration
   const handleRegister = async () => {
     if (!name.trim() || !email.trim() || !phone.trim() || !password) {
       setError('Please fill in all required registration fields.');
@@ -83,7 +94,7 @@ export default function SignupScreen() {
       await setSession(res.user, res.tokens);
       Alert.alert(
         'Account Created',
-        'Welcome to Tebeya Services! Please complete your government ID verification in Profile.',
+        'Welcome to Tebeya Services! Please upload your ID proof in your profile to complete verification.',
         [{ text: 'Continue', onPress: () => router.replace('/(tabs)') }]
       );
     } catch (err: unknown) {
@@ -95,142 +106,215 @@ export default function SignupScreen() {
   };
 
   return (
-    <ScreenWrapper scrollable className="px-5 py-4">
-      {/* Top Header */}
-      <View className="flex-row items-center justify-between pt-2 pb-4">
-        <TouchableOpacity
-          onPress={() => (step === 2 ? setStep(1) : router.back())}
-          className="w-12 h-12 rounded-2xl bg-white items-center justify-center shadow-sm"
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <ChevronLeft size={22} color="#201d1e" />
-        </TouchableOpacity>
-
-        <Text className="text-base font-black text-neutral-900 tracking-tight">
-          Invite-Only Signup
-        </Text>
-
-        <View className="w-12" />
-      </View>
-
-      <View className="bg-white rounded-[28px] p-6 shadow-sm border border-white/50 mb-4">
-        <View className="flex-row items-center mb-4">
-          <View className="w-10 h-10 rounded-2xl bg-[#fdece8] items-center justify-center mr-3">
-            <KeyRound size={20} color="#df3b20" />
-          </View>
-          <View>
-            <Text className="text-base font-black text-neutral-900">
-              {step === 1 ? 'Step 1: Invite Code' : 'Step 2: Staff Details'}
+    <ScreenWrapper
+      scrollable
+      backgroundColor="bg-white"
+      className="px-6 py-4 justify-between"
+    >
+      <View className="flex-1 justify-between">
+        <View className="pt-2">
+          {/* Top Navigation Bar */}
+          <View className="flex-row items-center justify-between mb-4">
+            <TouchableOpacity
+              onPress={() => (step === 2 ? setStep(1) : router.back())}
+              className="w-10 h-10 rounded-full bg-neutral-100 items-center justify-center"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <ChevronLeft size={22} color="#1a1a1a" />
+            </TouchableOpacity>
+            <Text className="text-base font-black text-neutral-900 tracking-tight">
+              {step === 1 ? 'Step 1: Invite OTP' : 'Step 2: Staff Details'}
             </Text>
-            <Text className="text-xs text-neutral-500">
-              {step === 1 ? 'Verify single-use access code' : 'Complete your account setup'}
-            </Text>
+            <View className="w-10" />
           </View>
+
+          {/* Orange Brand Progress Bar */}
+          <View className="flex-row items-center justify-center space-x-2 w-full px-2 mb-6">
+            <View
+              className={`flex-1 h-[4px] rounded-full mx-1 ${
+                step >= 1 ? 'bg-[#df3b20]' : 'bg-neutral-200'
+              }`}
+            />
+            <View
+              className={`flex-1 h-[4px] rounded-full mx-1 ${
+                step >= 2 ? 'bg-[#df3b20]' : 'bg-neutral-200'
+              }`}
+            />
+          </View>
+
+          {/* Global Error Banner */}
+          {error && (
+            <View className="bg-rose-50 border border-rose-200 p-3.5 rounded-2xl mb-4">
+              <Text className="text-xs text-rose-700 font-semibold text-center">{error}</Text>
+            </View>
+          )}
+
+          {step === 1 ? (
+            /* ---------------- STEP 1: INVITE CODE / OTP ENTRY FIRST ---------------- */
+            <View className="items-center">
+              {/* Meaningful Catering Staff Illustration */}
+              <View className="items-center my-3">
+                <CateringStaffIllustration width={220} height={175} />
+              </View>
+
+              {/* Meaningful Catering Copy */}
+              <Text className="text-2xl font-black text-neutral-900 text-center tracking-tight mb-2">
+                Join Event Staff
+              </Text>
+              <Text className="text-xs font-normal text-neutral-500 text-center px-4 leading-5 mb-8">
+                Enter the admin-issued invite code (OTP) provided by your catering coordinator to verify your access.
+              </Text>
+
+              {/* Pill Input */}
+              <Input
+                pill
+                placeholder="Single-Use Invite Code (e.g. TB-89X2-A)"
+                value={inviteCode}
+                onChangeText={(text) => {
+                  setInviteCode(text.toUpperCase());
+                  setError(null);
+                }}
+                autoCapitalize="characters"
+                autoCorrect={false}
+                leftIcon={<KeyRound size={18} color="#9ca3af" />}
+              />
+
+              {/* Primary Action Button (No Gmail or other buttons here) */}
+              <Button
+                title="Verify Invite Code"
+                variant="primary"
+                pill
+                size="lg"
+                onPress={handleVerifyCode}
+                loading={loading}
+                className="w-full h-[52px] mt-2 shadow-sm"
+              />
+            </View>
+          ) : (
+            /* ---------------- STEP 2: STAFF DETAILS & CREDENTIALS ---------------- */
+            <View>
+              {/* Verified Code Pill */}
+              <View className="flex-row items-center justify-center bg-[#fdece8] border border-[#fad4cc] py-2 px-4 rounded-full mb-6 self-center">
+                <CheckCircle2 size={16} color="#df3b20" />
+                <Text className="text-xs font-bold text-[#df3b20] ml-2">
+                  Verified Code: {inviteCode}
+                </Text>
+              </View>
+
+              <Text className="text-2xl font-black text-neutral-900 text-center tracking-tight mb-2">
+                Create Staff Profile
+              </Text>
+              <Text className="text-xs font-normal text-neutral-500 text-center px-4 leading-5 mb-6">
+                Fill in your details to complete registration and start booking banquet shifts.
+              </Text>
+
+              {/* Form Fields */}
+              <Input
+                pill
+                placeholder="Full Name"
+                value={name}
+                onChangeText={(text) => {
+                  setName(text);
+                  setError(null);
+                }}
+                leftIcon={<User size={18} color="#9ca3af" />}
+              />
+
+              <Input
+                pill
+                placeholder="Mobile Number"
+                value={phone}
+                onChangeText={(text) => {
+                  setPhone(text);
+                  setError(null);
+                }}
+                keyboardType="phone-pad"
+                editable={!lockedPhoneOrEmail || lockedPhoneOrEmail.includes('@')}
+                helperText={
+                  lockedPhoneOrEmail && !lockedPhoneOrEmail.includes('@')
+                    ? 'Locked to this invite code'
+                    : undefined
+                }
+                leftIcon={<Phone size={18} color="#9ca3af" />}
+              />
+
+              <Input
+                pill
+                placeholder="Email Address"
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  setError(null);
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                editable={!lockedPhoneOrEmail || !lockedPhoneOrEmail.includes('@')}
+                helperText={
+                  lockedPhoneOrEmail && lockedPhoneOrEmail.includes('@')
+                    ? 'Locked to this invite code'
+                    : undefined
+                }
+                leftIcon={<Mail size={18} color="#9ca3af" />}
+              />
+
+              <Input
+                pill
+                placeholder="Password (at least 6 characters)"
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  setError(null);
+                }}
+                secureTextEntry
+                leftIcon={<Lock size={18} color="#9ca3af" />}
+              />
+
+              <Input
+                pill
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={(text) => {
+                  setConfirmPassword(text);
+                  setError(null);
+                }}
+                secureTextEntry
+                leftIcon={<Lock size={18} color="#9ca3af" />}
+              />
+
+              {/* Primary Action Button */}
+              <Button
+                title="Complete Registration"
+                variant="primary"
+                pill
+                size="lg"
+                onPress={handleRegister}
+                loading={loading}
+                className="w-full h-[52px] mt-2 shadow-sm"
+              />
+
+              <TouchableOpacity
+                onPress={() => setStep(1)}
+                className="mt-3 py-2 items-center"
+              >
+                <Text className="text-xs font-semibold text-neutral-500">
+                  Change Invite Code
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
-        {error && (
-          <View className="bg-rose-50 border border-rose-200 p-3.5 rounded-xl mb-4">
-            <Text className="text-xs text-rose-700 font-semibold">{error}</Text>
-          </View>
-        )}
-
-        {step === 1 ? (
-          <View>
-            <Text className="text-xs text-neutral-600 leading-5 mb-4">
-              Registration requires an admin-issued single-use code to guarantee high-trust catering staff.
-            </Text>
-
-            <Input
-              label="Single-Use Invite Code"
-              placeholder="e.g. TB-89X2-A"
-              value={inviteCode}
-              onChangeText={(text) => {
-                setInviteCode(text.toUpperCase());
-                setError(null);
-              }}
-              autoCapitalize="characters"
-              autoCorrect={false}
-              leftIcon={<KeyRound size={18} color="#94a3b8" />}
-            />
-
-            <Button
-              title="Verify Invite Code"
-              onPress={handleVerifyCode}
-              loading={loading}
-              variant="primary"
-              size="lg"
-            />
-          </View>
-        ) : (
-          <View>
-            <View className="flex-row items-center bg-[#fdece8] p-3 rounded-xl mb-4">
-              <CheckCircle2 size={16} color="#df3b20" />
-              <Text className="text-xs font-bold text-[#df3b20] ml-2">
-                Validated Code: {inviteCode}
-              </Text>
-            </View>
-
-            <Input
-              label="Full Name"
-              placeholder="Rahul Sharma"
-              value={name}
-              onChangeText={setName}
-              leftIcon={<User size={18} color="#94a3b8" />}
-            />
-
-            <Input
-              label="Mobile Number"
-              placeholder="+91 98765 43210"
-              value={phone}
-              onChangeText={setPhone}
-              keyboardType="phone-pad"
-              leftIcon={<Phone size={18} color="#94a3b8" />}
-            />
-
-            <Input
-              label="Email Address"
-              placeholder="rahul@example.com"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              leftIcon={<Mail size={18} color="#94a3b8" />}
-            />
-
-            <Input
-              label="Password"
-              placeholder="At least 6 characters"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              leftIcon={<Lock size={18} color="#94a3b8" />}
-            />
-
-            <Input
-              label="Confirm Password"
-              placeholder="Re-enter password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-              leftIcon={<Lock size={18} color="#94a3b8" />}
-            />
-
-            <Button
-              title="Complete Registration"
-              onPress={handleRegister}
-              loading={loading}
-              variant="primary"
-              size="lg"
-            />
-          </View>
-        )}
-      </View>
-
-      <View className="bg-white/80 rounded-[24px] p-4 items-center">
-        <Text className="text-xs text-neutral-600">Already registered?</Text>
-        <TouchableOpacity onPress={() => router.push('/(auth)/login')} className="mt-1">
-          <Text className="text-xs font-black text-[#df3b20]">Sign In to Account →</Text>
-        </TouchableOpacity>
+        {/* Footer Navigation */}
+        <View className="items-center py-6">
+          <TouchableOpacity
+            onPress={() => router.push('/(auth)/login')}
+            className="flex-row items-center py-2"
+            hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
+          >
+            <Text className="text-[13px] text-neutral-600">Already registered? </Text>
+            <Text className="text-[13px] font-black text-[#df3b20]">Sign In</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScreenWrapper>
   );

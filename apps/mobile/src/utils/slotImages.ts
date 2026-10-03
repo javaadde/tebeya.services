@@ -13,6 +13,8 @@ const SLOT_IMAGES: Record<EventSlot, ImageSourcePropType> = {
   custom: require('../../assets/events/custom.jpg'),
 };
 
+export const BUFFET_IMAGE: ImageSourcePropType = require('../../assets/events/buffet.jpg');
+
 /**
  * Returns the local image source for an event.
  * If event has slot 'dinner' or starts at/after 16:00 (4 PM), it uses the evening event image.
