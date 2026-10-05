@@ -85,20 +85,20 @@ export const CateringStaffIllustration: React.FC<CateringStaffIllustrationProps>
       {/* White shirt collar */}
       <Path d="M109 77 L115 82 L121 77" fill="#FFFFFF" stroke="#1F241F" strokeWidth="1.6" />
 
-      {/* Bowtie (Brand Orange `#DF3B20` accent!) */}
+      {/* Bowtie (Brand Primary `#598A31` accent!) */}
       <Path
         d="M110 78 L115 80 L110 82 Z"
-        fill="#DF3B20"
-        stroke="#DF3B20"
+        fill="#598A31"
+        stroke="#598A31"
         strokeWidth="0.8"
       />
       <Path
         d="M120 78 L115 80 L120 82 Z"
-        fill="#DF3B20"
-        stroke="#DF3B20"
+        fill="#598A31"
+        stroke="#598A31"
         strokeWidth="0.8"
       />
-      <Circle cx="115" cy="80" r="1.8" fill="#DF3B20" />
+      <Circle cx="115" cy="80" r="1.8" fill="#598A31" />
 
       {/* Banquet Vest / Waistcoat (Black fitted vest) */}
       <Path
@@ -173,7 +173,7 @@ export const CateringStaffIllustration: React.FC<CateringStaffIllustrationProps>
       />
 
       {/* Cloche Top Handle */}
-      <Circle cx="156" cy="83" r="3" fill="#DF3B20" stroke="#1F241F" strokeWidth="1.2" />
+      <Circle cx="156" cy="83" r="3" fill="#598A31" stroke="#1F241F" strokeWidth="1.2" />
 
       {/* Cloche silver sheen reflection */}
       <Path

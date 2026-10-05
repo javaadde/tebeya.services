@@ -128,16 +128,16 @@ export default function SignupScreen() {
             <View className="w-10" />
           </View>
 
-          {/* Orange Brand Progress Bar */}
+          {/* Brand Primary Progress Bar */}
           <View className="flex-row items-center justify-center space-x-2 w-full px-2 mb-6">
             <View
               className={`flex-1 h-[4px] rounded-full mx-1 ${
-                step >= 1 ? 'bg-[#df3b20]' : 'bg-neutral-200'
+                step >= 1 ? 'bg-[#598A31]' : 'bg-neutral-200'
               }`}
             />
             <View
               className={`flex-1 h-[4px] rounded-full mx-1 ${
-                step >= 2 ? 'bg-[#df3b20]' : 'bg-neutral-200'
+                step >= 2 ? 'bg-[#598A31]' : 'bg-neutral-200'
               }`}
             />
           </View>
@@ -194,9 +194,9 @@ export default function SignupScreen() {
             /* ---------------- STEP 2: STAFF DETAILS & CREDENTIALS ---------------- */
             <View>
               {/* Verified Code Pill */}
-              <View className="flex-row items-center justify-center bg-[#fdece8] border border-[#fad4cc] py-2 px-4 rounded-full mb-6 self-center">
-                <CheckCircle2 size={16} color="#df3b20" />
-                <Text className="text-xs font-bold text-[#df3b20] ml-2">
+              <View className="flex-row items-center justify-center bg-[#f4f8ef] border border-[#cee2be] py-2 px-4 rounded-full mb-6 self-center">
+                <CheckCircle2 size={16} color="#598A31" />
+                <Text className="text-xs font-bold text-[#598A31] ml-2">
                   Verified Code: {inviteCode}
                 </Text>
               </View>
@@ -312,7 +312,7 @@ export default function SignupScreen() {
             hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
           >
             <Text className="text-[13px] text-neutral-600">Already registered? </Text>
-            <Text className="text-[13px] font-black text-[#df3b20]">Sign In</Text>
+            <Text className="text-[13px] font-black text-[#598A31]">Sign In</Text>
           </TouchableOpacity>
         </View>
       </View>

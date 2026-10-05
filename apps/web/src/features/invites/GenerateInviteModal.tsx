@@ -77,7 +77,7 @@ export function GenerateInviteModal({
               className={cn(
                 'py-2.5 px-4 rounded-xl text-xs font-bold transition-all text-center',
                 expiresInMinutes === 1
-                  ? 'bg-[#e66434] text-white shadow-sm'
+                  ? 'bg-[#598A31] text-white shadow-sm'
                   : 'bg-[#f7f4ef] text-stone-700 hover:bg-[#ede8e1]'
               )}
             >
@@ -89,7 +89,7 @@ export function GenerateInviteModal({
               className={cn(
                 'py-2.5 px-4 rounded-xl text-xs font-bold transition-all text-center',
                 expiresInMinutes === 2
-                  ? 'bg-[#e66434] text-white shadow-sm'
+                  ? 'bg-[#598A31] text-white shadow-sm'
                   : 'bg-[#f7f4ef] text-stone-700 hover:bg-[#ede8e1]'
               )}
             >
@@ -101,8 +101,8 @@ export function GenerateInviteModal({
           </p>
         </div>
 
-        <div className="bg-[#faeae3] p-3.5 rounded-2xl text-xs text-[#732c16] flex items-start gap-2.5 shadow-2xs">
-          <ShieldAlert className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#e66434]" />
+        <div className="bg-[#e6f0dc] p-3.5 rounded-2xl text-xs text-[#213514] flex items-start gap-2.5 shadow-2xs">
+          <ShieldAlert className="w-4 h-4 flex-shrink-0 mt-0.5 text-[#598A31]" />
           <span>
             <strong className="font-bold">Security Rule:</strong> Each invite code is strictly single-use and will automatically be deleted from the database once the {expiresInMinutes}-minute TTL elapses.
           </span>

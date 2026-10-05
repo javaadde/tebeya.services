@@ -40,3 +40,30 @@ export function getSlotImage(slot?: EventSlot, startTime?: string): ImageSourceP
 
   return SLOT_IMAGES.custom;
 }
+
+/**
+ * Returns an array of up to 3 image sources for an event.
+ * Matches the 3-image carousel style in the reference mockup.
+ */
+export function getEventImages(event: {
+  slot?: EventSlot;
+  startTime?: string;
+  imageUrl?: string;
+}): ImageSourcePropType[] {
+  const list: ImageSourcePropType[] = [];
+  if (event.imageUrl) {
+    list.push({ uri: event.imageUrl });
+  }
+
+  if (event.slot === 'dinner') {
+    list.push(BUFFET_IMAGE, SLOT_IMAGES.dinner, SLOT_IMAGES.lunch);
+  } else if (event.slot === 'lunch') {
+    list.push(SLOT_IMAGES.lunch, BUFFET_IMAGE, SLOT_IMAGES.dinner);
+  } else if (event.slot === 'breakfast') {
+    list.push(SLOT_IMAGES.breakfast, BUFFET_IMAGE, SLOT_IMAGES.lunch);
+  } else {
+    list.push(BUFFET_IMAGE, SLOT_IMAGES.dinner, SLOT_IMAGES.lunch);
+  }
+
+  return list.slice(0, 3);
+}

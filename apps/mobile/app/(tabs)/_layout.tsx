@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Tabs } from 'expo-router';
-import { Home, CalendarDays, History, Hexagon } from 'lucide-react-native';
+import { Pentagon, CalendarSearch, History, Hexagon, Circle } from 'lucide-react-native';
 
 interface TabBarProps {
   state: {
@@ -15,12 +15,35 @@ interface TabBarProps {
   };
 }
 
+const SettingsIcon = ({ size, color }: { size: number; color: string }) => (
+  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+    <Hexagon size={size} color={color} />
+    <Circle size={size * 0.35} color={color} strokeWidth={3} style={{ position: 'absolute' }} />
+  </View>
+);
+
+const HomeIcon = ({ size, color }: { size: number; color: string }) => (
+  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+    <Pentagon size={size} color={color} />
+    <View
+      style={{
+        position: 'absolute',
+        bottom: size * 0.22,
+        width: 2,
+        height: size * 0.25,
+        backgroundColor: color,
+        borderRadius: 1,
+      }}
+    />
+  </View>
+);
+
 function FloatingTabBar({ state, descriptors, navigation }: TabBarProps) {
   const icons: Record<string, React.ComponentType<any>> = {
-    index: Home,
-    shifts: CalendarDays,
+    index: HomeIcon,
+    shifts: CalendarSearch,
     earnings: History,
-    profile: Hexagon,
+    profile: SettingsIcon,
   };
 
   return (
@@ -28,7 +51,7 @@ function FloatingTabBar({ state, descriptors, navigation }: TabBarProps) {
       <View style={styles.tabBarContainer}>
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
-          const IconComponent = icons[route.name] || Home;
+          const IconComponent = icons[route.name] || HomeIcon;
 
           const onPress = () => {
             const event = navigation.emit({
@@ -55,8 +78,8 @@ function FloatingTabBar({ state, descriptors, navigation }: TabBarProps) {
               ]}
             >
               <IconComponent
-                size={22}
-                color="#ffffff"
+                size={26}
+                color={isFocused ? '#ffffff' : '#f5f5f5'}
               />
             </TouchableOpacity>
           );
@@ -89,33 +112,33 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
-    paddingBottom: Platform.OS === 'ios' ? 24 : 16,
+    paddingBottom: Platform.OS === 'ios' ? 34 : 24,
     backgroundColor: 'transparent',
   },
   tabBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#1f1c1d',
-    width: '78%',
-    maxWidth: 310,
-    height: 58,
-    borderRadius: 38,
+    backgroundColor: '#201d1e',
+    width: '70%',
+    maxWidth: 270,
+    height: 64,
+    borderRadius: 32,
     paddingHorizontal: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
     elevation: 10,
   },
   tabItem: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tabItemActive: {
-    backgroundColor: '#df3b20',
+    backgroundColor: '#598A31',
   },
 });

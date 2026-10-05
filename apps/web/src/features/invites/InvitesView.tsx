@@ -71,7 +71,7 @@ export function InvitesView() {
       <div className="px-6 sm:px-8 py-3 space-y-6 pb-12">
         {/* Info Banner */}
         <div className="bg-white p-5 rounded-3xl shadow-sm flex items-start gap-4">
-          <div className="p-3 bg-[#faeae3] rounded-2xl text-[#e66434] flex-shrink-0">
+          <div className="p-3 bg-[#e6f0dc] rounded-2xl text-[#598A31] flex-shrink-0">
             <KeyRound className="w-5 h-5" />
           </div>
           <div>
@@ -94,7 +94,7 @@ export function InvitesView() {
                 onClick={() => setStatusFilter(tab.value)}
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
                   statusFilter === tab.value
-                    ? 'bg-[#e66434] text-white shadow-md shadow-[#e66434]/20'
+                    ? 'bg-[#598A31] text-white shadow-md shadow-[#598A31]/20'
                     : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
@@ -141,11 +141,11 @@ export function InvitesView() {
                         </span>
                         <button
                           onClick={() => handleCopy(item.code)}
-                          className="p-1 text-stone-400 hover:text-[#e66434] rounded transition-colors"
+                          className="p-1 text-stone-400 hover:text-[#598A31] rounded transition-colors"
                           title="Copy Code"
                         >
                           {copiedCode === item.code ? (
-                            <Check className="w-4 h-4 text-[#e66434]" />
+                            <Check className="w-4 h-4 text-[#598A31]" />
                           ) : (
                             <Copy className="w-4 h-4" />
                           )}

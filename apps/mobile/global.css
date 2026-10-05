@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  Text, TextInput {
+    font-family: 'BricolageGrotesque_400Regular';
+  }
+}
+
+@layer utilities {
+  .font-thin {
+    font-family: 'BricolageGrotesque_200ExtraLight' !important;
+    font-weight: normal !important;
+  }
+  .font-extralight {
+    font-family: 'BricolageGrotesque_200ExtraLight' !important;
+    font-weight: normal !important;
+  }
+  .font-light {
+    font-family: 'BricolageGrotesque_300Light' !important;
+    font-weight: normal !important;
+  }
+  .font-normal {
+    font-family: 'BricolageGrotesque_400Regular' !important;
+    font-weight: normal !important;
+  }
+  .font-medium {
+    font-family: 'BricolageGrotesque_500Medium' !important;
+    font-weight: normal !important;
+  }
+  .font-semibold {
+    font-family: 'BricolageGrotesque_600SemiBold' !important;
+    font-weight: normal !important;
+  }
+  .font-bold {
+    font-family: 'BricolageGrotesque_700Bold' !important;
+    font-weight: normal !important;
+  }
+  .font-extrabold {
+    font-family: 'BricolageGrotesque_800ExtraBold' !important;
+    font-weight: normal !important;
+  }
+  .font-black {
+    font-family: 'BricolageGrotesque_800ExtraBold' !important;
+    font-weight: normal !important;
+  }
+}

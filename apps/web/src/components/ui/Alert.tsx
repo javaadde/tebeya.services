@@ -16,7 +16,7 @@ export function Alert({
   className,
 }: AlertProps) {
   const variants = {
-    info: 'bg-[#faeae3] text-[#732c16] border-[#f5d5c7]',
+    info: 'bg-[#e6f0dc] text-[#213514] border-[#cee2be]',
     success: 'bg-emerald-50 text-emerald-900 border-emerald-200/80',
     warning: 'bg-amber-50 text-amber-900 border-amber-200/80',
     danger: 'bg-rose-50 text-rose-900 border-rose-200/80',

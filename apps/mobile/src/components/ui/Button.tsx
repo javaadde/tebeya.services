@@ -33,7 +33,7 @@ export const Button: React.FC<ButtonProps> = ({
   const getContainerStyles = () => {
     switch (variant) {
       case 'primary':
-        return 'bg-[#df3b20] active:bg-[#c73017] border-transparent';
+        return 'bg-[#598A31] active:bg-[#487226] border-transparent';
       case 'secondary':
         return 'bg-[#201d1e] active:bg-black border-transparent';
       case 'forest':
@@ -49,7 +49,7 @@ export const Button: React.FC<ButtonProps> = ({
       case 'ghost':
         return 'bg-transparent active:bg-neutral-100';
       default:
-        return 'bg-[#df3b20] border-transparent';
+        return 'bg-[#598A31] border-transparent';
     }
   };
 

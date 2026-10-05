@@ -54,7 +54,7 @@ export function StaffView() {
                 onClick={() => setStatusFilter(tab.value)}
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
                   statusFilter === tab.value
-                    ? 'bg-[#e66434] text-white shadow-md shadow-[#e66434]/20'
+                    ? 'bg-[#598A31] text-white shadow-md shadow-[#598A31]/20'
                     : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
@@ -70,7 +70,7 @@ export function StaffView() {
               placeholder="Search by name, phone, or email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3.5 py-2 text-xs bg-white rounded-xl shadow-xs focus:outline-none focus:ring-2 focus:ring-[#e66434]/20"
+              className="w-full pl-9 pr-3.5 py-2 text-xs bg-white rounded-xl shadow-xs focus:outline-none focus:ring-2 focus:ring-[#598A31]/20"
             />
           </div>
         </div>
@@ -108,7 +108,7 @@ export function StaffView() {
                   >
                     <TableCell>
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-[#faeae3] text-[#e66434] flex items-center justify-center font-bold text-xs">
+                        <div className="w-8 h-8 rounded-xl bg-[#e6f0dc] text-[#598A31] flex items-center justify-center font-bold text-xs">
                           {staff.name ? staff.name[0].toUpperCase() : 'U'}
                         </div>
                         <div>
@@ -154,7 +154,7 @@ export function StaffView() {
                           e.stopPropagation();
                           setSelectedStaff(staff);
                         }}
-                        className="inline-flex items-center gap-1 text-xs text-[#e66434] font-bold hover:underline"
+                        className="inline-flex items-center gap-1 text-xs text-[#598A31] font-bold hover:underline"
                       >
                         Review Profile
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -169,7 +169,7 @@ export function StaffView() {
 
         {/* Security / KYC Advisory */}
         <div className="p-4 bg-[#f7f4ef] rounded-2xl shadow-xs text-xs text-stone-600 flex items-start gap-3">
-          <ShieldAlert className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
+          <ShieldAlert className="w-4 h-4 text-[#598A31] flex-shrink-0 mt-0.5" />
           <div>
             <strong className="text-stone-900">Private Storage Compliance (Rule 4):</strong> Staff government ID proof images are stored in Cloudinary authenticated mode. Signed temporary links expire automatically to protect candidate privacy.
           </div>

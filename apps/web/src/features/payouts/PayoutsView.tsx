@@ -205,7 +205,7 @@ export function PayoutsView() {
                       pendingItems.length > 0 &&
                       selectedBookingIds.length === pendingItems.length
                     }
-                    className="rounded-lg border-[#dad0c3] text-[#e66434] focus:ring-[#e66434]"
+                    className="rounded-lg border-[#dad0c3] text-[#598A31] focus:ring-[#598A31]"
                   />
                 </TableHeader>
                 <TableHeader>Staff Member</TableHeader>
@@ -242,7 +242,7 @@ export function PayoutsView() {
                             type="checkbox"
                             checked={selectedBookingIds.includes(item.bookingId)}
                             onChange={() => handleToggleSelect(item.bookingId)}
-                            className="rounded-lg border-[#dad0c3] text-[#e66434] focus:ring-[#e66434]"
+                            className="rounded-lg border-[#dad0c3] text-[#598A31] focus:ring-[#598A31]"
                           />
                         )}
                       </TableCell>
@@ -274,7 +274,7 @@ export function PayoutsView() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-xs text-[#e66434] hover:bg-[#faeae3] border-[#f5d5c7] rounded-xl font-bold"
+                            className="text-xs text-[#598A31] hover:bg-[#e6f0dc] border-[#cee2be] rounded-xl font-bold"
                             onClick={() => handleMarkSinglePaid(item.bookingId)}
                             isLoading={isProcessing}
                           >

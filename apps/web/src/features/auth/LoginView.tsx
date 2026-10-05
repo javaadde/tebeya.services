@@ -138,7 +138,7 @@ export function LoginView() {
                     setOtp('');
                     setError(null);
                   }}
-                  className="text-[#e66434] hover:underline font-bold flex items-center gap-1"
+                  className="text-[#598A31] hover:underline font-bold flex items-center gap-1"
                 >
                   <ArrowLeft className="w-3 h-3" /> Change
                 </button>
@@ -173,7 +173,7 @@ export function LoginView() {
                   type="button"
                   disabled={isLoading}
                   onClick={handleResendOtp}
-                  className="inline-flex items-center gap-1 text-xs text-stone-500 hover:text-[#e66434] font-medium"
+                  className="inline-flex items-center gap-1 text-xs text-stone-500 hover:text-[#598A31] font-medium"
                 >
                   <RefreshCw className="w-3 h-3" /> Didn't receive code? Resend
                 </button>
@@ -192,7 +192,7 @@ export function LoginView() {
             </Button>
 
             <div className="flex items-start gap-2.5 text-xs text-stone-500 bg-[#faf8f5] p-3 rounded-2xl border border-[#dad0c3]/60">
-              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-4 h-4 text-[#598A31] flex-shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold text-stone-700">Access Control:</span> Only authorized admin emails are issued OTP passes.
               </div>

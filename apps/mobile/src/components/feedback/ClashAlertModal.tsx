@@ -23,8 +23,8 @@ export const ClashAlertModal: React.FC<ClashAlertModalProps> = ({
     >
       <View className="flex-1 bg-black/60 items-center justify-center p-5">
         <View className="w-full max-w-sm bg-white rounded-[28px] p-6 shadow-xl">
-          <View className="w-14 h-14 rounded-2xl bg-[#fdece8] items-center justify-center mb-4 self-center">
-            <ShieldAlert size={28} color="#df3b20" />
+          <View className="w-14 h-14 rounded-2xl bg-[#f4f8ef] items-center justify-center mb-4 self-center">
+            <ShieldAlert size={28} color="#598A31" />
           </View>
 
           <Text className="text-xl font-black text-neutral-900 text-center mb-2">

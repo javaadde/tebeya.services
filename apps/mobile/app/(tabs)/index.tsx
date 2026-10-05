@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
@@ -30,6 +31,8 @@ export default function HomeFeedScreen() {
 
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('all');
   const [availableOnly, setAvailableOnly] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState<boolean>(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const {
     data: events = [],
@@ -115,28 +118,49 @@ export default function HomeFeedScreen() {
 
   return (
     <ScreenWrapper className="px-4">
-      {/* Header matching reference mockup: Avatar, Greeting, User Name, Circular Button */}
-      <AppTopHeader
-        mode="user"
-        subtitle={greeting}
-        title={user?.name || 'Staff'}
-        onRightPress={() => router.push('/notifications')}
-      />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
+        scrollEventThrottle={16}
+        onScrollBeginDrag={() => {
+          if (!hasScrolled) {
+            setHasScrolled(true);
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 400,
+              useNativeDriver: true,
+            }).start();
+          }
+        }}
+        onScroll={(e) => {
+          const offsetY = e.nativeEvent.contentOffset.y;
+          if (offsetY > 20 && !hasScrolled) {
+            setHasScrolled(true);
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 400,
+              useNativeDriver: true,
+            }).start();
+          }
+        }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            colors={['#df3b20']}
-            tintColor="#df3b20"
+            colors={['#598A31']}
+            tintColor="#598A31"
           />
         }
       >
+        {/* Header matching reference mockup: Avatar, Greeting, User Name, Circular Button */}
+        <AppTopHeader
+          mode="user"
+          subtitle={greeting}
+          title={user?.name || 'Staff'}
+          onRightPress={() => router.push('/notifications')}
+        />
         {/* Quick Filters Row matching mockup */}
-        <View className="flex-row items-center justify-between mb-3 mt-1">
+        <View className="flex-row items-center justify-between mb-3 mt-6">
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -173,7 +197,7 @@ export default function HomeFeedScreen() {
             onPress={() => setAvailableOnly((prev) => !prev)}
             className={`w-9 h-9 rounded-full items-center justify-center shadow-sm border shrink-0 ${
               availableOnly
-                ? 'bg-[#df3b20] border-[#df3b20]'
+                ? 'bg-[#598A31] border-[#598A31]'
                 : 'bg-white border-white/60'
             }`}
           >
@@ -187,10 +211,10 @@ export default function HomeFeedScreen() {
 
         {/* One-per-day Info Banner */}
         {hasBookingToday && (
-          <View className="bg-[#fdece8] rounded-2xl p-4 mb-3 flex-row items-center border border-[#fad4cc]">
-            <CheckCircle2 size={20} color="#df3b20" />
+          <View className="bg-[#f4f8ef] rounded-2xl p-4 mb-3 flex-row items-center border border-[#cee2be]">
+            <CheckCircle2 size={20} color="#598A31" />
             <View className="ml-3 flex-1">
-              <Text className="text-xs font-bold text-[#df3b20]">
+              <Text className="text-xs font-bold text-[#598A31]">
                 You have a shift today
               </Text>
               <Text className="text-[10px] text-neutral-600 mt-0.5">
@@ -203,11 +227,11 @@ export default function HomeFeedScreen() {
         {/* Loading State */}
         {isLoading && (
           <View className="items-center justify-center py-16">
-            <ActivityIndicator size="large" color="#df3b20" />
+            <ActivityIndicator size="large" color="#598A31" />
           </View>
         )}
 
-        {/* Big Hero Card: Terracotta Red stepped card with swipeable image carousel */}
+        {/* Featured Events: Forest Green stepped card slider matching reference mockup */}
         {!isLoading && upcomingEvents.length > 0 && (
           <View className="mt-1">
             <BigEventCard
@@ -238,7 +262,7 @@ export default function HomeFeedScreen() {
         {/* Empty State */}
         {!isLoading && displayShifts.length === 0 && (
           <View className="bg-white rounded-[28px] p-8 items-center justify-center my-6 shadow-sm border border-white/50">
-            <Sparkles size={36} color="#df3b20" />
+            <Sparkles size={36} color="#598A31" />
             <Text className="text-base font-bold text-neutral-800 mt-3">
               No Shifts Found
             </Text>
@@ -252,14 +276,14 @@ export default function HomeFeedScreen() {
 
         {/* Bottom Quote: Hakuna Matata ! */}
         {displayShifts.length > 0 && (
-          <View className="items-center justify-center pt-6 pb-4">
-            <Text className="text-2xl font-black text-neutral-400/80 tracking-wider text-center">
+          <Animated.View style={{ opacity: fadeAnim }} className="items-center justify-center pt-6 pb-4">
+            <Text className="text-3xl font-black text-neutral-400/80 tracking-wider text-center">
               Hakuna Matata !
             </Text>
             <Text className="text-[11px] font-semibold text-neutral-400 mt-1">
               You're all caught up
             </Text>
-          </View>
+          </Animated.View>
         )}
       </ScrollView>
     </ScreenWrapper>

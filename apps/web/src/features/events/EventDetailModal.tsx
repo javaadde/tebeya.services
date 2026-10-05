@@ -186,17 +186,17 @@ export function EventDetailModal({
           <div className="space-y-2 bg-white p-4 rounded-2xl border border-[#dad0c3]">
             <h4 className="font-bold text-stone-900 text-sm mb-2">Schedule & Venue</h4>
             <p className="flex items-center gap-2 text-stone-600">
-              <Calendar className="w-4 h-4 text-[#e66434]" />
+              <Calendar className="w-4 h-4 text-[#598A31]" />
               <span>{event.date}</span>
             </p>
             <p className="flex items-center gap-2 text-stone-600">
-              <Clock className="w-4 h-4 text-[#e66434]" />
+              <Clock className="w-4 h-4 text-[#598A31]" />
               <span>
                 {event.startTime} - {event.endTime} (24h)
               </span>
             </p>
             <p className="flex items-start gap-2 text-stone-600">
-              <MapPin className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
+              <MapPin className="w-4 h-4 text-[#598A31] flex-shrink-0 mt-0.5" />
               <span>{event.venue.text}</span>
             </p>
           </div>
@@ -325,7 +325,7 @@ export function EventDetailModal({
                             [item.bookingId]: e.target.value as AttendanceStatus,
                           }))
                         }
-                        className="text-xs border border-[#dad0c3] rounded-lg px-2.5 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-[#e66434]"
+                        className="text-xs border border-[#dad0c3] rounded-lg px-2.5 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-[#598A31]"
                       >
                         <option value="pending">Pending</option>
                         <option value="present">Present (Eligible)</option>

@@ -71,8 +71,8 @@ export default function ForgotPasswordScreen() {
           )}
 
           {sent ? (
-            <View className="bg-[#fdece8] border border-[#fad4cc] p-6 rounded-3xl items-center my-4">
-              <CheckCircle2 size={36} color="#df3b20" />
+            <View className="bg-[#f4f8ef] border border-[#cee2be] p-6 rounded-3xl items-center my-4">
+              <CheckCircle2 size={36} color="#598A31" />
               <Text className="text-base font-bold text-neutral-900 mt-3 mb-1">
                 Instructions Dispatched
               </Text>
@@ -123,7 +123,7 @@ export default function ForgotPasswordScreen() {
             className="flex-row items-center py-2"
           >
             <Text className="text-[13px] text-neutral-600">Remember your password? </Text>
-            <Text className="text-[13px] font-black text-[#df3b20]">Log in</Text>
+            <Text className="text-[13px] font-black text-[#598A31]">Log in</Text>
           </TouchableOpacity>
         </View>
       </View>

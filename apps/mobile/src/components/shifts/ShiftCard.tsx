@@ -95,7 +95,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = ({
 
       {/* Status indicator row: Colored dot + slot name */}
       <View className="flex-row items-center my-1">
-        <View className="w-1.5 h-1.5 rounded-full bg-[#df3b20] mr-1.5" />
+        <View className="w-1.5 h-1.5 rounded-full bg-[#598A31] mr-1.5" />
         <Text className="text-[11px] font-bold text-neutral-800 capitalize">
           {event.slot || 'Shift'}
         </Text>
@@ -121,7 +121,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = ({
           </Text>
         </View>
 
-        <Text className="text-xs font-black text-[#df3b20]">
+        <Text className="text-xs font-black text-[#598A31]">
           ₹{event.payPerPerson}
         </Text>
       </View>

@@ -59,7 +59,7 @@ export default function OnboardingScreen() {
             {slide.subtitle}
           </Text>
 
-          {/* 3 Horizontal Pill Dash Indicators (Brand Orange Active) */}
+          {/* 3 Horizontal Pill Dash Indicators (Brand Primary Active) */}
           <View className="flex-row items-center justify-center space-x-2 w-full px-2 mb-8">
             {SLIDES.map((_, idx) => {
               const isLit = idx <= currentSlide || (currentSlide === 0 && idx < 2);
@@ -72,7 +72,7 @@ export default function OnboardingScreen() {
                 >
                   <View
                     className={`h-[4px] rounded-full mx-1 ${
-                      isLit ? 'bg-[#df3b20]' : 'bg-neutral-200'
+                      isLit ? 'bg-[#598A31]' : 'bg-neutral-200'
                     }`}
                   />
                 </TouchableOpacity>
@@ -80,7 +80,7 @@ export default function OnboardingScreen() {
             })}
           </View>
 
-          {/* Primary Action Button (Brand Orange) */}
+          {/* Primary Action Button */}
           <Button
             title="Enter Invite Code & Sign Up"
             variant="primary"
@@ -102,7 +102,7 @@ export default function OnboardingScreen() {
             hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
           >
             <Text className="text-[13px] text-neutral-600">Already have an account? </Text>
-            <Text className="text-[13px] font-black text-[#df3b20]">Log in</Text>
+            <Text className="text-[13px] font-black text-[#598A31]">Log in</Text>
           </TouchableOpacity>
         </View>
       </View>

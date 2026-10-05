@@ -87,12 +87,12 @@ export function Sidebar({ activeTab, onSelectTab }: SidebarProps) {
                 >
                   {/* Left Pill Marker Indicator */}
                   {isCurrent && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#e66434] rounded-r-full shadow-xs" />
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#598A31] rounded-r-full shadow-xs" />
                   )}
                   <Icon
                     className={cn(
                       'w-4 h-4 transition-colors flex-shrink-0',
-                      isCurrent ? 'text-[#e66434]' : 'text-stone-400 group-hover:text-stone-700'
+                      isCurrent ? 'text-[#598A31]' : 'text-stone-400 group-hover:text-stone-700'
                     )}
                   />
                   <span className="truncate">{item.name}</span>
@@ -123,12 +123,12 @@ export function Sidebar({ activeTab, onSelectTab }: SidebarProps) {
                   )}
                 >
                   {isCurrent && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#e66434] rounded-r-full shadow-xs" />
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#598A31] rounded-r-full shadow-xs" />
                   )}
                   <Icon
                     className={cn(
                       'w-4 h-4 transition-colors flex-shrink-0',
-                      isCurrent ? 'text-[#e66434]' : 'text-stone-400 group-hover:text-stone-700'
+                      isCurrent ? 'text-[#598A31]' : 'text-stone-400 group-hover:text-stone-700'
                     )}
                   />
                   <span className="truncate">{item.name}</span>

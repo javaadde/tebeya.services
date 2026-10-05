@@ -78,7 +78,7 @@ export default function AddressPickerScreen() {
 
       <View className="bg-white rounded-[28px] p-5 shadow-sm border border-white/50 mb-4">
         <View className="flex-row items-center mb-2">
-          <Navigation size={16} color="#df3b20" />
+          <Navigation size={16} color="#598A31" />
           <Text className="text-xs font-bold text-neutral-800 ml-1.5">
             Distance Travel Allowance
           </Text>

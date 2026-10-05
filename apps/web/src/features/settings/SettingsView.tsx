@@ -106,7 +106,7 @@ export function SettingsView() {
             {/* Travel Formula Box */}
             <div className="p-4 bg-[#f7f4ef] rounded-2xl shadow-xs text-xs text-stone-900">
               <h5 className="font-bold mb-1 flex items-center gap-1.5 text-stone-900">
-                <Sliders className="w-3.5 h-3.5 text-[#e66434]" />
+                <Sliders className="w-3.5 h-3.5 text-[#598A31]" />
                 Live Travel Calculation Formula
               </h5>
               <p className="font-mono text-stone-800 bg-white/90 p-2.5 rounded-xl shadow-xs my-1.5 font-bold">
@@ -140,7 +140,7 @@ export function SettingsView() {
 
           <div className="space-y-3 text-xs text-stone-600">
             <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
-              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-4 h-4 text-[#598A31] flex-shrink-0 mt-0.5" />
               <div>
                 <strong className="text-stone-900 block font-bold">Rule 1: Shared Domain Contracts</strong>
                 All entity schemas (CateringEvent, Booking, User, InviteCode) originate from @tebeya/shared.
@@ -148,7 +148,7 @@ export function SettingsView() {
             </div>
 
             <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
-              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-4 h-4 text-[#598A31] flex-shrink-0 mt-0.5" />
               <div>
                 <strong className="text-stone-900 block font-bold">Rule 2: Server-Side Clash & Capacity Authority</strong>
                 Hard overlap checks (startA &lt; endB and startB &lt; endA), daily 2-event maximums, and atomic seat increments are strictly enforced by the backend API.
@@ -156,7 +156,7 @@ export function SettingsView() {
             </div>
 
             <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
-              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-4 h-4 text-[#598A31] flex-shrink-0 mt-0.5" />
               <div>
                 <strong className="text-stone-900 block font-bold">Rule 3: Restricted Invite-Only Onboarding</strong>
                 Open self-registration is disabled. Mobile staff signups require valid, single-use, admin-issued invite codes.
@@ -164,7 +164,7 @@ export function SettingsView() {
             </div>
 
             <div className="flex items-start gap-3 p-3.5 bg-[#f7f4ef] rounded-2xl shadow-xs">
-              <ShieldCheck className="w-4 h-4 text-[#e66434] flex-shrink-0 mt-0.5" />
+              <ShieldCheck className="w-4 h-4 text-[#598A31] flex-shrink-0 mt-0.5" />
               <div>
                 <strong className="text-stone-900 block font-bold">Rule 4: Private KYC Document Storage</strong>
                 Staff Government ID proof documents are stored in Cloudinary authenticated mode and viewed using short-lived signed URLs.

@@ -40,8 +40,8 @@ export const DoubleBookingModal: React.FC<DoubleBookingModalProps> = ({
     >
       <View className="flex-1 bg-black/60 items-center justify-center p-5">
         <View className="w-full max-w-sm bg-white rounded-[28px] p-6 shadow-xl">
-          <View className="w-14 h-14 rounded-2xl bg-[#fdece8] items-center justify-center mb-4 self-center">
-            <AlertTriangle size={28} color="#df3b20" />
+          <View className="w-14 h-14 rounded-2xl bg-[#f4f8ef] items-center justify-center mb-4 self-center">
+            <AlertTriangle size={28} color="#598A31" />
           </View>
 
           <Text className="text-xl font-black text-neutral-900 text-center mb-2">
@@ -56,10 +56,10 @@ export const DoubleBookingModal: React.FC<DoubleBookingModalProps> = ({
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => setAcknowledged(!acknowledged)}
-            className="flex-row items-center bg-[#fdece8] p-3.5 rounded-2xl border border-[#fad4cc] mb-5"
+            className="flex-row items-center bg-[#f4f8ef] p-3.5 rounded-2xl border border-[#cee2be] mb-5"
           >
             {acknowledged ? (
-              <CheckSquare size={20} color="#df3b20" />
+              <CheckSquare size={20} color="#598A31" />
             ) : (
               <Square size={20} color="#94a3b8" />
             )}

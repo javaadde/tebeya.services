@@ -7,23 +7,27 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['BricolageGrotesque_400Regular', 'sans-serif'],
+      },
       colors: {
         brand: {
-          coral: '#df3b20',
-          dark: '#c73017',
-          light: '#fdece8',
+          coral: '#598A31',
+          primary: '#598A31',
+          dark: '#487226',
+          light: '#f4f8ef',
         },
         primary: {
-          50: '#fdece8',
-          100: '#fad4cc',
-          200: '#f6ad9d',
-          300: '#f07f68',
-          400: '#e85638',
-          500: '#df3b20', // Main terracotta/orange-red brand color from designs
-          600: '#c92f16',
-          700: '#a72310',
-          800: '#8a1f11',
-          900: '#731e13',
+          50: '#f4f8ef',
+          100: '#e6f0dc',
+          200: '#cee2be',
+          300: '#b0d199',
+          400: '#82b55b',
+          500: '#598A31', // Main brand color from designs
+          600: '#487226',
+          700: '#38591e',
+          800: '#2c4419',
+          900: '#213514',
         },
         appBg: '#d4d5d6', // Exact warm light-gray background from designs
         navDark: '#201d1e', // Exact dark charcoal floating bottom bar

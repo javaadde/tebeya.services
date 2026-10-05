@@ -46,7 +46,7 @@ export default function NotificationsScreen() {
     switch (type) {
       case 'event_published':
       case 'seat_opened':
-        return <Sparkles size={18} color="#df3b20" />;
+        return <Sparkles size={18} color="#598A31" />;
       case 'payment_marked':
         return <IndianRupee size={18} color="#10b981" />;
       case 'event_reminder':
@@ -79,7 +79,7 @@ export default function NotificationsScreen() {
             onPress={() => markAllReadMutation.mutate()}
             className="px-3 py-1.5 rounded-xl bg-white shadow-sm"
           >
-            <Text className="text-xs font-bold text-[#df3b20]">
+            <Text className="text-xs font-bold text-[#598A31]">
               Mark all
             </Text>
           </TouchableOpacity>
@@ -95,8 +95,8 @@ export default function NotificationsScreen() {
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            colors={['#df3b20']}
-            tintColor="#df3b20"
+            colors={['#598A31']}
+            tintColor="#598A31"
           />
         }
         contentContainerStyle={{ paddingBottom: 40 }}
@@ -112,7 +112,7 @@ export default function NotificationsScreen() {
               }}
               className={`p-4 rounded-[24px] mb-3 shadow-sm border ${
                 isUnread
-                  ? 'bg-white border-[#fad4cc]'
+                  ? 'bg-white border-[#cee2be]'
                   : 'bg-white/90 border-white/60'
               }`}
             >
@@ -126,7 +126,7 @@ export default function NotificationsScreen() {
                       {item.title}
                     </Text>
                     {isUnread && (
-                      <View className="w-2 h-2 rounded-full bg-[#df3b20] ml-1" />
+                      <View className="w-2 h-2 rounded-full bg-[#598A31] ml-1" />
                     )}
                   </View>
                   <Text className="text-xs text-neutral-600 leading-4">

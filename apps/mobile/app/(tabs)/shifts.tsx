@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import {
   View,
   Text,
   ScrollView,
   RefreshControl,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
@@ -21,6 +22,8 @@ export default function UpcomingEventsScreen() {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('all');
   const [availableOnly, setAvailableOnly] = useState<boolean>(false);
+  const [hasScrolled, setHasScrolled] = useState<boolean>(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const {
     data: myBookingsData,
@@ -78,76 +81,97 @@ export default function UpcomingEventsScreen() {
 
   return (
     <ScreenWrapper className="px-4">
-      {/* Header matching Image 1: "check" / "Your Events" / Red Circular Button with Camera/Action */}
-      <AppTopHeader
-        subtitle="check"
-        title="Your Events"
-        rightIcon={<Camera size={22} color="#ffffff" strokeWidth={2.2} />}
-        onRightPress={() => router.push('/notifications')}
-      />
-
-      {/* Quick Filters Row matching Image 1 */}
-      <View className="flex-row items-center justify-between mb-4 mt-1">
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ alignItems: 'center', paddingRight: 8 }}
-        >
-          {filters.map((filter) => {
-            const isActive = selectedFilter === filter.key;
-            return (
-              <TouchableOpacity
-                key={filter.key}
-                activeOpacity={0.8}
-                onPress={() => setSelectedFilter(filter.key)}
-                className={`px-5 py-2 rounded-full mr-2.5 shadow-sm border ${
-                  isActive
-                    ? 'bg-[#1f1c1d] border-[#1f1c1d]'
-                    : 'bg-white border-white/60'
-                }`}
-              >
-                <Text
-                  className={`text-xs font-bold ${
-                    isActive ? 'text-white' : 'text-neutral-700'
-                  }`}
-                >
-                  {filter.label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-
-        {/* Circular Action/Toggle Button matching the circle in Image 1 */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => setAvailableOnly((prev) => !prev)}
-          className={`w-9 h-9 rounded-full items-center justify-center shadow-sm border shrink-0 ${
-            availableOnly
-              ? 'bg-[#df3b20] border-[#df3b20]'
-              : 'bg-white border-white/60'
-          }`}
-        >
-          <SlidersHorizontal
-            size={16}
-            color={availableOnly ? '#ffffff' : '#201d1e'}
-            strokeWidth={2.2}
-          />
-        </TouchableOpacity>
-      </View>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 130 }}
+        scrollEventThrottle={16}
+        onScrollBeginDrag={() => {
+          if (!hasScrolled) {
+            setHasScrolled(true);
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 400,
+              useNativeDriver: true,
+            }).start();
+          }
+        }}
+        onScroll={(e) => {
+          const offsetY = e.nativeEvent.contentOffset.y;
+          if (offsetY > 20 && !hasScrolled) {
+            setHasScrolled(true);
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 400,
+              useNativeDriver: true,
+            }).start();
+          }
+        }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
             onRefresh={refetch}
-            colors={['#df3b20']}
-            tintColor="#df3b20"
+            colors={['#598A31']}
+            tintColor="#598A31"
           />
         }
       >
+        {/* Header matching Image 1: "check" / "Your Events" / Red Circular Button with Camera/Action */}
+        <AppTopHeader
+          subtitle="check"
+          title="Your Events"
+          rightIcon={<Camera size={22} color="#ffffff" strokeWidth={2.2} />}
+          onRightPress={() => router.push('/notifications')}
+        />
+
+        {/* Quick Filters Row matching Image 1 */}
+        <View className="flex-row items-center justify-between mb-4 mt-6">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: 'center', paddingRight: 8 }}
+          >
+            {filters.map((filter) => {
+              const isActive = selectedFilter === filter.key;
+              return (
+                <TouchableOpacity
+                  key={filter.key}
+                  activeOpacity={0.8}
+                  onPress={() => setSelectedFilter(filter.key)}
+                  className={`px-5 py-2 rounded-full mr-2.5 shadow-sm border ${
+                    isActive
+                      ? 'bg-[#1f1c1d] border-[#1f1c1d]'
+                      : 'bg-white border-white/60'
+                  }`}
+                >
+                  <Text
+                    className={`text-xs font-bold ${
+                      isActive ? 'text-white' : 'text-neutral-700'
+                    }`}
+                  >
+                    {filter.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+
+          {/* Circular Action/Toggle Button matching the circle in Image 1 */}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setAvailableOnly((prev) => !prev)}
+            className={`w-9 h-9 rounded-full items-center justify-center shadow-sm border shrink-0 ${
+              availableOnly
+                ? 'bg-[#598A31] border-[#598A31]'
+                : 'bg-white border-white/60'
+            }`}
+          >
+            <SlidersHorizontal
+              size={16}
+              color={availableOnly ? '#ffffff' : '#201d1e'}
+              strokeWidth={2.2}
+            />
+          </TouchableOpacity>
+        </View>
         {/* Vertical Event Cards List matching Image 1 & Image 2 */}
         <View className="pt-1">
           {displayShifts.map((event) => (
@@ -161,8 +185,8 @@ export default function UpcomingEventsScreen() {
 
         {/* Empty state if no events match current filters */}
         {displayShifts.length === 0 && !isLoading && (
-          <View className="bg-white rounded-[26px] p-8 items-center justify-center my-6 shadow-sm border border-white/50">
-            <Sparkles size={36} color="#df3b20" />
+          <View className="bg-white rounded-[28px] p-8 items-center justify-center my-6 shadow-sm border border-white/50">
+            <Sparkles size={36} color="#598A31" />
             <Text className="text-base font-bold text-neutral-800 mt-3">
               No Shifts Found
             </Text>
@@ -176,14 +200,14 @@ export default function UpcomingEventsScreen() {
 
         {/* Bottom Quote: Hakuna Matata ! */}
         {displayShifts.length > 0 && (
-          <View className="items-center justify-center pt-8 pb-4">
-            <Text className="text-2xl font-black text-neutral-400/80 tracking-wider text-center">
+          <Animated.View style={{ opacity: fadeAnim }} className="items-center justify-center pt-8 pb-4">
+            <Text className="text-3xl font-black text-neutral-400/80 tracking-wider text-center">
               Hakuna Matata !
             </Text>
             <Text className="text-[11px] font-semibold text-neutral-400 mt-1">
               You're all caught up with available shifts
             </Text>
-          </View>
+          </Animated.View>
         )}
       </ScrollView>
     </ScreenWrapper>

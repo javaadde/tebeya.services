@@ -61,7 +61,7 @@ export function EventsView() {
         }
       />
 
-      <div className="px-6 sm:px-8 py-3 space-y-6 pb-12">
+      <div className="px-6 sm:px-8 pt-8 pb-12 space-y-6">
         {/* Filters bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
           <div className="flex items-center gap-1.5 bg-[#f7f4ef] p-1.5 rounded-2xl">
@@ -71,7 +71,7 @@ export function EventsView() {
                 onClick={() => setStatusFilter(tab.value)}
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all ${
                   statusFilter === tab.value
-                    ? 'bg-[#e66434] text-white shadow-md shadow-[#e66434]/20'
+                    ? 'bg-[#598A31] text-white shadow-md shadow-[#598A31]/20'
                     : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
@@ -126,7 +126,7 @@ export function EventsView() {
                     {/* Header: Title + Badges */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div>
-                        <h3 className="text-base font-black text-stone-900 group-hover:text-[#e66434] transition-colors line-clamp-1">
+                        <h3 className="text-base font-black text-stone-900 group-hover:text-[#598A31] transition-colors line-clamp-1">
                           {evt.title}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
@@ -134,23 +134,23 @@ export function EventsView() {
                           <StatusBadge status={evt.status} />
                         </div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-stone-300 group-hover:text-[#e66434] transition-colors flex-shrink-0" />
+                      <ChevronRight className="w-5 h-5 text-stone-300 group-hover:text-[#598A31] transition-colors flex-shrink-0" />
                     </div>
 
                     {/* Metadata */}
                     <div className="space-y-1.5 text-xs text-stone-600 my-4">
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0" />
+                        <Calendar className="w-3.5 h-3.5 text-[#598A31] flex-shrink-0" />
                         <span>{evt.date}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0" />
+                        <Clock className="w-3.5 h-3.5 text-[#598A31] flex-shrink-0" />
                         <span>
                           {evt.startTime} - {evt.endTime}
                         </span>
                       </div>
                       <div className="flex items-start gap-2">
-                        <MapPin className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0 mt-0.5" />
+                        <MapPin className="w-3.5 h-3.5 text-[#598A31] flex-shrink-0 mt-0.5" />
                         <span className="line-clamp-1">{evt.venue.text}</span>
                       </div>
                     </div>
@@ -175,7 +175,7 @@ export function EventsView() {
                     <div className="w-full bg-[#f4f0ea] rounded-full h-2 overflow-hidden mb-3">
                       <div
                         className={`h-full rounded-full transition-all duration-300 ${
-                          isFull ? 'bg-emerald-600' : 'bg-[#e66434]'
+                          isFull ? 'bg-emerald-600' : 'bg-[#598A31]'
                         }`}
                         style={{ width: `${fillPct}%` }}
                       />

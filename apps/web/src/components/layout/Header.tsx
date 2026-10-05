@@ -20,7 +20,7 @@ export function Header({ title, subtitle, action }: HeaderProps) {
       <div className="bg-white rounded-2xl px-4 sm:px-5 py-2.5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Search Pill */}
         <div className="relative flex-1 max-w-sm">
-          <div className="flex items-center gap-2.5 bg-[#f7f4ef] rounded-xl px-3.5 py-2 transition-all focus-within:ring-2 focus-within:ring-[#e66434]/25">
+          <div className="flex items-center gap-2.5 bg-[#f7f4ef] rounded-xl px-3.5 py-2 transition-all focus-within:ring-2 focus-within:ring-[#598A31]/25">
             <Search className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" />
             <input
               type="text"
@@ -41,7 +41,7 @@ export function Header({ title, subtitle, action }: HeaderProps) {
           <button
             type="button"
             title="Messages & Advisories"
-            className="w-9 h-9 rounded-full bg-[#f7f4ef] text-stone-600 hover:text-[#e66434] hover:bg-[#faeae3] transition-all flex items-center justify-center"
+            className="w-9 h-9 rounded-full bg-[#f7f4ef] text-stone-600 hover:text-[#598A31] hover:bg-[#e6f0dc] transition-all flex items-center justify-center"
           >
             <Mail className="w-4 h-4" />
           </button>
@@ -51,17 +51,17 @@ export function Header({ title, subtitle, action }: HeaderProps) {
             type="button"
             onClick={() => setHasUnread(false)}
             title="Notifications"
-            className="w-9 h-9 rounded-full bg-[#f7f4ef] text-stone-600 hover:text-[#e66434] hover:bg-[#faeae3] transition-all flex items-center justify-center relative"
+            className="w-9 h-9 rounded-full bg-[#f7f4ef] text-stone-600 hover:text-[#598A31] hover:bg-[#e6f0dc] transition-all flex items-center justify-center relative"
           >
             <Bell className="w-4 h-4" />
             {hasUnread && (
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#e66434] ring-2 ring-white" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#598A31] ring-2 ring-white" />
             )}
           </button>
 
           {/* User Profile Chip */}
           <div className="flex items-center gap-2.5 pl-3">
-            <div className="w-9 h-9 rounded-full bg-[#faeae3] text-[#e66434] flex items-center justify-center font-bold text-xs flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-[#e6f0dc] text-[#598A31] flex items-center justify-center font-bold text-xs flex-shrink-0">
               {user?.name ? user.name[0].toUpperCase() : <UserIcon className="w-4 h-4" />}
             </div>
             <div className="text-left hidden md:block min-w-0">

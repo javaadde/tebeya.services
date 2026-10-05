@@ -226,7 +226,7 @@ export function CreateEventModal({ isOpen, onClose, onSuccess }: CreateEventModa
             type="checkbox"
             checked={publishImmediately}
             onChange={(e) => setPublishImmediately(e.target.checked)}
-            className="w-4 h-4 rounded text-[#e66434] focus:ring-[#e66434] accent-[#e66434] cursor-pointer"
+            className="w-4 h-4 rounded text-[#598A31] focus:ring-[#598A31] accent-[#598A31] cursor-pointer"
           />
           <label htmlFor="publishImmediately" className="text-xs font-semibold text-stone-700 cursor-pointer select-none">
             Publish shift immediately (Visible in staff mobile app)

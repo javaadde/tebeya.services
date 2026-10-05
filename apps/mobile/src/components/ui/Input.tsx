@@ -39,7 +39,7 @@ export const Input: React.FC<InputProps> = ({
         } ${
           error
             ? 'border-rose-400 bg-rose-50/20'
-            : 'border-neutral-200 focus:border-[#df3b20]'
+            : 'border-neutral-200 focus:border-[#598A31]'
         }`}
       >
         {leftIcon && <View className="mr-3 items-center justify-center">{leftIcon}</View>}
@@ -55,7 +55,7 @@ export const Input: React.FC<InputProps> = ({
             style,
           ]}
           placeholderTextColor="#9ca3af"
-          selectionColor="#df3b20"
+          selectionColor="#598A31"
           secureTextEntry={isSecure}
           {...props}
         />

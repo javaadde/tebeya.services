@@ -46,10 +46,10 @@ export const AppTopHeader: React.FC<AppTopHeaderProps> = ({
             />
           </View>
           <View className="flex-1">
-            <Text className="text-xs font-medium text-neutral-600">
+            <Text className="text-sm font-semibold text-neutral-600">
               {subtitle || 'Good Morning !'}
             </Text>
-            <Text className="text-base font-bold text-neutral-900 tracking-tight" numberOfLines={1}>
+            <Text className="text-2xl font-black text-neutral-900 tracking-tight" numberOfLines={1}>
               {title || user?.name || 'Jude Bellingham'}
             </Text>
           </View>
@@ -57,21 +57,21 @@ export const AppTopHeader: React.FC<AppTopHeaderProps> = ({
       ) : (
         <View className="flex-1 mr-3">
           {subtitle && (
-            <Text className="text-xs font-medium text-neutral-600 mb-0.5">
+            <Text className="text-sm font-semibold text-neutral-600 mb-0.5">
               {subtitle}
             </Text>
           )}
-          <Text className="text-xl font-black text-neutral-900 tracking-tight" numberOfLines={1}>
+          <Text className="text-3xl font-black text-neutral-900 tracking-tight" numberOfLines={1}>
             {title}
           </Text>
         </View>
       )}
 
-      {/* Terracotta/Orange circular button matching nav bar active indicator */}
+      {/* Primary circular button matching nav bar active indicator */}
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={handleAction}
-        className="w-12 h-12 rounded-full bg-[#df3b20] items-center justify-center shadow-sm"
+        className="w-12 h-12 rounded-full bg-[#598A31] items-center justify-center shadow-sm"
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
         {rightIcon || <Bell size={22} color="#ffffff" />}

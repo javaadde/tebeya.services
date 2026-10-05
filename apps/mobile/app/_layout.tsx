@@ -5,7 +5,11 @@ import { View, ActivityIndicator } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuthStore } from '../src/store/authStore';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
 import '../global.css';
+
+SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -88,6 +92,26 @@ function RootNavigation() {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    BricolageGrotesque_200ExtraLight: require('../assets/fonts/static/BricolageGrotesque-ExtraLight.ttf'),
+    BricolageGrotesque_300Light: require('../assets/fonts/static/BricolageGrotesque-Light.ttf'),
+    BricolageGrotesque_400Regular: require('../assets/fonts/static/BricolageGrotesque-Regular.ttf'),
+    BricolageGrotesque_500Medium: require('../assets/fonts/static/BricolageGrotesque-Medium.ttf'),
+    BricolageGrotesque_600SemiBold: require('../assets/fonts/static/BricolageGrotesque-SemiBold.ttf'),
+    BricolageGrotesque_700Bold: require('../assets/fonts/static/BricolageGrotesque-Bold.ttf'),
+    BricolageGrotesque_800ExtraBold: require('../assets/fonts/static/BricolageGrotesque-ExtraBold.ttf'),
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>

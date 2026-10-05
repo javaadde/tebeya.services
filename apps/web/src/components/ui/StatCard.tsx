@@ -29,7 +29,7 @@ export function StatCard({
         className={cn(
           'relative p-5 rounded-2xl transition-all duration-200 flex flex-col items-center justify-between text-center select-none min-h-[140px]',
           isFeatured
-            ? 'bg-[#e66434] text-white shadow-lg shadow-[#e66434]/25 hover:bg-[#cf5224]'
+            ? 'bg-[#598A31] text-white shadow-lg shadow-[#598A31]/25 hover:bg-[#487226]'
             : 'bg-white text-stone-900 shadow-sm hover:shadow-md',
           onClick && 'cursor-pointer hover:-translate-y-0.5'
         )}
@@ -78,7 +78,7 @@ export function StatCard({
         )}
 
         {isFeatured && (
-          <div className="absolute -bottom-2.5 w-6 h-6 rounded-full bg-white text-[#e66434] shadow-md flex items-center justify-center text-[10px] font-bold">
+          <div className="absolute -bottom-2.5 w-6 h-6 rounded-full bg-white text-[#598A31] shadow-md flex items-center justify-center text-[10px] font-bold">
             ↗
           </div>
         )}
@@ -90,9 +90,9 @@ export function StatCard({
     default: 'bg-[#f7f4ef] text-stone-700',
     emerald: 'bg-emerald-50 text-emerald-800',
     amber: 'bg-amber-50 text-amber-800',
-    blue: 'bg-[#faeae3] text-[#cf5224]',
-    terracotta: 'bg-[#faeae3] text-[#cf5224]',
-    featured: 'bg-[#e66434] text-white',
+    blue: 'bg-sky-50 text-sky-800',
+    terracotta: 'bg-[#e6f0dc] text-[#487226]',
+    featured: 'bg-[#598A31] text-white',
   };
 
   return (

@@ -44,8 +44,8 @@ export const SLOT_INFO: Record<EventSlot, { label: string; badgeClass: string; t
   },
   dinner: {
     label: 'Dinner',
-    badgeClass: 'bg-[#fdece8] border-[#fad4cc]',
-    textClass: 'text-[#df3b20]',
+    badgeClass: 'bg-[#f4f8ef] border-[#cee2be]',
+    textClass: 'text-[#598A31]',
   },
   custom: {
     label: 'Custom Shift',

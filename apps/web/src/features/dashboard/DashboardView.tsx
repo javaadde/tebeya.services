@@ -154,7 +154,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                 variant="default"
                 onClick={() => onNavigate('staff')}
               />
-              {/* Featured Pill Card in terracotta #e66434 */}
+              {/* Featured Pill Card in primary #598A31 */}
               <StatCard
                 label="Active Shifts"
                 value={upcomingEvents.length || '0'}
@@ -197,10 +197,10 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
 
         {/* Operational Attention Banner */}
         {understaffedEvents.length > 0 && (
-          <div className="bg-[#faeae3] rounded-3xl p-5 shadow-sm">
+          <div className="bg-[#e6f0dc] rounded-3xl p-5 shadow-sm">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-2xl bg-[#e66434] text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-[#e66434]/30">
+                <div className="w-9 h-9 rounded-2xl bg-[#598A31] text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-[#598A31]/30">
                   <AlertTriangle className="w-5 h-5" />
                 </div>
                 <div>
@@ -287,7 +287,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                               item.capacity === 0
                                 ? 'bg-stone-200'
                                 : isSelected
-                                ? 'bg-[#e66434] shadow-md shadow-[#e66434]/30'
+                                ? 'bg-[#598A31] shadow-md shadow-[#598A31]/30'
                                 : 'bg-stone-900 group-hover:bg-stone-700'
                             }`}
                           />
@@ -303,7 +303,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                         {/* Month Label */}
                         <span
                           className={`text-[11px] font-semibold mt-3 transition-colors ${
-                            isSelected ? 'text-[#e66434] font-bold' : 'text-stone-400 group-hover:text-stone-700'
+                            isSelected ? 'text-[#598A31] font-bold' : 'text-stone-400 group-hover:text-stone-700'
                           }`}
                         >
                           {item.month}
@@ -323,7 +323,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
               </span>
               <button
                 onClick={() => onNavigate('events')}
-                className="text-[#e66434] hover:text-[#cf5224] font-bold inline-flex items-center gap-1"
+                className="text-[#598A31] hover:text-[#487226] font-bold inline-flex items-center gap-1"
               >
                 View Analytics <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -337,7 +337,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
               <div className="flex items-center justify-between pb-4">
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-black text-stone-900 tracking-tight">Pending Approvals</h3>
-                  <span className="w-6 h-6 rounded-full bg-[#faeae3] text-[#e66434] text-xs font-black flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-[#e6f0dc] text-[#598A31] text-xs font-black flex items-center justify-center">
                     {pendingKYCStaff.length}
                   </span>
                 </div>
@@ -365,7 +365,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                           {staff.name ? staff.name[0].toUpperCase() : 'S'}
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-stone-900 group-hover:text-[#e66434] transition-colors">
+                          <p className="text-xs font-bold text-stone-900 group-hover:text-[#598A31] transition-colors">
                             {staff.name}
                           </p>
                           <p className="text-[11px] text-stone-500 font-medium">
@@ -411,7 +411,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                 <select
                   value={tableFilter}
                   onChange={(e) => setTableFilter(e.target.value as EventStatus | 'all')}
-                  className="appearance-none bg-[#f7f4ef] text-stone-800 text-xs font-bold rounded-2xl px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#e66434]/20 cursor-pointer shadow-xs"
+                  className="appearance-none bg-[#f7f4ef] text-stone-800 text-xs font-bold rounded-2xl px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#598A31]/20 cursor-pointer shadow-xs"
                 >
                   <option value="all">Status ▾</option>
                   <option value="published">Published</option>
@@ -465,9 +465,9 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                         onClick={() => setSelectedEvent(evt)}
                         className="hover:bg-[#faf8f5] transition-colors cursor-pointer group"
                       >
-                        <td className="py-4 px-3 font-bold text-stone-900 group-hover:text-[#e66434] transition-colors">
+                        <td className="py-4 px-3 font-bold text-stone-900 group-hover:text-[#598A31] transition-colors">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-xl bg-[#faeae3] text-[#e66434] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                            <div className="w-8 h-8 rounded-xl bg-[#e6f0dc] text-[#598A31] flex items-center justify-center font-bold text-xs flex-shrink-0">
                               <Briefcase className="w-4 h-4" />
                             </div>
                             <span className="truncate max-w-[200px]">{evt.title}</span>
@@ -506,7 +506,7 @@ export function DashboardView({ onNavigate }: DashboardViewProps) {
                             <div className="w-full bg-[#f4f0ea] rounded-full h-1.5 overflow-hidden">
                               <div
                                 className={`h-full rounded-full transition-all ${
-                                  fillPct >= 100 ? 'bg-emerald-600' : 'bg-[#e66434]'
+                                  fillPct >= 100 ? 'bg-emerald-600' : 'bg-[#598A31]'
                                 }`}
                                 style={{ width: `${fillPct}%` }}
                               />

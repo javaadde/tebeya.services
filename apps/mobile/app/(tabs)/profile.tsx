@@ -10,15 +10,16 @@ import {
 import { useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import {
-  User as UserIcon,
-  Phone,
-  Bell,
-  Headphones,
-  ShieldCheck,
-  MapPin,
-  ChevronRight,
-  LogOut,
-  Info,
+  AppWindow,
+  CalendarSearch,
+  Hexagon,
+  History,
+  ArrowUpRight,
+  HelpCircle,
+  Home,
+  Clock,
+  Settings,
+  LogOut
 } from 'lucide-react-native';
 import { ScreenWrapper } from '../../src/components/layout/ScreenWrapper';
 import { AppTopHeader } from '../../src/components/layout/AppTopHeader';
@@ -28,11 +29,6 @@ import { profileApi } from '../../src/api/profile.api';
 export default function UserSettingsScreen() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
-
-  const { data: wageRule } = useQuery({
-    queryKey: ['wage-rules'],
-    queryFn: () => profileApi.getWageRules(),
-  });
 
   const handleLogout = () => {
     Alert.alert('Sign Out', 'Are you sure you want to log out of Tebeya Services?', [
@@ -52,146 +48,132 @@ export default function UserSettingsScreen() {
     user?.profileImageUrl ||
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80';
 
-  const hasIdProof = !!user?.idProofUrl;
-  const isAddressConfirmed = !!user?.address?.confirmed;
-
   return (
-    <ScreenWrapper className="px-4">
-      {/* Header matching Image 4: "Change your" / "User & Settings" / Orange Button */}
-      <AppTopHeader
-        subtitle="Change your"
-        title="User & Settings"
-      />
-
+    <ScreenWrapper className="px-4 bg-[#dfdfdf]">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 110 }}
       >
-        {/* Profile Hero Section matching Image 4 */}
-        <View className="flex-row items-center py-2 mb-2">
-          {/* Circular Avatar */}
-          <View className="w-20 h-20 rounded-full border-2 border-neutral-900 overflow-hidden mr-4 bg-neutral-200">
+        <AppTopHeader
+          subtitle="Change your"
+          title="User & Settings"
+          rightIcon={<LogOut size={22} color="#ffffff" />}
+          onRightPress={handleLogout}
+        />
+
+        <View className="flex-row items-center py-2 mb-2 mt-2">
+          <View className="w-20 h-20 rounded-full border border-neutral-200 overflow-hidden mr-4 bg-neutral-200">
             <Image
               source={{ uri: defaultAvatar }}
               className="w-full h-full"
               resizeMode="cover"
             />
           </View>
-
-          {/* User Details matching Image 4 */}
           <View className="flex-1">
-            <Text className="text-xl font-black text-neutral-900 tracking-tight">
+            <Text className="text-2xl font-black text-neutral-900 tracking-tight">
               {user?.name || 'Jude Bellingham'}
             </Text>
-            <Text className="text-xs font-bold text-neutral-600 mt-0.5">
+            <Text className="text-xs text-neutral-600 mt-0.5">
               {user?.phone || '+91 790293742'}
             </Text>
-            <Text className="text-xs font-medium text-neutral-500">
+            <Text className="text-xs text-neutral-500">
               {user?.email || 'jawaadde@gmail.com'}
             </Text>
           </View>
         </View>
 
-        {/* 3 Circular Quick Action Buttons matching Image 4 */}
-        <View className="flex-row justify-between px-2 my-4">
-          {/* Circle 1: Phone / Account Details */}
+        <View className="flex-row justify-start space-x-4 my-6">
           <TouchableOpacity
             activeOpacity={0.85}
-            onPress={() => router.push('/address-picker')}
-            className="w-16 h-16 rounded-full bg-white items-center justify-center shadow-sm border border-white/50"
+            className="w-14 h-14 rounded-full bg-white items-center justify-center shadow-sm"
           >
-            <MapPin size={22} color="#201d1e" />
+            <AppWindow size={24} color="#598A31" />
           </TouchableOpacity>
 
-          {/* Circle 2: Notifications Center */}
           <TouchableOpacity
             activeOpacity={0.85}
-            onPress={() => router.push('/notifications')}
-            className="w-16 h-16 rounded-full bg-white items-center justify-center shadow-sm border border-white/50"
+            className="w-14 h-14 rounded-full bg-[#598A31] items-center justify-center shadow-sm ml-4"
           >
-            <Bell size={22} color="#201d1e" />
+            <CalendarSearch size={24} color="#ffffff" />
           </TouchableOpacity>
 
-          {/* Circle 3: Support / Coordinator */}
           <TouchableOpacity
             activeOpacity={0.85}
-            onPress={() => Alert.alert('Support Hotline', 'Tebeya Coordinator: +91 98765 43210')}
-            className="w-16 h-16 rounded-full bg-white items-center justify-center shadow-sm border border-white/50"
+            className="w-14 h-14 rounded-full bg-[#598A31] items-center justify-center shadow-sm ml-4"
           >
-            <Headphones size={22} color="#201d1e" />
+            <Hexagon size={24} color="#ffffff" />
           </TouchableOpacity>
         </View>
 
-        {/* Card 1: Horizontal Rounded Card (KYC ID Proof) */}
-        <TouchableOpacity
-          activeOpacity={0.88}
-          onPress={() => router.push('/kyc-upload')}
-          className="bg-white rounded-[28px] p-5 mb-3.5 shadow-sm border border-white/50 flex-row items-center justify-between"
-        >
-          <View className="flex-1 mr-3">
-            <View className="flex-row items-center mb-1">
-              <ShieldCheck size={16} color={hasIdProof ? '#10b981' : '#df3b20'} />
-              <Text className="text-sm font-bold text-neutral-900 ml-1.5">
-                Government ID Proof (KYC)
-              </Text>
-            </View>
-            <Text className="text-xs text-neutral-500 leading-4">
-              {hasIdProof
-                ? 'Document uploaded in private vault. Admin verified.'
-                : 'Upload Aadhaar, Voter ID, or Driving License for KYC compliance.'}
-            </Text>
+        <View className="bg-white rounded-[28px] p-5 mb-4 shadow-sm">
+          <Text className="text-sm font-black text-neutral-900 mb-4">
+            Account Details
+          </Text>
+          <View className="flex-row justify-between mb-3">
+            <Text className="text-xs text-neutral-500">Email Address</Text>
+            <Text className="text-xs font-bold text-neutral-900">{user?.email || 'jawaadde@gmail.com'}</Text>
           </View>
-          <View className="w-8 h-8 rounded-full bg-[#f1f2f2] items-center justify-center">
-            <ChevronRight size={16} color="#201d1e" />
+          <View className="flex-row justify-between mb-3">
+            <Text className="text-xs text-neutral-500">Phone Number</Text>
+            <Text className="text-xs font-bold text-neutral-900">{user?.phone || '+91 790293742'}</Text>
           </View>
-        </TouchableOpacity>
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-neutral-500">Member Since</Text>
+            <Text className="text-xs font-bold text-neutral-900">Oct 2023</Text>
+          </View>
+        </View>
 
-        {/* Card 2: Large Tall Rounded Card (Address & Policy & Logout) */}
-        <View className="bg-white rounded-[28px] p-5 shadow-sm border border-white/50">
-          <Text className="text-sm font-black text-neutral-900 mb-3">
-            Account Preferences & Rules
+        <View className="bg-white rounded-[28px] p-5 shadow-sm mb-6">
+          <Text className="text-sm font-black text-neutral-900 mb-5">
+            Preferences
           </Text>
 
-          {/* Address Item */}
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => router.push('/address-picker')}
-            className="flex-row items-center justify-between py-3 border-b border-neutral-100"
-          >
-            <View className="flex-1 mr-2">
-              <Text className="text-xs font-bold text-neutral-800">
-                Home Address Location
-              </Text>
-              <Text className="text-xs text-neutral-500 mt-0.5" numberOfLines={1}>
-                {user?.address?.text || 'Indiranagar, Bangalore (Coordinates confirmed)'}
-              </Text>
+          <TouchableOpacity className="flex-row items-center mb-6" activeOpacity={0.8}>
+            <View className="w-10 h-10 rounded-full bg-[#9cb97a] items-center justify-center mr-3">
+              <History size={20} color="#ffffff" />
             </View>
-            <ChevronRight size={16} color="#94a3b8" />
+            <View className="flex-1">
+              <Text className="text-sm font-bold text-neutral-900">Order History</Text>
+              <Text className="text-xs text-neutral-500 mt-0.5">View all your past orders</Text>
+            </View>
+            <ArrowUpRight size={20} color="#201d1e" />
           </TouchableOpacity>
 
-          {/* Policy Information */}
-          <View className="py-3 border-b border-neutral-100">
-            <View className="flex-row items-center mb-1">
-              <Info size={14} color="#df3b20" />
-              <Text className="text-xs font-bold text-neutral-800 ml-1.5">
-                Distance Travel Policy
-              </Text>
+          <TouchableOpacity className="flex-row items-center mb-6" activeOpacity={0.8}>
+            <View className="w-10 h-10 rounded-full bg-[#9cb97a] items-center justify-center mr-3">
+              <Hexagon size={20} color="#ffffff" />
             </View>
-            <Text className="text-xs text-neutral-500 leading-4">
-              Free travel buffer up to {wageRule?.freeKm ?? 10} km. Shifts beyond earn an extra +₹{wageRule?.perKmRate ?? 15}/km.
-            </Text>
-          </View>
+            <View className="flex-1">
+              <Text className="text-sm font-bold text-neutral-900">App Settings</Text>
+              <Text className="text-xs text-neutral-500 mt-0.5">Manage notifications & privacy</Text>
+            </View>
+            <ArrowUpRight size={20} color="#201d1e" />
+          </TouchableOpacity>
 
-          {/* Sign Out Button in Brand Coral */}
-          <TouchableOpacity
-            activeOpacity={0.85}
-            onPress={handleLogout}
-            className="mt-6 bg-[#df3b20] py-3.5 px-4 rounded-2xl flex-row items-center justify-center shadow-sm"
-          >
-            <LogOut size={16} color="#ffffff" />
-            <Text className="text-sm font-bold text-white ml-2">
-              Sign Out of Account
-            </Text>
+          <TouchableOpacity className="flex-row items-center mb-6" activeOpacity={0.8}>
+            <View className="w-10 h-10 rounded-full bg-[#9cb97a] items-center justify-center mr-3">
+              <CalendarSearch size={20} color="#ffffff" />
+            </View>
+            <View className="flex-1">
+              <Text className="text-sm font-bold text-neutral-900">Saved Searches</Text>
+              <Text className="text-xs text-neutral-500 mt-0.5">Quick access to your favorites</Text>
+            </View>
+            <ArrowUpRight size={20} color="#201d1e" />
+          </TouchableOpacity>
+
+          <Text className="text-sm font-black text-neutral-900 mt-2 mb-5">
+            Support
+          </Text>
+
+          <TouchableOpacity className="flex-row items-center" activeOpacity={0.8}>
+            <View className="w-10 h-10 rounded-full bg-[#9cb97a] items-center justify-center mr-3">
+              <Home size={20} color="#ffffff" />
+            </View>
+            <View className="flex-1">
+              <Text className="text-sm font-bold text-neutral-900">Help Center</Text>
+              <Text className="text-xs text-neutral-500 mt-0.5">FAQs and troubleshooting</Text>
+            </View>
+            <ArrowUpRight size={20} color="#201d1e" />
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -137,7 +137,7 @@ export function StaffDetailModal({
           <div className="pt-2">
             <span className="text-stone-500 block">Registered Address (for travel radius):</span>
             <div className="flex items-center gap-1.5 text-stone-800 mt-0.5">
-              <MapPin className="w-3.5 h-3.5 text-[#e66434] flex-shrink-0" />
+              <MapPin className="w-3.5 h-3.5 text-[#598A31] flex-shrink-0" />
               <span>{staff.address?.text || 'No address confirmed'}</span>
             </div>
           </div>
@@ -147,10 +147,10 @@ export function StaffDetailModal({
         <div className="bg-white p-4 rounded-2xl border border-[#dad0c3] space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="font-bold text-stone-900 text-sm flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#e66434]" />
+              <FileText className="w-4 h-4 text-[#598A31]" />
               Government ID Proof (Private KYC Asset)
             </h4>
-            <span className="text-[11px] bg-[#faeae3] text-[#cf5224] border border-[#f5d5c7] px-2.5 py-0.5 rounded-full font-bold">
+            <span className="text-[11px] bg-[#e6f0dc] text-[#487226] border border-[#cee2be] px-2.5 py-0.5 rounded-full font-bold">
               Rule 4 Compliant
             </span>
           </div>
@@ -169,7 +169,7 @@ export function StaffDetailModal({
                   href={staff.idProofUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-[#e66434] hover:underline font-bold"
+                  className="inline-flex items-center gap-1 text-xs text-[#598A31] hover:underline font-bold"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   View Original Document

@@ -81,8 +81,8 @@ export default function KycUploadScreen() {
         {/* Privacy Note (Rule 4) */}
         <View className="bg-white rounded-[28px] p-5 mb-3.5 shadow-sm border border-white/50">
           <View className="flex-row items-center mb-1.5">
-            <Lock size={16} color="#df3b20" />
-            <Text className="text-xs font-bold text-[#df3b20] ml-1.5">
+            <Lock size={16} color="#598A31" />
+            <Text className="text-xs font-bold text-[#598A31] ml-1.5">
               Private Authenticated Storage (Rule 4)
             </Text>
           </View>
@@ -132,13 +132,13 @@ export default function KycUploadScreen() {
         >
           <View
             className={`w-14 h-14 rounded-full items-center justify-center mb-3 ${
-              simulatedSelected ? 'bg-emerald-100' : 'bg-[#fdece8]'
+              simulatedSelected ? 'bg-emerald-100' : 'bg-[#f4f8ef]'
             }`}
           >
             {simulatedSelected ? (
               <CheckCircle2 size={28} color="#059669" />
             ) : (
-              <Camera size={26} color="#df3b20" />
+              <Camera size={26} color="#598A31" />
             )}
           </View>
 

@@ -96,7 +96,7 @@ export default function LoginScreen() {
             </Text>
           </TouchableOpacity>
 
-          {/* Brand Orange Primary Login Button */}
+          {/* Primary Login Button */}
           <Button
             title="Login"
             variant="primary"
@@ -127,7 +127,7 @@ export default function LoginScreen() {
           hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
         >
           <Text className="text-[13px] text-neutral-600">Need an account? </Text>
-          <Text className="text-[13px] font-black text-[#df3b20]">Sign up</Text>
+          <Text className="text-[13px] font-black text-[#598A31]">Sign up</Text>
         </TouchableOpacity>
       </View>
     </ScreenWrapper>
